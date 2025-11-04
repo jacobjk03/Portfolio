@@ -30,7 +30,6 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
     message: "",
   });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -44,8 +43,48 @@ export default function Contact() {
     setUplinkInitiated(true);
   };
 
+  // ============================================
+  // 📧 EMAILJS CONFIGURATION
+  // ============================================
+  // Paste your EmailJS credentials here:
+  // 
+  // 1. EmailJS Public Key: Get from https://dashboard.emailjs.com/admin/integration
+  // 2. EmailJS Service ID: Get from https://dashboard.emailjs.com/admin/service
+  // 3. EmailJS Template ID: Get from https://dashboard.emailjs.com/admin/template
+  //
+  // Make sure your EmailJS service is configured to use Gmail!
+  // ============================================
+  const EMAILJS_PUBLIC_KEY = "Lcf71Be-dQHjlqah-"; // ⬅️ PASTE YOUR PUBLIC KEY HERE
+  const EMAILJS_SERVICE_ID = "service_k08yehc"; // ⬅️ PASTE YOUR SERVICE ID HERE
+  const EMAILJS_TEMPLATE_ID = "template_voc2hhi"; // ⬅️ PASTE YOUR TEMPLATE ID HERE
+
+  // Email validation helper
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form fields
+    if (!formData.name.trim()) {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
+      return;
+    }
+
+    if (!formData.email.trim() || !isValidEmail(formData.email)) {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
+      return;
+    }
+
+    if (!formData.message.trim()) {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
+      return;
+    }
     
     // Trigger system flicker effect
     setSystemFlicker(true);
@@ -59,22 +98,22 @@ export default function Contact() {
     setTimeout(() => setUploadPhase("sending"), 800);
 
     // Phase 2: Sending + EmailJS call (1200ms after start)
-    setTimeout(() => {
+    setTimeout(async () => {
       setUploadPhase("confirming");
       
-      emailjs.send(
-        "service_01hkt2h",           
-        "template_voc2hhi", 
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-        },
-        "kDPaaMHOl1oX_DxA9"
-      )
-      .then(() => {
-        // Phase 3: Delivery confirmed (2000ms after start)
+      try {
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+          },
+          EMAILJS_PUBLIC_KEY
+        );
+
+        // Phase 3: Delivery confirmed
         setTimeout(() => {
           setUploadPhase("done");
           setStatus("success");
@@ -82,15 +121,14 @@ export default function Contact() {
           // Trigger cinematic shockwave effect on success!
           triggerShockwave();
           
-          setFormData({ name: "", email: "", subject: "", message: "" });
+          setFormData({ name: "", email: "", message: "" });
           setTimeout(() => setStatus("idle"), 3000);
         }, 200);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("EmailJS Error:", error);
         setStatus("error");
         setTimeout(() => setStatus("idle"), 5000);
-      });
+      }
     }, 1200);
   };
 
@@ -311,22 +349,6 @@ export default function Contact() {
                 />
               </div>
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                  Subject *
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  disabled={status === "sending"}
-                  className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  placeholder="What's this about?"
-                />
-              </div>
-              <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-2">
                   Message *
                 </label>
@@ -497,7 +519,7 @@ export default function Contact() {
                     ) : status === "error" ? (
                       <>
                         <AlertCircle className="w-5 h-5" />
-                        <span>Try Again</span>
+                        <span>Transmission failed — please try again</span>
                       </>
                     ) : isHovering ? (
                       <>
@@ -639,7 +661,7 @@ export default function Contact() {
                   >
                     <AlertCircle className="w-5 h-5" />
                     <span className="text-sm font-medium">
-                      Failed to send. Please try again.
+                      Transmission failed — please try again
                     </span>
                   </motion.div>
                 )}
