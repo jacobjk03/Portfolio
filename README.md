@@ -458,4 +458,4 @@ npm run lint
 - **Email:** jkuriak3@asu.edu
 - **LinkedIn:** [linkedin.com/in/jacob-kuriakose](https://linkedin.com/in/jacob-kuriakose)
 - **GitHub:** [github.com/jacobjk03](https://github.com/jacobjk03)
-- **Website:** [jacobjk03.github.io](https://jacobjk03.github.io)
+- **Website:** [jacobkuriakose.com](https://jacobkuriakose.com)

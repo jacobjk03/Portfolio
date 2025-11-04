@@ -78,7 +78,7 @@ export const resumeData: ResumeData = {
   socials: {
     github: "https://github.com/jacobjk03",
     linkedin: "https://linkedin.com/in/jacob-kuriakose",
-    website: "https://jacobjk03.github.io"
+    website: "https://jacobkuriakose.com"
   },
 
   skills: [
@@ -207,6 +207,18 @@ export const resumeData: ResumeData = {
       ],
       github: "https://github.com/jacobjk03/Data-Driven-Walmart-Sales-Predictions",
       featured: true
+    },
+    {
+      title: "Waterbot",
+      description: "AI-powered educational chatbot for water literacy with multilingual & voice support",
+      longDescription: "Waterbot is an AI-powered educational chatbot developed at Arizona State University to promote water literacy and sustainability awareness. It engages users—especially K-12 students—in interactive, conversational learning about water conservation, the water cycle, and real-world water challenges. The system runs on a fully cloud-based AWS infrastructure (ECS, CDK, S3, DynamoDB, CloudFront, and RDS) and supports multilingual and voice-based interactions. It was designed to deliver scalable, accessible, and engaging water education experiences while showcasing production-grade AI deployment and cloud engineering practices.",
+      image: "/assets/projects/waterbot.jpg",
+      technologies: [
+        "Python", "AWS", "Graph RAG", "JavaScript", "HTML", "CSS"
+      ],
+      link: "https://azwaterbot.org",
+      github: "https://github.com/jacobjk03/waterbot",
+      featured: false
     }
   ],
 

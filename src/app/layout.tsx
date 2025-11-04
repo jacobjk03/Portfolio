@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Jacob Kuriakose - Data Scientist & ML Engineer",
     description: "Portfolio showcasing my work in Machine Learning, NLP, and AI systems",
-    url: "https://jacobjk03.github.io",
+    url: "https://jacobkuriakose.com",
     siteName: "Jacob Kuriakose Portfolio",
     locale: "en_US",
     type: "website",
