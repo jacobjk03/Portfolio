@@ -108,7 +108,6 @@ export default function Contact() {
           {
             from_name: formData.name,
             from_email: formData.email,
-            subject: "New Portfolio Contact Message",
             message: formData.message,
           },
           EMAILJS_PUBLIC_KEY
