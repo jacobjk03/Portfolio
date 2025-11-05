@@ -69,10 +69,20 @@ export function AIAssistant() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Auto-open chat once per session, then auto-close on first scroll if user hasn't interacted
+  // Auto-open chat once per session on larger screens (≥768px), then auto-close on first scroll if user hasn't interacted
   useEffect(() => {
     if (typeof window === "undefined") return;
-    // Skip if already shown in this session
+    
+    // Check viewport width - only auto-open on desktop/tablet (≥768px)
+    const isLargeScreen = window.innerWidth >= 768;
+    
+    // Skip if mobile device or already shown in this session
+    if (!isLargeScreen) {
+      // On mobile, mark as shown to prevent any auto-open attempts
+      window.sessionStorage.setItem("chatAutoShown", "true");
+      return;
+    }
+    
     const already = window.sessionStorage.getItem("chatAutoShown");
     if (!already) {
       // Open after small delay to avoid jank
@@ -244,7 +254,7 @@ export function AIAssistant() {
       setMessages([
         {
           role: "assistant",
-          content: "Hi! I'm Jacob's AI assistant. Ask me anything about his background, skills, projects, or tech interests!",
+          content: `Hi! I'm Jacob's AI assistant 👋\n\nCurious about his background or experience?\n\nYou can ask me about:\n• AI/ML & data engineering experience\n• RAG & LLM projects\n• AWS, DevOps & cloud skills\n• Work authorization & graduation timeline\n• Past work experience (industry + research)\n• Leadership, teaching, and teamwork experience\n\nHow can I help you learn more about Jacob?`,
         },
       ]);
     }
@@ -283,7 +293,7 @@ export function AIAssistant() {
     setMessages([
       {
         role: "assistant",
-        content: "Hi! I'm Jacob's AI assistant. Ask me anything about his background, skills, projects, or tech interests!",
+        content: `Hi! I'm Jacob's AI assistant 👋\n\nCurious about his background or experience?\n\nYou can ask me about:\n• AI/ML & data engineering experience\n• RAG & LLM projects\n• AWS, DevOps & cloud skills\n• Work authorization & graduation timeline\n• Past work experience (industry + research)\n• Leadership, teaching, and teamwork experience\n\nHow can I help you learn more about Jacob?`,
       },
     ]);
     setShowSettings(false);
@@ -294,6 +304,136 @@ export function AIAssistant() {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
+    }
+  };
+
+  // Handle quick button for work authorization - auto-sends the question
+  const handleWorkAuthClick = async () => {
+    const question = "What is your work authorization status?";
+    
+    // Create newMessages including the user's question
+    const newMessages = [...messages, { role: "user" as const, content: question }];
+    
+    // Update state immediately so UI shows the user's message
+    setMessages(newMessages);
+    
+    // Add typing placeholder immediately
+    const typingId = `typing-${Date.now()}`;
+    setMessages([...newMessages, { role: "typing", content: "", id: typingId }]);
+    
+    // Cancel any existing request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+    
+    try {
+      // Build API payload from newMessages
+      const apiMessages = newMessages.map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      }));
+      
+      // Call Groq API with streaming
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: apiMessages }),
+        signal: abortControllerRef.current.signal,
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMsg = errorData.error || "⚠️ AI is unavailable. Try again.";
+        throw new Error(errorMsg);
+      }
+      
+      // Add assistant message placeholder
+      const assistantId = `assistant-${Date.now()}`;
+      setMessages((prev) => [...prev, { role: "assistant", content: "", id: assistantId }]);
+      
+      // Stream the response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      
+      if (!reader) {
+        throw new Error("No response stream");
+      }
+      
+      let accumulatedContent = "";
+      let hasReceivedContent = false;
+      
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+        
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6).trim();
+            if (data === "[DONE]") {
+              setMessages((prev) => prev.filter((m) => m.id !== typingId));
+              break;
+            }
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.error) {
+                setMessages((prev) => prev.filter((m) => m.id !== typingId && m.id !== assistantId));
+                throw new Error(parsed.error);
+              }
+              if (parsed.content) {
+                if (!hasReceivedContent) {
+                  hasReceivedContent = true;
+                  setMessages((prev) => prev.filter((m) => m.id !== typingId));
+                }
+                accumulatedContent += parsed.content;
+                setMessages((prev) => {
+                  const lastAssistantIndex = (() => {
+                    for (let i = prev.length - 1; i >= 0; i--) {
+                      if (prev[i].role === "assistant") return i;
+                    }
+                    return -1;
+                  })();
+                  if (lastAssistantIndex === -1) return prev;
+                  const next = [...prev];
+                  next[lastAssistantIndex] = { ...next[lastAssistantIndex], content: accumulatedContent } as any;
+                  return next;
+                });
+              }
+            } catch (e) {
+              // Skip invalid JSON chunks
+            }
+          }
+        }
+      }
+      
+      // Ensure typing indicator is removed and finalize message
+      setMessages((prev) => {
+        const filtered = prev.filter((m) => m.id !== typingId);
+        return filtered.map((m) =>
+          m.id === assistantId
+            ? { role: "assistant" as const, content: accumulatedContent || m.content }
+            : m
+        );
+      });
+    } catch (err: any) {
+      // Remove typing placeholder
+      setMessages((prev) => prev.filter((m) => m.id !== typingId));
+      
+      // Append error message
+      if (err.name !== "AbortError") {
+        const errorMsg = err.message || "⚠️ AI is unavailable. Try again.";
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: errorMsg },
+        ]);
+      }
+    } finally {
+      abortControllerRef.current = null;
     }
   };
 
@@ -416,6 +556,13 @@ export function AIAssistant() {
 
             {/* Input Area - Always visible */}
             <div className="p-4 border-t border-purple-500/20">
+              {/* Quick Action Button */}
+              <button
+                onClick={handleWorkAuthClick}
+                className="mb-3 w-full px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 text-foreground hover:from-purple-500/30 hover:to-cyan-500/30 transition-all duration-200 flex items-center justify-center gap-2"
+              >
+                <span>Work Authorization Info</span>
+              </button>
               <div className="flex items-end gap-2">
                 <textarea
                   value={input}
