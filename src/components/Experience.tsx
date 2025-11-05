@@ -1,32 +1,29 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
+import type React from "react";
 import { Briefcase, GraduationCap, Calendar, MapPin } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { useRecruiterMode } from "@/hooks/useRecruiterMode";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 export default function Experience() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1, rootMargin: "-100px", triggerOnce: true });
   const { isRecruiterMode } = useRecruiterMode();
 
   return (
     <section id="experience" className="py-20 bg-secondary/30" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+        <div
+          className={`text-center mb-16 transition-all duration-500 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+          }`}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Experience & Education</h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mx-auto rounded-full mb-4" />
           <p className="text-muted-foreground max-w-2xl mx-auto">
             My professional journey and academic background
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Experience Timeline */}
@@ -39,12 +36,12 @@ export default function Experience() {
             </h3>
             <div className="space-y-6">
               {resumeData.experience.map((exp, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative pl-8 pb-8 border-l-2 border-primary/30 last:border-l-0 last:pb-0 group"
+                  className={`relative pl-8 pb-8 border-l-2 border-primary/30 last:border-l-0 last:pb-0 group transition-all duration-500 ${
+                    isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
+                  }`}
+                  style={{ transitionDelay: `${index * 50}ms` }}
                 >
                   <div className="absolute left-0 top-1 w-4 h-4 -ml-[9px] rounded-full bg-primary ring-4 ring-background group-hover:scale-125 transition-transform" />
                   
@@ -88,7 +85,7 @@ export default function Experience() {
                       </div>
                     )}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -103,12 +100,12 @@ export default function Experience() {
             </h3>
             <div className="space-y-6">
               {resumeData.education.map((edu, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative pl-8 pb-8 border-l-2 border-primary/30 last:border-l-0 last:pb-0 group"
+                  className={`relative pl-8 pb-8 border-l-2 border-primary/30 last:border-l-0 last:pb-0 group transition-all duration-500 ${
+                    isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
+                  }`}
+                  style={{ transitionDelay: `${index * 50}ms` }}
                 >
                   <div className="absolute left-0 top-1 w-4 h-4 -ml-[9px] rounded-full bg-primary ring-4 ring-background group-hover:scale-125 transition-transform" />
                   
@@ -149,7 +146,7 @@ export default function Experience() {
                       </div>
                     )}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -158,4 +155,3 @@ export default function Experience() {
     </section>
   );
 }
-

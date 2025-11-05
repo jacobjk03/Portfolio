@@ -1,14 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
+import type React from "react";
 import { Code2, Palette, Zap, Award } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 export default function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1, rootMargin: "-100px", triggerOnce: true });
 
   const stats = [
     {
@@ -36,21 +34,21 @@ export default function About() {
   return (
     <section id="about" className="py-20 bg-secondary/30" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+        <div
+          className={`text-center mb-16 transition-all duration-500 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+          }`}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">About Me</h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mx-auto rounded-full" />
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <div
+            className={`transition-all duration-500 ${
+              isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
+            }`}
+            style={{ transitionDelay: "200ms" }}
           >
             <div className="relative group">
               <div className="aspect-square rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-1">
@@ -66,16 +64,17 @@ export default function About() {
                   )}
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl -z-10 group-hover:bg-purple-500/20 transition-colors" />
-              <div className="absolute -top-6 -left-6 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl -z-10 group-hover:bg-pink-500/20 transition-colors" />
+              {/* Reduced blur - using gradients instead */}
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-500/15 rounded-full opacity-50 -z-10 group-hover:bg-purple-500/15 transition-colors" />
+              <div className="absolute -top-6 -left-6 w-32 h-32 bg-purple-500/15 rounded-full opacity-50 -z-10 group-hover:bg-pink-500/15 transition-colors" />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="space-y-6"
+          <div
+            className={`space-y-6 transition-all duration-500 ${
+              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
+            }`}
+            style={{ transitionDelay: "400ms" }}
           >
             <div>
               <h3 className="text-2xl font-bold mb-4">
@@ -93,28 +92,28 @@ export default function About() {
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-4 pt-4">
               {stats.map((stat, index) => (
-                <motion.div
+                <div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                  className="p-6 rounded-xl bg-background border border-border hover:border-primary/50 transition-all group card-hover glass-edge-glow"
+                  className={`p-6 rounded-xl bg-background border border-border hover:border-primary/50 transition-all group card-hover glass-edge-glow transition-all duration-500 ${
+                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+                  }`}
+                  style={{ transitionDelay: `${600 + index * 100}ms` }}
                 >
                   <stat.icon className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
                   <div className="text-3xl font-bold text-primary mb-2">
                     {stat.value}
                   </div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
             {/* Location & Contact */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 1 }}
-              className="flex flex-wrap gap-4 pt-4"
+            <div
+              className={`flex flex-wrap gap-4 pt-4 transition-all duration-500 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+              }`}
+              style={{ transitionDelay: "1000ms" }}
             >
               <div className="flex items-center gap-2 text-muted-foreground">
                 <span className="text-2xl">📍</span>
@@ -124,11 +123,10 @@ export default function About() {
                 <span className="text-2xl">💼</span>
                 <span>Available for work</span>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-

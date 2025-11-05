@@ -19,113 +19,83 @@ export default function Home() {
       <ScrollProgress />
       <Navbar />
       
+      {/* Hero - Keep effects for hero section only */}
       <VisionSection 
-        enableLightBeams 
+        enableLightBeams={true}
         lightPosition="center" 
         lightColor="purple" 
-        lightIntensity={0.7}
-        bokehDensity={0.9}
+        lightIntensity={0.5}
+        bokehDensity={0.4}
         bokehColors={["#8b5cf6", "#a855f7", "#c084fc"]}
         bokehSeed={1000}
-        enableGlassDepth
-        glassIntensity={1.2}
-        glassTilt={3}
+        enableGlassDepth={true}
+        glassIntensity={1.0}
+        glassTilt={2}
         glassGlow="purple"
         glassBlur="xl"
       >
         <Hero />
       </VisionSection>
 
+      {/* About - Minimal effects */}
       <VisionSection 
         delay={100} 
-        enableLightBeams 
-        lightPosition="left" 
-        lightColor="blue" 
-        lightIntensity={0.5}
-        bokehDensity={0.7}
+        bokehDensity={0.2}
         bokehColors={["#3b82f6", "#60a5fa", "#93c5fd"]}
         bokehSeed={2000}
-        enableGlassDepth
-        glassIntensity={0.8}
-        glassTilt={2}
-        glassGlow="blue"
-        glassBlur="2xl"
       >
         <About />
       </VisionSection>
 
+      {/* Skills - Minimal effects */}
       <VisionSection 
         delay={150} 
-        enableLightBeams 
-        lightPosition="right" 
-        lightColor="cyan" 
-        lightIntensity={0.6}
-        bokehDensity={0.8}
+        bokehDensity={0.2}
         bokehColors={["#22d3ee", "#06b6d4", "#67e8f9"]}
         bokehSeed={3000}
       >
         <Skills />
       </VisionSection>
 
+      {/* Experience - No effects */}
       <VisionSection 
-        delay={100} 
-        enableLightBeams 
-        lightPosition="left" 
-        lightColor="purple" 
-        lightIntensity={0.55}
-        bokehDensity={0.75}
-        bokehColors={["#8b5cf6", "#c084fc", "#e9d5ff"]}
-        bokehSeed={4000}
+        delay={100}
       >
         <Experience />
       </VisionSection>
 
+      {/* Projects - Minimal effects */}
       <VisionSection 
         delay={150} 
-        enableLightBeams 
-        lightPosition="right" 
-        lightColor="blue" 
-        lightIntensity={0.6}
-        bokehDensity={0.85}
+        bokehDensity={0.25}
         bokehColors={["#3b82f6", "#2563eb", "#60a5fa"]}
         bokehSeed={5000}
       >
         <Projects />
       </VisionSection>
 
+      {/* Certifications - No effects */}
       <VisionSection 
-        delay={100} 
-        enableLightBeams 
-        lightPosition="center" 
-        lightColor="cyan" 
-        lightIntensity={0.5}
-        bokehDensity={0.7}
-        bokehColors={["#22d3ee", "#67e8f9", "#a5f3fc"]}
-        bokehSeed={6000}
+        delay={100}
       >
         <Certifications />
       </VisionSection>
 
+      {/* Blog - No effects */}
       <VisionSection 
-        delay={150} 
-        enableLightBeams 
-        lightPosition="left" 
-        lightColor="blue" 
-        lightIntensity={0.55}
-        bokehDensity={0.8}
-        bokehColors={["#3b82f6", "#60a5fa", "#93c5fd"]}
-        bokehSeed={7000}
+        delay={150}
       >
         <Blog />
       </VisionSection>
 
+      {/* Contact - Keep effects for contact section */}
       <VisionSection 
         delay={100} 
-        enableLightBeams 
+        enableLightBeams={true}
         lightPosition="right" 
         lightColor="purple" 
-        lightIntensity={0.65}
-        bokehDensity={0.9}
+        lightIntensity={0.5}
+        bokehDensity={0.3}
         bokehColors={["#8b5cf6", "#a855f7", "#d8b4fe"]}
         bokehSeed={8000}
       >
@@ -136,4 +106,3 @@ export default function Home() {
     </main>
   );
 }
-

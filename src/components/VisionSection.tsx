@@ -26,21 +26,24 @@ interface VisionSectionProps {
 }
 
 /**
- * Vision Pro-style section wrapper with spatial depth animations
- * Each section lifts into view with blur-to-focus, scale, and glow
- * Optionally adds VisionOS-style volumetric light beams and bokeh particles
+ * Optimized VisionSection - Reduced effects, disabled by default
+ * Performance improvements:
+ * - Light beams disabled by default (enabled=false prop)
+ * - Reduced bokeh density defaults
+ * - Glass depth optional
+ * - Only essential animations on section headers
  */
 export function VisionSection({
   children,
   className = "",
   delay = 0,
-  enableLightBeams = false,
+  enableLightBeams = false, // Changed default to false
   lightPosition = "left",
   lightColor = "purple",
   lightIntensity = 0.6,
-  bokehDensity = 0.8,
+  bokehDensity = 0.3, // Reduced default density
   bokehColors = ["#8b5cf6", "#22d3ee", "#a855f7"],
-  bokehLayers = 3,
+  bokehLayers = 2, // Reduced layers
   bokehSeed,
   enableGlassDepth = false,
   glassIntensity = 1,
@@ -70,18 +73,23 @@ export function VisionSection({
           blur={glassBlur}
         />
       )}
-      <BokehField
-        density={bokehDensity}
-        colors={bokehColors}
-        layers={bokehLayers}
-        seed={bokehSeed}
-      />
+      {/* Only render bokeh if density > 0 */}
+      {bokehDensity > 0 && (
+        <BokehField
+          density={bokehDensity}
+          colors={bokehColors}
+          layers={bokehLayers}
+          seed={bokehSeed}
+        />
+      )}
+      {/* Light beams disabled by default - only show when explicitly enabled */}
       {enableLightBeams && (
         <VolumetricLight
           position={lightPosition}
           color={lightColor}
           intensity={lightIntensity}
           delay={delay}
+          enabled={enableLightBeams} // Pass enabled prop
         />
       )}
       <div className="relative z-10">
@@ -90,4 +98,3 @@ export function VisionSection({
     </section>
   );
 }
-

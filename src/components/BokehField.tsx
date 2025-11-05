@@ -12,15 +12,6 @@ interface BokehParticle {
   opacity: number;
   color: string;
   layer: number;
-  vx: number;
-  vy: number;
-  phase: number;
-  floatPhase: number;
-  floatSpeed: number;
-  floatAmplitudeX: number;
-  floatAmplitudeY: number;
-  glowPhase: number;
-  glowSpeed: number;
 }
 
 interface BokehFieldProps {
@@ -45,20 +36,31 @@ function hexToRgba(hex: string, alpha: number): string {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
+/**
+ * Optimized BokehField - Reduced particles and throttled animations
+ * Performance improvements:
+ * - Reduced particle count by 60% (from 120 max to 50 max)
+ * - Removed continuous float animations
+ * - Removed mouse parallax tracking
+ * - Removed scroll parallax
+ * - Static particles with minimal opacity variation
+ * - Only renders when section is visible
+ * - Throttled animation frame updates
+ */
 export function BokehField({
-  density = 0.8,
+  density = 0.4, // Reduced default density
   colors = ["#8b5cf6", "#22d3ee", "#a855f7"],
-  layers = 3,
+  layers = 2, // Reduced layers
   seed = 1337,
 }: BokehFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<BokehParticle[]>([]);
   const animationRef = useRef<number>();
-  const mouseRef = useRef({ x: 0.5, y: 0.5 });
-  const scrollOffsetRef = useRef(0);
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const lastFrameTime = useRef(0);
+  const frameThrottle = 16; // ~60fps cap
 
   const isVisible = useSectionVisibility(containerRef);
 
@@ -90,11 +92,12 @@ export function BokehField({
     canvas.style.height = `${rect.height}px`;
     ctx.scale(dpr, dpr);
 
-    const actualDensity = isMobile ? density * 0.5 : density;
+    // Reduced particle count significantly
+    const actualDensity = isMobile ? density * 0.3 : density;
     const particleCount = Math.floor(
-      ((rect.width * rect.height) / 15000) * actualDensity * 100
+      ((rect.width * rect.height) / 25000) * actualDensity * 50 // Reduced multiplier from 100 to 50
     );
-    const maxParticles = Math.min(particleCount, isMobile ? 60 : 120);
+    const maxParticles = Math.min(particleCount, isMobile ? 25 : 50); // Reduced from 60/120
 
     const random = seededRandom(seed);
     particlesRef.current = Array.from({ length: maxParticles }, () => {
@@ -107,99 +110,69 @@ export function BokehField({
         y: baseY,
         baseX,
         baseY,
-        size: 6 + random() * 42,
-        opacity: 0.04 + random() * 0.14,
+        size: 8 + random() * 30, // Slightly larger, fewer particles
+        opacity: 0.03 + random() * 0.08, // Reduced opacity range
         color: colors[Math.floor(random() * colors.length)],
         layer,
-        vx: (random() - 0.5) * 0.15,
-        vy: (random() - 0.5) * 0.15,
-        phase: random() * Math.PI * 2,
-        floatPhase: random() * Math.PI * 2,
-        floatSpeed: 0.03 + random() * 0.09,
-        floatAmplitudeX: 5 + random() * 10,
-        floatAmplitudeY: 8 + random() * 12,
-        glowPhase: random() * Math.PI * 2,
-        glowSpeed: 0.12 + random() * 0.18,
       };
     });
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      mouseRef.current = {
-        x: (e.clientX - rect.left) / rect.width,
-        y: (e.clientY - rect.top) / rect.height,
-      };
-    };
+    // Initial render
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    particlesRef.current.forEach((particle) => {
+      const gradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.size);
+      const alpha = Math.max(0, Math.min(1, particle.opacity));
+      
+      gradient.addColorStop(0, hexToRgba(particle.color, alpha));
+      gradient.addColorStop(0.5, hexToRgba(particle.color, alpha * 0.5));
+      gradient.addColorStop(1, hexToRgba(particle.color, 0));
 
-    const handleScroll = () => {
-      const rect = container.getBoundingClientRect();
-      scrollOffsetRef.current = -rect.top / window.innerHeight;
-    };
+      ctx.fillStyle = gradient;
+      ctx.fillRect(
+        particle.x - particle.size,
+        particle.y - particle.size,
+        particle.size * 2,
+        particle.size * 2
+      );
+    });
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
+    // Only animate if visible and not reduced motion
+    if (!isVisible || prefersReducedMotion) {
+      return;
+    }
 
+    // Throttled animation - only subtle opacity pulse
     let lastTime = 0;
     const animate = (time: number) => {
-      if (!isVisible || prefersReducedMotion) {
+      // Throttle frames
+      if (time - lastFrameTime.current < frameThrottle) {
         animationRef.current = requestAnimationFrame(animate);
         return;
       }
+      lastFrameTime.current = time;
 
-      const deltaTime = time - lastTime;
+      const deltaTime = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
-      const deltaSeconds = Math.min(deltaTime / 1000, 0.1);
 
       ctx.clearRect(0, 0, rect.width, rect.height);
 
+      // Static particles with minimal opacity variation
       particlesRef.current.forEach((particle) => {
-        if (!prefersReducedMotion) {
-          particle.floatPhase += particle.floatSpeed * deltaSeconds;
-          particle.glowPhase += particle.glowSpeed * deltaSeconds;
+        const pulse = prefersReducedMotion ? 1 : 0.85 + Math.sin(time * 0.0005) * 0.15;
+        const alpha = particle.opacity * pulse;
 
-          const floatX = Math.sin(particle.floatPhase) * particle.floatAmplitudeX;
-          const floatY = Math.cos(particle.floatPhase * 0.7) * particle.floatAmplitudeY;
-
-          particle.x = particle.baseX + floatX;
-          particle.y = particle.baseY + floatY;
-
-          particle.phase += 0.6 * deltaSeconds;
-        }
-
-        const layerFactor = (particle.layer + 1) / layers;
-        const parallaxX = (mouseRef.current.x - 0.5) * 4 * layerFactor;
-        const parallaxY = (mouseRef.current.y - 0.5) * 4 * layerFactor;
-        const scrollParallax = scrollOffsetRef.current * 15 * (1 - layerFactor);
-
-        const x = particle.x + parallaxX;
-        const y = particle.y + parallaxY + scrollParallax;
-
-        const glowIntensity = prefersReducedMotion
-          ? 1
-          : 0.3 + Math.sin(particle.glowPhase) * 0.7;
-        
-        const pulseOpacity = prefersReducedMotion
-          ? particle.opacity
-          : particle.opacity * glowIntensity;
-
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, particle.size);
-        const alpha = Math.max(0, Math.min(1, pulseOpacity));
-        const alphaMid = Math.max(0, Math.min(1, pulseOpacity * 0.5));
-        
+        const gradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.size);
         gradient.addColorStop(0, hexToRgba(particle.color, alpha));
-        gradient.addColorStop(0.5, hexToRgba(particle.color, alphaMid));
+        gradient.addColorStop(0.5, hexToRgba(particle.color, alpha * 0.5));
         gradient.addColorStop(1, hexToRgba(particle.color, 0));
 
         ctx.fillStyle = gradient;
-        ctx.filter = `blur(${particle.size * 0.5}px)`;
         ctx.fillRect(
-          x - particle.size,
-          y - particle.size,
+          particle.x - particle.size,
+          particle.y - particle.size,
           particle.size * 2,
           particle.size * 2
         );
-        ctx.filter = "none";
       });
 
       animationRef.current = requestAnimationFrame(animate);
@@ -222,8 +195,6 @@ export function BokehField({
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("scroll", handleScroll);
       resizeObserver.disconnect();
     };
   }, [density, colors, layers, seed, isVisible, isMobile, prefersReducedMotion]);
@@ -242,4 +213,3 @@ export function BokehField({
     </div>
   );
 }
-

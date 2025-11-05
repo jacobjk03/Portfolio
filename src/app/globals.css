@@ -343,7 +343,11 @@ a,
 .vision-section {
   opacity: 0;
   position: relative;
-  will-change: transform, opacity, filter;
+  /* Only add will-change when actually animating */
+}
+
+.vision-section.vision-visible {
+  will-change: transform, opacity;
 }
 
 /* Ensure first section (Hero) is immediately visible */
@@ -432,11 +436,22 @@ a,
 
 /* Reduced motion: fade only, no blur or transform */
 @media (prefers-reduced-motion: reduce) {
+  /* Disable all animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
   .vision-section {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
     animation: none !important;
+    will-change: auto !important;
   }
 
   .vision-section.vision-visible {
