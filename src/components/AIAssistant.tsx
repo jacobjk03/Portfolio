@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion"; // Animations
 import { Bot, X, Send, Settings2, RotateCcw } from "lucide-react";
 import { ChatBubble } from "./chat/ChatBubble";
 
@@ -19,10 +20,85 @@ export function AIAssistant() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [animClass, setAnimClass] = useState("chat-bounce"); // CSS keyframe class for FAB
   
   const chatRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   // No retry timers; show a single clean error on failure
+  const bounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const bounceResetRef = useRef<NodeJS.Timeout | null>(null);
+  const lastPulseRef = useRef(false); // track pulse state when passing Experience
+  const autoShownRef = useRef(false); // whether this session's auto-open is active
+  const userOpenedRef = useRef(false); // true if user toggled open manually
+
+  // Scroll-driven animation class swap: bounce (default) -> pulse near Experience
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let ticking = false;
+    const getExperienceTop = (): number | null => {
+      const byId = document.getElementById("experience");
+      if (byId) return byId.getBoundingClientRect().top + window.scrollY;
+      const byClass = document.querySelector('[class*="experience"]') as HTMLElement | null;
+      if (byClass) return byClass.getBoundingClientRect().top + window.scrollY;
+      return null;
+    };
+    const threshold = () => {
+      const top = getExperienceTop();
+      if (top == null) return null;
+      return top - 120; // start pulsing slightly before section is fully reached
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const th = threshold();
+          if (th != null) {
+            const reached = window.scrollY >= th;
+            if (reached !== lastPulseRef.current) {
+              lastPulseRef.current = reached;
+              setAnimClass(reached ? "chat-pulse" : "chat-bounce");
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    // initial check
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Auto-open chat once per session, then auto-close on first scroll if user hasn't interacted
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    // Skip if already shown in this session
+    const already = window.sessionStorage.getItem("chatAutoShown");
+    if (!already) {
+      // Open after small delay to avoid jank
+      const t = setTimeout(() => {
+        setIsOpen(true);
+        autoShownRef.current = true;
+      }, 200);
+      // Close on first scroll beyond threshold if still auto-opened
+      const onScroll = () => {
+        if (!autoShownRef.current) return;
+        if (userOpenedRef.current) return; // user interacted, don't auto-close
+        if (window.scrollY > 50) {
+          setIsOpen(false);
+          autoShownRef.current = false;
+          window.sessionStorage.setItem("chatAutoShown", "true");
+          window.removeEventListener("scroll", onScroll);
+          clearTimeout(t as unknown as number);
+        }
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        clearTimeout(t as unknown as number);
+      };
+    }
+  }, []);
 
   // Handle send message - instant UI update with streaming
   const handleSend = async () => {
@@ -223,33 +299,65 @@ export function AIAssistant() {
 
   return (
     <>
-      {/* Floating Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110 group"
-        style={{
-          boxShadow: "0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(0, 207, 255, 0.3)",
+      {/* Floating Button - Premium orb */}
+      <motion.button
+        onClick={() => {
+          setIsOpen(!isOpen);
+          userOpenedRef.current = true; // mark manual interaction; prevents auto-close on scroll
         }}
         aria-label="Open AI Assistant"
+        initial={{ scale: 0.95, opacity: 0.9 }}
+        whileHover={{ scale: 1.05, boxShadow: "0 0 24px rgba(139,92,246,0.6), 0 0 48px rgba(0,207,255,0.4)" }}
+        whileTap={{ scale: 0.98 }}
+        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md bg-gradient-to-br from-purple-500 to-cyan-500 shadow-lg overflow-visible group ${animClass}`}
+        style={{ boxShadow: "0 0 18px rgba(139, 92, 246, 0.45), 0 0 36px rgba(0, 207, 255, 0.28)" }}
       >
-        <Bot className="w-6 h-6 text-white" />
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 opacity-0 group-hover:opacity-100 animate-pulse" />
-      </button>
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          // Keep halo; CSS animation handles main motion
+          animate={{ boxShadow: [
+            "0 0 0px rgba(139,92,246,0.0)",
+            "0 0 18px rgba(139,92,246,0.28)",
+            "0 0 0px rgba(139,92,246,0.0)"
+          ] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          animate={{ rotate: [0, 8, -8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="relative"
+        >
+          <Bot className="w-6 h-6 text-white" />
+        </motion.div>
+      </motion.button>
 
       {/* Badge Text */}
       <div className="fixed bottom-20 right-6 z-50 text-xs text-muted-foreground text-right max-w-[140px]">
         AI-powered portfolio
       </div>
 
-      {/* Chat Modal */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-end md:justify-center p-4 pointer-events-none">
-          <div
-            className="w-full md:w-[500px] h-[600px] md:h-[700px] bg-background/95 dark:bg-background/95 backdrop-blur-xl border border-purple-500/20 rounded-2xl shadow-2xl flex flex-col pointer-events-auto"
-            style={{
-              boxShadow: "0 0 40px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-            }}
+      {/* Chat Window - bottom-right widget */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed z-50 pointer-events-none"
+            style={{ bottom: 100, right: 20 }}
+            initial={{ opacity: 0, scale: 0.8, y: 20, transformOrigin: "bottom right" }}
+            animate={{ opacity: 1, scale: 1, y: 0, transformOrigin: "bottom right" }}
+            exit={{ opacity: 0, scale: 0.85, y: 10, transformOrigin: "bottom right" }}
+            transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
           >
+            <motion.div
+              className="pointer-events-auto rounded-2xl flex flex-col border w-[92vw] max-w-[520px] h-[60vh] max-h-[720px]"
+              // Glass + gradient border
+              style={{
+                background: "linear-gradient(180deg, rgba(17,17,20,0.8), rgba(17,17,20,0.6))",
+                backdropFilter: "blur(14px)",
+                WebkitBackdropFilter: "blur(14px)",
+                boxShadow: "0 0 48px rgba(139,92,246,0.22)",
+                borderImage: "linear-gradient(135deg, rgba(168,85,247,0.65), rgba(34,211,238,0.45)) 1",
+              }}
+            >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-purple-500/20">
               <div className="flex items-center gap-3">
@@ -297,28 +405,12 @@ export function AIAssistant() {
             )}
 
             {/* Messages Area - Always visible */}
-            <div
-              ref={chatRef}
-              className="flex-1 overflow-y-auto p-4 space-y-4"
-            >
+            <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((msg, idx) => {
                 if (msg.role === "typing") {
-                  return (
-                    <ChatBubble
-                      key={msg.id || idx}
-                      message=""
-                      isUser={false}
-                      isTyping={true}
-                    />
-                  );
+                  return <ChatBubble key={msg.id || idx} message="" isUser={false} isTyping={true} />;
                 }
-                return (
-                  <ChatBubble
-                    key={msg.id || idx}
-                    message={msg.content}
-                    isUser={msg.role === "user"}
-                  />
-                );
+                return <ChatBubble key={msg.id || idx} message={msg.content} isUser={msg.role === "user"} />;
               })}
             </div>
 
@@ -343,9 +435,24 @@ export function AIAssistant() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Local CSS keyframes for FAB animations */}
+      <style jsx global>{`
+        @keyframes fab-bounce {
+          0% { transform: translateY(0) scale(1); }
+          35% { transform: translateY(-6px) scale(1.08); }
+          100% { transform: translateY(0) scale(1); }
+        }
+        @keyframes fab-pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.03); }
+        }
+        .chat-bounce { animation: fab-bounce 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; transform-origin: center; }
+        .chat-pulse { animation: fab-pulse 3s ease-in-out infinite; transform-origin: center; }
+      `}</style>
     </>
   );
 }
