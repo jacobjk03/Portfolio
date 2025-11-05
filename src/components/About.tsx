@@ -76,17 +76,28 @@ export default function About() {
             }`}
             style={{ transitionDelay: "400ms" }}
           >
-            <div>
-              <h3 className="text-2xl font-bold mb-4">
+            <div className="space-y-5">
+              <h3 className="text-2xl font-bold mb-6">
                 Hi, I'm <span className="gradient-text">{resumeData.personal.name.split(" ")[0]}</span>
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-                {resumeData.personal.bio}
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                With years of experience in web development, I specialize in creating performant, 
-                accessible, and visually stunning applications that solve real-world problems.
-              </p>
+              
+              <div className="space-y-5">
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  I build <strong className="text-foreground">Generative AI</strong> systems that go beyond simple chatbots — intelligent agents with reasoning, planning, and autonomous action. My work focuses on <strong className="text-foreground">Agentic AI</strong> using ReAct patterns, tool-use, memory systems, and multi-step orchestration frameworks like LangGraph.
+                </p>
+
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  I specialize in <strong className="text-foreground">RAG systems</strong> for factual, context-aware AI, and deploy production-ready LLM pipelines on <strong className="text-foreground">AWS</strong> — ECS Fargate, Lambda, DynamoDB, S3, and CloudFront — ensuring scalable, secure infrastructure for enterprise AI applications.
+                </p>
+
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  My approach blends research-driven innovation with production engineering. I work across the full stack: from designing agent workflows and evaluation metrics to building interactive systems with voice, translation, and autonomous decision-making.
+                </p>
+
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Currently at Arizona State University, I'm developing cloud-native AI systems and advancing practical applications of agentic AI, RAG, and scalable ML deployment.
+                </p>
+              </div>
             </div>
 
             {/* Stats Grid */}

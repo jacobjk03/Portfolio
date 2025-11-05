@@ -6,6 +6,7 @@ import NeonCursor from "@/components/NeonCursor";
 import PageTransition from "@/components/PageTransition";
 import AIBackdrop from "@/components/AIBackdrop";
 import { MagneticEffects } from "@/components/MagneticEffects";
+import { AIAssistant } from "@/components/AIAssistant";
 
 const inter = Inter({ 
   subsets: ["latin"], 
@@ -83,6 +84,7 @@ export default function RootLayout({
           <NeonCursor />
           <MagneticEffects />
           {children}
+          <AIAssistant />
         </ThemeProvider>
       </body>
     </html>
