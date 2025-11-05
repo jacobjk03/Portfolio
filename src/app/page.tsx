@@ -3,7 +3,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import WorkAuthorizationFAQ from "@/components/WorkAuthorizationFAQ";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
@@ -46,16 +45,6 @@ export default function Home() {
         bokehSeed={2000}
       >
         <About />
-      </VisionSection>
-
-      {/* Work Authorization FAQ */}
-      <VisionSection 
-        delay={150} 
-        bokehDensity={0.15}
-        bokehColors={["#8b5cf6", "#a855f7", "#c084fc"]}
-        bokehSeed={2500}
-      >
-        <WorkAuthorizationFAQ />
       </VisionSection>
 
       {/* Skills - Minimal effects */}

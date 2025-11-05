@@ -830,3 +830,64 @@ a[data-ripple] {
     animation: none !important;
   }
 }
+
+/* Navbar persistent active state - Desktop/Tablet */
+.nav-active {
+  transform: scale(1.08);
+  text-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
+  transition: all 0.25s ease-out;
+}
+
+/* Navbar one-time bounce animation - Desktop/Tablet */
+@keyframes navPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.nav-bounce-once {
+  animation: navPop 0.25s ease-out;
+  transform-origin: center;
+}
+
+/* Navbar persistent active state - Mobile */
+.nav-active-mobile {
+  transform: scale(1.05);
+  transition: all 0.25s ease-out;
+}
+
+/* Navbar one-time bounce animation - Mobile */
+@keyframes navPopMobile {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.nav-bounce-once-mobile {
+  animation: navPopMobile 0.25s ease-out;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-active,
+  .nav-active-mobile {
+    transform: scale(1) !important;
+    text-shadow: none !important;
+  }
+  .nav-bounce-once,
+  .nav-bounce-once-mobile {
+    animation: none !important;
+  }
+}

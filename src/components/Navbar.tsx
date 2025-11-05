@@ -12,6 +12,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [bouncingSection, setBouncingSection] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [toastState, setToastState] = useState<{ message: string; position: { x: number; y: number } } | null>(null);
@@ -19,42 +20,88 @@ export default function Navbar() {
 
   useEffect(() => {
     setMounted(true);
+    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-
-      // Update active section based on scroll position
-      const sections = ["home", "about", "skills", "experience", "projects", "certifications", "contact"];
-      
-      // Get current scroll position (center of viewport)
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      
-      let activeSection = "home";
-      
-      // Check each section and find which one the scroll position is in
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        const element = document.getElementById(section);
-        
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const sectionTop = window.scrollY + rect.top;
-          
-          // If we've scrolled past the start of this section, it's the active one
-          if (window.scrollY >= sectionTop - 200) {
-            activeSection = section;
-            break;
-          }
-        }
-      }
-      
-      setActiveSection(activeSection);
     };
     
-    // Call once on mount
+    window.addEventListener("scroll", handleScroll);
+    
+    // IntersectionObserver for section detection
+    const sections = ["home", "about", "skills", "experience", "projects", "certifications", "contact"];
+    const observers: IntersectionObserver[] = [];
+    let previousActive = "home";
+    const intersectingSections = new Set<string>();
+
+    sections.forEach((sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (!element) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              intersectingSections.add(sectionId);
+            } else {
+              intersectingSections.delete(sectionId);
+            }
+            
+            // Determine the active section (prefer the first one in viewport order)
+            let newActive = previousActive;
+            for (const id of sections) {
+              if (intersectingSections.has(id)) {
+                newActive = id;
+                break;
+              }
+            }
+            
+            // If no sections are intersecting, use scroll position as fallback
+            if (intersectingSections.size === 0) {
+              const scrollY = window.scrollY;
+              for (let i = sections.length - 1; i >= 0; i--) {
+                const el = document.getElementById(sections[i]);
+                if (el) {
+                  const rect = el.getBoundingClientRect();
+                  const sectionTop = window.scrollY + rect.top;
+                  if (scrollY >= sectionTop - 200) {
+                    newActive = sections[i];
+                    break;
+                  }
+                }
+              }
+            }
+            
+            if (newActive !== previousActive) {
+              setActiveSection(newActive);
+              
+              // Trigger one-time bounce animation when section becomes active
+              setBouncingSection(newActive);
+              // Remove bounce class after animation completes (250ms)
+              setTimeout(() => {
+                setBouncingSection((prev) => (prev === newActive ? null : prev));
+              }, 250);
+              
+              previousActive = newActive;
+            }
+          });
+        },
+        {
+          rootMargin: "-20% 0px -60% 0px", // Trigger when section is in upper portion of viewport
+          threshold: 0.1,
+        }
+      );
+
+      observer.observe(element);
+      observers.push(observer);
+    });
+
+    // Handle initial state
     handleScroll();
     
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observers.forEach((obs) => obs.disconnect());
+    };
   }, []);
 
   const navItems = [
@@ -137,6 +184,7 @@ export default function Navbar() {
             {navItems.map((item) => {
               const sectionId = item.href.replace("#", "");
               const isActive = activeSection === sectionId;
+              const shouldBounce = bouncingSection === sectionId;
               return (
                 <a
                   key={item.name}
@@ -145,11 +193,11 @@ export default function Navbar() {
                     e.preventDefault();
                     handleNavClick(item.href);
                   }}
-                  className={`px-4 py-2 rounded-lg transition-colors relative ${
+                  className={`px-4 py-2 rounded-lg relative transition-all duration-[250ms] ease-out ${
                     isActive
-                      ? "text-primary font-medium"
+                      ? "text-primary font-medium nav-active"
                       : "text-gray-700 dark:text-foreground/70 hover:text-gray-900 dark:hover:text-foreground"
-                  }`}
+                  } ${shouldBounce ? "nav-bounce-once" : ""}`}
                 >
                   {item.name}
                   {isActive && (
@@ -241,6 +289,7 @@ export default function Navbar() {
             {navItems.map((item) => {
               const sectionId = item.href.replace("#", "");
               const isActive = activeSection === sectionId;
+              const shouldBounce = bouncingSection === sectionId;
               return (
                 <a
                   key={item.name}
@@ -249,11 +298,11 @@ export default function Navbar() {
                     e.preventDefault();
                     handleNavClick(item.href);
                   }}
-                  className={`block py-3 px-4 rounded-lg transition-colors ${
+                  className={`block py-3 px-4 rounded-lg transition-all duration-[250ms] ease-out ${
                     isActive
-                      ? "bg-primary/10 text-primary font-medium"
+                      ? "bg-primary/10 text-primary font-medium nav-active-mobile"
                       : "text-gray-700 dark:text-foreground/70 hover:bg-gray-100 dark:hover:bg-secondary hover:text-gray-900 dark:hover:text-foreground"
-                  }`}
+                  } ${shouldBounce ? "nav-bounce-once-mobile" : ""}`}
                 >
                   {item.name}
                 </a>
