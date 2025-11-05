@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 96%; /* Light mode: #F5F5F5 equivalent */
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -92,6 +92,11 @@ html {
 /* Gradient text */
 .gradient-text {
   @apply bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+}
+
+/* Light mode: darker neon shades for better visibility */
+.light .gradient-text {
+  @apply bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
 }
 
 /* Animated gradient background */

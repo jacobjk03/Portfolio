@@ -8,16 +8,19 @@ A cutting-edge, cinematic portfolio website built with Next.js 14, TypeScript, T
 
 ### 🎨 Core Features
 - **Modern Design** - Clean, minimalist interface with glassmorphism effects and cyberpunk aesthetics
-- **Dark/Light Mode** - Seamless theme switching with system preference detection
-- **Smooth Animations** - Framer Motion powered scroll-based animations with GPU acceleration
+- **Dark/Light Mode** - Seamless theme switching with system preference detection and localStorage persistence
+- **Scroll Progress Indicator** - Thin neon gradient bar (#8A2BE2 → #00CFFF) at top with subtle glow, smooth updates
+- **Skills Visualization** - Animated horizontal progress bars for each skill category with neon colors
+- **Smooth Animations** - Lightweight IntersectionObserver-based animations with GPU acceleration
 - **Fully Responsive** - Works perfectly on all devices and screen sizes
 - **Active Section Highlighting** - Smart navbar that highlights current section in viewport
 - **Interactive Project Cards** - Click to view detailed project information in modals with loader animations
+- **Lazy Loading** - All project images load lazily for optimal performance
 - **Timeline Layout** - Beautiful timeline design for experience and education
 - **Contact Form** - Cinematic transmission uplink experience with EmailJS integration
 - **Blog Section** - Markdown-ready blog section structure
 - **Accessible** - Built with accessibility best practices and `prefers-reduced-motion` support
-- **Performance Optimized** - Fast loading times, smooth interactions, and GPU-accelerated animations
+- **Performance Optimized** - Fast loading times, smooth interactions, reduced GPU usage, and optimized animations
 - **SEO Friendly** - Proper meta tags, Open Graph tags, and semantic HTML
 
 ### 🎯 Advanced Features
@@ -66,8 +69,17 @@ A cutting-edge, cinematic portfolio website built with Next.js 14, TypeScript, T
 #### 🎬 Cinematic Animations
 - **Shockwave Effects** - Smooth camera shake and glow pulse on interactions
 - **Neon Pulse** - Subtle glow animations throughout the interface
-- **Scroll Progress** - Minimal progress indicator at top
+- **Scroll Progress Indicator** - Enhanced neon gradient progress bar (#8A2BE2 → #00CFFF) with glow effect
+- **Skills Progress Bars** - Animated horizontal bars showing skill proficiency with neon gradient fills
 - **Section Transitions** - Immersive spatial transitions between sections
+
+#### 🚀 Performance Enhancements
+- **Lazy Loading** - All project images use native `loading="lazy"` attribute
+- **Optimized Animations** - Replaced heavy Framer Motion scroll triggers with lightweight IntersectionObserver
+- **Reduced GPU Usage** - Replaced blur filters with CSS gradients where possible
+- **Event-Based Effects** - Volumetric light beams and particles only render when needed
+- **Throttled Updates** - Scroll progress and animations use requestAnimationFrame throttling
+- **Smart will-change** - Only applied to actively animating elements
 
 ## 🛠️ Tech Stack
 

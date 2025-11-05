@@ -128,6 +128,8 @@ export default function Projects() {
                       src={project.image}
                       alt={project.title}
                       className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/20 group-hover:from-blue-500/10 group-hover:to-purple-500/30 transition-all" />
                   </>
@@ -267,6 +269,8 @@ export default function Projects() {
                         src={resumeData.projects[selectedProject].image}
                         alt={resumeData.projects[selectedProject].title}
                         className="rounded-xl shadow-lg max-w-full max-h-[520px] md:max-h-[600px] mx-auto object-contain"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="text-8xl">🚀</div>
