@@ -19,7 +19,7 @@ A cutting-edge, cinematic portfolio website built with Next.js 14, TypeScript, T
 - **Timeline Layout** - Beautiful timeline design for experience and education
 - **Contact Form** - Cinematic transmission uplink experience with EmailJS integration
 - **Blog Section** - Markdown-ready blog section structure
-- **AI Chat Assistant** - Browser-only LLM chat powered by WebLLM (no API calls), answers questions about Jacob's background, skills, and projects
+- **AI Chat Assistant** - Cloud-powered LLM chat using Groq API (Llama 3 8B), answers questions about Jacob's background, skills, and projects
 - **Accessible** - Built with accessibility best practices and `prefers-reduced-motion` support
 - **Performance Optimized** - Fast loading times, smooth interactions, reduced GPU usage, and optimized animations
 - **SEO Friendly** - Proper meta tags, Open Graph tags, and semantic HTML
@@ -75,14 +75,13 @@ A cutting-edge, cinematic portfolio website built with Next.js 14, TypeScript, T
 - **Section Transitions** - Immersive spatial transitions between sections
 
 #### 🤖 AI Chat Assistant
-- **Browser-Only LLM** - Powered by WebLLM, runs entirely in the browser (no API calls)
-- **WebGPU Support** - Uses WebGPU for fast inference, graceful fallback if unavailable
+- **Cloud-Powered LLM** - Powered by Groq API (Llama 3 8B), fast streaming responses
+- **Streaming Responses** - Real-time text streaming as AI generates responses
 - **Resume Context** - Loads resume data as system prompt to answer questions accurately
-- **Model Options** - Fast model (Phi-3-mini) or Smart model (Llama-3.1-8B) toggle
 - **Chat Interface** - Floating button with glassmorphic modal, neon styling
 - **Typing Animation** - Smooth typing dots animation during AI response
-- **Settings Panel** - Reset chat and toggle between model options
-- **Lazy Loading** - WebLLM only loads when user opens chat for optimal performance
+- **Settings Panel** - Reset chat functionality
+- **Instant UI** - No loading states, chat opens immediately with welcome message
 
 #### 🚀 Performance Enhancements
 - **Lazy Loading** - All project images use native `loading="lazy"` attribute
@@ -102,7 +101,7 @@ A cutting-edge, cinematic portfolio website built with Next.js 14, TypeScript, T
 - **Theme:** [next-themes](https://github.com/pacocoursey/next-themes)
 - **Email Service:** [EmailJS](https://www.emailjs.com/) (ready to integrate)
 - **Markdown:** [react-markdown](https://github.com/remarkjs/react-markdown) with [remark-gfm](https://github.com/remarkjs/remark-gfm)
-- **AI/LLM:** [@mlc-ai/web-llm](https://github.com/mlc-ai/web-llm) for browser-only LLM inference
+- **AI/LLM:** [Groq SDK](https://github.com/groq/groq-sdk) for cloud-based LLM inference (Llama 3 8B)
 
 ## 📦 Installation
 

@@ -83,19 +83,23 @@ export default function About() {
               
               <div className="space-y-5">
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  I build <strong className="text-foreground">Generative AI</strong> systems that go beyond simple chatbots — intelligent agents with reasoning, planning, and autonomous action. My work focuses on <strong className="text-foreground">Agentic AI</strong> using ReAct patterns, tool-use, memory systems, and multi-step orchestration frameworks like LangGraph.
+                  I build AI that thinks, plans, and acts — not just responds.
                 </p>
 
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  I specialize in <strong className="text-foreground">RAG systems</strong> for factual, context-aware AI, and deploy production-ready LLM pipelines on <strong className="text-foreground">AWS</strong> — ECS Fargate, Lambda, DynamoDB, S3, and CloudFront — ensuring scalable, secure infrastructure for enterprise AI applications.
+                  My focus is <strong className="text-foreground">Agentic AI</strong> and <strong className="text-foreground">RAG systems</strong> powered by memory, tool-use, and multi-step reasoning.
                 </p>
 
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  My approach blends research-driven innovation with production engineering. I work across the full stack: from designing agent workflows and evaluation metrics to building interactive systems with voice, translation, and autonomous decision-making.
+                  I ship production-ready LLM applications on <strong className="text-foreground">AWS</strong>, architected for speed, reliability, and enterprise scale.
                 </p>
 
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  Currently at Arizona State University, I'm developing cloud-native AI systems and advancing practical applications of agentic AI, RAG, and scalable ML deployment.
+                  Blending research and engineering, I design AI agents you can trust from real-time decision systems to voice-enabled assistants.
+                </p>
+
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Currently at Arizona State University, I am focused on cloud-native AI systems and next-gen autonomous intelligence.
                 </p>
               </div>
             </div>

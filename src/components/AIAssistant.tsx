@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Bot, X, Send, Settings2, RotateCcw } from "lucide-react";
 import { ChatBubble } from "./chat/ChatBubble";
-import { resumeData } from "@/config/resume-data";
 
 interface Message {
   role: "user" | "assistant" | "typing";
@@ -12,199 +11,158 @@ interface Message {
 }
 
 /**
- * AI Assistant Component using WebLLM
- * Instant conversation with no loading states
+ * AI Assistant Component using Groq API
+ * Instant conversation with streaming responses
  */
 export function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [modelReady, setModelReady] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   
   const chatRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<any>(null);
-  const isInitializingRef = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  // No retry timers; show a single clean error on failure
 
-  // Build system prompt from resume data
-  const buildSystemPrompt = (): string => {
-    const skills = resumeData.skills
-      .map((s) => `${s.category}: ${s.items.join(", ")}`)
-      .join("\n");
-
-    const experience = resumeData.experience
-      .map(
-        (e) =>
-          `${e.position} at ${e.company} (${e.startDate} - ${e.endDate}): ${e.description.join("; ")}`
-      )
-      .join("\n");
-
-    const projects = resumeData.projects
-      .map((p) => `${p.title}: ${p.description}`)
-      .join("\n");
-
-    return `You are Jacob Kuriakose's AI portfolio assistant. You are professional, confident, and friendly. Help visitors learn about Jacob.
-
-About Jacob:
-- Name: ${resumeData.personal.name}
-- Title: ${resumeData.personal.title}
-- Location: ${resumeData.personal.location}
-- Email: ${resumeData.personal.email}
-- Bio: ${resumeData.personal.bio}
-
-Skills:
-${skills}
-
-Experience:
-${experience}
-
-Projects:
-${projects}
-
-Education: ${resumeData.education.map((e) => `${e.degree} from ${e.institution}`).join(", ")}
-
-When answering:
-- Be concise and professional
-- Focus on Jacob's expertise in ML, NLP, and cloud AI
-- Mention specific projects and technologies when relevant
-- Be helpful and enthusiastic about Jacob's work
-- Keep responses under 3-4 sentences unless asked for details`;
-  };
-
-  // Check WebGPU support
-  const checkWebGPUSupport = async (): Promise<boolean> => {
-    if (!navigator.gpu) return false;
-    try {
-      const adapter = await navigator.gpu.requestAdapter();
-      return adapter !== null;
-    } catch {
-      return false;
-    }
-  };
-
-  // Initialize WebLLM model in background (non-blocking)
-  const initializeModel = async () => {
-    if (engineRef.current || isInitializingRef.current) return;
-
-    isInitializingRef.current = true;
-    setError(null);
-
-    try {
-      // Check WebGPU support
-      const hasWebGPU = await checkWebGPUSupport();
-      if (!hasWebGPU) {
-        // Don't set error, just mark as unavailable
-        isInitializingRef.current = false;
-        return;
-      }
-
-      // Dynamic import to lazy load WebLLM
-      const { CreateMLCEngine } = await import("@mlc-ai/web-llm");
-      
-      // Use smaller, faster model: Qwen2.5-0.5B
-      const modelId = "Qwen2.5-0.5B-Instruct-q4f16_1-MLC";
-
-      console.log(`Initializing model: ${modelId}`);
-
-      engineRef.current = await CreateMLCEngine(modelId, {
-        initProgressCallback: (progress: any) => {
-          // Silent progress logging
-          if (typeof progress === 'number') {
-            console.log(`Model loading: ${(progress * 100).toFixed(1)}%`);
-          } else if (progress?.progress) {
-            console.log(`Model loading: ${(progress.progress * 100).toFixed(1)}%`);
-          }
-        },
-      });
-
-      setModelReady(true);
-      isInitializingRef.current = false;
-    } catch (err: any) {
-      console.error("Failed to initialize model:", err);
-      isInitializingRef.current = false;
-      // Don't show error immediately, only when user tries to send
-    }
-  };
-
-  // Handle send message - instant UI update
+  // Handle send message - instant UI update with streaming
   const handleSend = async () => {
+    // 1) Read input and clear it
     const userMessage = input.trim();
     if (!userMessage) return;
-
-    // Clear input immediately
     setInput("");
 
-    // Show user message immediately
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    // 2) Create newMessages including the user's latest message
+    const newMessages = [...messages, { role: "user" as const, content: userMessage }];
 
-    // Add typing placeholder immediately
+    // Update state immediately so UI shows the user's message
+    setMessages(newMessages);
+
+    // Add typing placeholder immediately (append to new list)
     const typingId = `typing-${Date.now()}`;
-    setMessages((prev) => [...prev, { role: "typing", content: "", id: typingId }]);
+    setMessages([...newMessages, { role: "typing", content: "", id: typingId }]);
 
-    // Ensure model is ready, or try to initialize
-    if (!engineRef.current && !isInitializingRef.current) {
-      await initializeModel();
+    // Cancel any existing request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
     }
-
-    // If model not ready, show error
-    if (!engineRef.current) {
-      // Remove typing placeholder
-      setMessages((prev) => prev.filter((m) => m.id !== typingId));
-      
-      // Add error message
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "AI is unavailable. Please try again." },
-      ]);
-      return;
-    }
+    abortControllerRef.current = new AbortController();
 
     try {
-      // Get conversation history (excluding typing placeholder)
-      const conversationMessages = messages.filter((m) => m.role !== "typing");
+      // 3) Build API payload from newMessages (avoids stale state)
+      const apiMessages = newMessages.map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      }));
 
-      // Build messages for API
-      const apiMessages = [
-        { role: "system" as const, content: buildSystemPrompt() },
-        ...conversationMessages.map((m) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-        })),
-        { role: "user" as const, content: userMessage },
-      ];
-
-      // Get response from model
-      const response = await engineRef.current.chat.completions.create({
-        messages: apiMessages,
-        temperature: 0.7,
-        max_tokens: 200,
+      // Call Groq API with streaming
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: apiMessages }),
+        signal: abortControllerRef.current.signal,
       });
 
-      const assistantMessage = response.choices[0]?.message?.content || 
-        response.choices?.[0]?.delta?.content ||
-        "I'm sorry, I couldn't generate a response.";
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMsg = errorData.error || "⚠️ AI is unavailable. Try again.";
+        throw new Error(errorMsg);
+      }
 
-      // Remove typing placeholder and add response
+      // Keep typing placeholder visible until we start receiving content
+      // Add assistant message placeholder immediately but keep typing indicator
+      const assistantId = `assistant-${Date.now()}`;
+      setMessages((prev) => [...prev, { role: "assistant", content: "", id: assistantId }]);
+
+      // Stream the response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error("No response stream");
+      }
+
+      let accumulatedContent = "";
+      let hasReceivedContent = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6).trim();
+            if (data === "[DONE]") {
+              // Remove typing indicator when done
+              setMessages((prev) => prev.filter((m) => m.id !== typingId));
+              break;
+            }
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.error) {
+                // Handle error from stream
+                setMessages((prev) => prev.filter((m) => m.id !== typingId && m.id !== assistantId));
+                throw new Error(parsed.error);
+              }
+              if (parsed.content) {
+                if (!hasReceivedContent) {
+                  hasReceivedContent = true;
+                  // Remove typing indicator once we receive first content
+                  setMessages((prev) => prev.filter((m) => m.id !== typingId));
+                }
+                accumulatedContent += parsed.content;
+                // 4) Update the LAST assistant message content (the one we just added)
+                setMessages((prev) => {
+                  const lastAssistantIndex = (() => {
+                    for (let i = prev.length - 1; i >= 0; i--) {
+                      if (prev[i].role === "assistant") return i;
+                    }
+                    return -1;
+                  })();
+                  if (lastAssistantIndex === -1) return prev;
+                  const next = [...prev];
+                  next[lastAssistantIndex] = { ...next[lastAssistantIndex], content: accumulatedContent } as any;
+                  return next;
+                });
+              }
+            } catch (e) {
+              // Skip invalid JSON chunks
+            }
+          }
+        }
+      }
+
+      // Ensure typing indicator is removed and finalize message
       setMessages((prev) => {
-        const withoutTyping = prev.filter((m) => m.id !== typingId);
-        return [...withoutTyping, { role: "assistant", content: assistantMessage }];
+        const filtered = prev.filter((m) => m.id !== typingId);
+        return filtered.map((m) =>
+          m.id === assistantId
+            ? { role: "assistant" as const, content: accumulatedContent || m.content }
+            : m
+        );
       });
     } catch (err: any) {
-      console.error("Error generating response:", err);
-      
       // Remove typing placeholder
       setMessages((prev) => prev.filter((m) => m.id !== typingId));
       
-      // Add error message
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "AI is unavailable. Please try again." },
-      ]);
+      // Do NOT remove user messages or clear history - just append error message
+      if (err.name !== "AbortError") {
+        const errorMsg = err.message || "⚠️ AI is unavailable. Try again.";
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: errorMsg },
+        ]);
+      }
+    } finally {
+      abortControllerRef.current = null;
     }
   };
 
-  // Show welcome message immediately when chat opens
+  // Show welcome message immediately when chat opens (only if no messages exist)
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setMessages([
@@ -213,20 +171,39 @@ When answering:
           content: "Hi! I'm Jacob's AI assistant. Ask me anything about his background, skills, projects, or tech interests!",
         },
       ]);
-      // Start model initialization in background (non-blocking)
-      initializeModel();
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length]);
 
-  // Scroll to bottom when new messages arrive
+  // Scroll to bottom smoothly when new messages arrive
   useEffect(() => {
     if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      // Use requestAnimationFrame for smooth scrolling
+      requestAnimationFrame(() => {
+        if (chatRef.current) {
+          chatRef.current.scrollTo({
+            top: chatRef.current.scrollHeight,
+            behavior: "smooth",
+          });
+        }
+      });
     }
   }, [messages]);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
   // Reset chat
   const handleReset = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    // no retry timers to clear
     setMessages([
       {
         role: "assistant",
@@ -281,9 +258,7 @@ When answering:
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground">Ask Jacob AI</h3>
-                  <p className="text-xs text-muted-foreground">
-                    {modelReady ? "Online" : "Initializing..."}
-                  </p>
+                  <p className="text-xs text-muted-foreground">Online</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -309,7 +284,7 @@ When answering:
               <div className="p-4 border-b border-purple-500/20 bg-secondary/30">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-medium">Model</span>
-                  <span className="text-xs text-muted-foreground">Qwen2.5-0.5B</span>
+                          <span className="text-xs text-muted-foreground">Llama 4 Scout</span>
                 </div>
                 <button
                   onClick={handleReset}
@@ -339,7 +314,7 @@ When answering:
                 }
                 return (
                   <ChatBubble
-                    key={idx}
+                    key={msg.id || idx}
                     message={msg.content}
                     isUser={msg.role === "user"}
                   />
@@ -359,7 +334,7 @@ When answering:
                   disabled={false}
                 />
                 <button
-                  onClick={handleSend}
+                  onClick={() => handleSend()}
                   disabled={!input.trim()}
                   className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
                   aria-label="Send message"
