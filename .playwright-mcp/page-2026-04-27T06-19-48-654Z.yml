@@ -1,0 +1,496 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e5]:
+      - generic [ref=e7]:
+        - link "Jacob Kuriakose" [ref=e8] [cursor=pointer]:
+          - /url: "#home"
+        - generic [ref=e9]:
+          - link "About" [ref=e10] [cursor=pointer]:
+            - /url: "#about"
+          - link "Skills" [ref=e11] [cursor=pointer]:
+            - /url: "#skills"
+          - link "Experience" [ref=e12] [cursor=pointer]:
+            - /url: "#experience"
+          - link "Projects" [ref=e13] [cursor=pointer]:
+            - /url: "#projects"
+          - link "Certifications" [ref=e14] [cursor=pointer]:
+            - /url: "#certifications"
+          - link "Contact" [ref=e15] [cursor=pointer]:
+            - /url: "#contact"
+        - link "Connect" [ref=e17] [cursor=pointer]:
+          - /url: "#contact"
+    - generic [ref=e20]:
+      - generic: "01"
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic [ref=e25]: Data Scientist & Machine Learning Engineer
+            - generic [ref=e26]: Open to Work
+          - heading "Jacob Kuriakose." [level=1] [ref=e29] [cursor=pointer]:
+            - text: Jacob
+            - text: Kuriakose.
+          - paragraph [ref=e30]: Data Scientist specializing in Machine Learning and NLP with hands-on experience in deploying generative AI systems and cloud-native architectures.
+          - generic [ref=e31]:
+            - link "View My Work" [ref=e32] [cursor=pointer]:
+              - /url: "#projects"
+            - link "Get In Touch" [ref=e33] [cursor=pointer]:
+              - /url: "#contact"
+            - button "Resume" [ref=e34] [cursor=pointer]:
+              - img [ref=e35]
+              - text: Resume
+          - generic [ref=e39]:
+            - link "github" [ref=e40] [cursor=pointer]:
+              - /url: https://github.com/jacobjk03
+              - img [ref=e41]
+            - link "linkedin" [ref=e44] [cursor=pointer]:
+              - /url: https://linkedin.com/in/jacob-kuriakose
+              - img [ref=e45]
+            - link "website" [ref=e49] [cursor=pointer]:
+              - /url: https://jacobkuriakose.com
+              - img [ref=e50]
+            - link "Email" [ref=e53] [cursor=pointer]:
+              - /url: mailto:jkuriak3@asu.edu
+              - img [ref=e54]
+        - generic [ref=e59]:
+          - generic: drag to rotate · pinch to zoom
+          - generic [ref=e60]:
+            - generic [ref=e62]:
+              - generic [ref=e63]: Data Scientist
+              - generic [ref=e64]: ML & Analytics
+            - generic [ref=e66]:
+              - generic [ref=e67]: ML Engineer
+              - generic [ref=e68]: Model Deployment
+            - generic [ref=e70]:
+              - generic [ref=e71]: NLP Engineer
+              - generic [ref=e72]: Language Models
+            - generic [ref=e74]:
+              - generic [ref=e75]: Cloud Architect
+              - generic [ref=e76]: AWS & GCP
+            - generic [ref=e79]: Jacob Kuriakose
+      - img [ref=e83]
+    - generic [ref=e86]:
+      - generic [ref=e88]: Machine Learning
+      - generic [ref=e91]: Deep Learning
+      - generic [ref=e94]: NLP
+      - generic [ref=e97]: Transformers
+      - generic [ref=e100]: Generative AI
+      - generic [ref=e103]: Time Series Forecasting
+      - generic [ref=e106]: EDA
+      - generic [ref=e109]: Feature Engineering
+      - generic [ref=e112]: Model Evaluation
+      - generic [ref=e115]: Python
+      - generic [ref=e118]: C++
+      - generic [ref=e121]: SQL
+      - generic [ref=e124]: TensorFlow
+      - generic [ref=e127]: Keras
+      - generic [ref=e130]: PyTorch
+      - generic [ref=e133]: Scikit-Learn
+      - generic [ref=e136]: LangChain
+      - generic [ref=e139]: LangGraph
+      - generic [ref=e142]: Flask
+      - generic [ref=e145]: Statsmodels
+      - generic [ref=e148]: AWS (EC2, ECS, ECR, RDS, S3, DynamoDB, Lambda, CloudFront, Secrets Manager)
+      - generic [ref=e151]: Docker
+      - generic [ref=e154]: Git
+      - generic [ref=e157]: Jupyter Notebook
+      - generic [ref=e160]: PySpark
+      - generic [ref=e163]: Tableau
+      - generic [ref=e166]: MS Excel
+      - generic [ref=e169]: Machine Learning
+      - generic [ref=e172]: Deep Learning
+      - generic [ref=e175]: NLP
+      - generic [ref=e178]: Transformers
+      - generic [ref=e181]: Generative AI
+      - generic [ref=e184]: Time Series Forecasting
+      - generic [ref=e187]: EDA
+      - generic [ref=e190]: Feature Engineering
+      - generic [ref=e193]: Model Evaluation
+      - generic [ref=e196]: Python
+      - generic [ref=e199]: C++
+      - generic [ref=e202]: SQL
+      - generic [ref=e205]: TensorFlow
+      - generic [ref=e208]: Keras
+      - generic [ref=e211]: PyTorch
+      - generic [ref=e214]: Scikit-Learn
+      - generic [ref=e217]: LangChain
+      - generic [ref=e220]: LangGraph
+      - generic [ref=e223]: Flask
+      - generic [ref=e226]: Statsmodels
+      - generic [ref=e229]: AWS (EC2, ECS, ECR, RDS, S3, DynamoDB, Lambda, CloudFront, Secrets Manager)
+      - generic [ref=e232]: Docker
+      - generic [ref=e235]: Git
+      - generic [ref=e238]: Jupyter Notebook
+      - generic [ref=e241]: PySpark
+      - generic [ref=e244]: Tableau
+      - generic [ref=e247]: MS Excel
+    - generic [ref=e251]:
+      - generic: "02"
+      - generic [ref=e253]:
+        - img "Jacob Kuriakose" [ref=e256]
+        - generic [ref=e258]:
+          - generic [ref=e259]: About
+          - heading "Structured inquiry. Scalable impact." [level=2] [ref=e260]:
+            - text: Structured inquiry.
+            - text: Scalable impact.
+          - generic [ref=e261]:
+            - paragraph [ref=e262]:
+              - text: I build AI that thinks, plans, and acts — not just responds. My focus is
+              - strong [ref=e263]: Agentic AI
+              - text: and
+              - strong [ref=e264]: RAG systems
+              - text: powered by memory, tool-use, and multi-step reasoning.
+            - paragraph [ref=e265]:
+              - text: I ship production-ready LLM applications on
+              - strong [ref=e266]: AWS
+              - text: ", architected for speed, reliability, and enterprise scale. Blending research and engineering, I design AI agents you can trust — from real-time decision systems to voice-enabled assistants."
+            - paragraph [ref=e267]:
+              - text: Currently at
+              - strong [ref=e268]: Arizona State University
+              - text: ", focused on cloud-native AI systems and next-gen autonomous intelligence."
+          - generic [ref=e269]:
+            - generic [ref=e270]:
+              - generic [ref=e271]: 📍
+              - text: Tempe, AZ
+            - generic [ref=e272]:
+              - generic [ref=e273]: 💼
+              - text: Available for work
+          - generic [ref=e274]:
+            - generic [ref=e275]:
+              - generic [ref=e276]: 0+
+              - text: Roles & Internships
+            - generic [ref=e277]:
+              - generic [ref=e278]: 0+
+              - text: Projects Built
+            - generic [ref=e279]:
+              - generic [ref=e280]: 0+
+              - text: Technologies
+            - generic [ref=e281]:
+              - generic [ref=e282]: 0+
+              - text: Certifications
+    - generic [ref=e285]:
+      - generic: "03"
+      - generic [ref=e286]:
+        - generic [ref=e287]:
+          - generic [ref=e288]: Core Competencies
+          - heading "Skills & Expertise" [level=2] [ref=e289]
+        - generic [ref=e290]:
+          - generic [ref=e291]:
+            - heading "Machine Learning & AI" [level=3] [ref=e292]
+            - generic [ref=e294]:
+              - generic [ref=e295]: Proficiency
+              - generic [ref=e296]: 100%
+            - generic [ref=e298]:
+              - generic [ref=e299]: Machine Learning
+              - generic [ref=e300]: Deep Learning
+              - generic [ref=e301]: NLP
+              - generic [ref=e302]: Transformers
+              - generic [ref=e303]: Generative AI
+              - generic [ref=e304]: Time Series Forecasting
+              - generic [ref=e305]: EDA
+              - generic [ref=e306]: Feature Engineering
+              - generic [ref=e307]: Model Evaluation
+          - generic [ref=e308]:
+            - heading "Programming" [level=3] [ref=e309]
+            - generic [ref=e311]:
+              - generic [ref=e312]: Proficiency
+              - generic [ref=e313]: 80%
+            - generic [ref=e315]:
+              - generic [ref=e316]: Python
+              - generic [ref=e317]: C++
+              - generic [ref=e318]: SQL
+          - generic [ref=e319]:
+            - heading "Frameworks & Libraries" [level=3] [ref=e320]
+            - generic [ref=e322]:
+              - generic [ref=e323]: Proficiency
+              - generic [ref=e324]: 97%
+            - generic [ref=e326]:
+              - generic [ref=e327]: TensorFlow
+              - generic [ref=e328]: Keras
+              - generic [ref=e329]: PyTorch
+              - generic [ref=e330]: Scikit-Learn
+              - generic [ref=e331]: LangChain
+              - generic [ref=e332]: LangGraph
+              - generic [ref=e333]: Flask
+              - generic [ref=e334]: Statsmodels
+          - generic [ref=e335]:
+            - heading "Cloud & Tools" [level=3] [ref=e336]
+            - generic [ref=e338]:
+              - generic [ref=e339]: Proficiency
+              - generic [ref=e340]: 93%
+            - generic [ref=e342]:
+              - generic [ref=e343]: AWS (EC2, ECS, ECR, RDS, S3, DynamoDB, Lambda, CloudFront, Secrets Manager)
+              - generic [ref=e344]: Docker
+              - generic [ref=e345]: Git
+              - generic [ref=e346]: Jupyter Notebook
+              - generic [ref=e347]: PySpark
+              - generic [ref=e348]: Tableau
+              - generic [ref=e349]: MS Excel
+    - generic [ref=e352]:
+      - generic: "04"
+      - generic [ref=e353]:
+        - generic [ref=e354]:
+          - generic [ref=e355]: Background
+          - heading "Experience & Education" [level=2] [ref=e356]
+        - generic [ref=e357]:
+          - generic [ref=e358]:
+            - generic [ref=e359]: Experience
+            - generic [ref=e360]:
+              - generic [ref=e361]:
+                - generic [ref=e362]: May 2025 — Present
+                - heading "Research Assistant — AI & Cloud" [level=4] [ref=e363]
+                - paragraph [ref=e364]: Arizona State University · Tempe, AZ
+                - list [ref=e365]:
+                  - listitem [ref=e366]:
+                    - generic [ref=e367]: —
+                    - generic [ref=e368]: Led migration of production-grade AI chatbot (Waterbot) to CISA AWS environment
+                  - listitem [ref=e369]:
+                    - generic [ref=e370]: —
+                    - generic [ref=e371]: Provisioned AWS CDK stack — ECS, ECR, ALB, CloudFront, S3, RDS PostgreSQL, DynamoDB, Lambda
+                  - listitem [ref=e372]:
+                    - generic [ref=e373]: —
+                    - generic [ref=e374]: Implemented secure RDS integration via Secrets Manager & IAM roles
+                  - listitem [ref=e375]:
+                    - generic [ref=e376]: —
+                    - generic [ref=e377]: Built & pushed Docker images to ECR; switched to ECS CLI redeploys reducing deploy time ~85%
+                  - listitem [ref=e378]:
+                    - generic [ref=e379]: —
+                    - generic [ref=e380]: Resolved IAM & CloudShell issues improving deployment stability ~30%
+                  - listitem [ref=e381]:
+                    - generic [ref=e382]: —
+                    - generic [ref=e383]: Restored chatbot access for 2,000+ users by removing unintended CloudFront auth
+                - generic [ref=e384]:
+                  - generic [ref=e385]: AWS CDK
+                  - generic [ref=e386]: Docker
+                  - generic [ref=e387]: ECS Fargate
+                  - generic [ref=e388]: PostgreSQL
+                  - generic [ref=e389]: Python
+                  - generic [ref=e390]: Lambda
+              - generic [ref=e391]:
+                - generic [ref=e392]: Jan 2023 — Jul 2023
+                - heading "Software Quality Engineer Intern" [level=4] [ref=e393]
+                - paragraph [ref=e394]: Red Hat · Remote
+                - list [ref=e395]:
+                  - listitem [ref=e396]:
+                    - generic [ref=e397]: —
+                    - generic [ref=e398]: Automated & executed software test suites using GoLang
+                  - listitem [ref=e399]:
+                    - generic [ref=e400]: —
+                    - generic [ref=e401]: Reduced test execution time by 30% through optimization
+                  - listitem [ref=e402]:
+                    - generic [ref=e403]: —
+                    - generic [ref=e404]: Designed detailed test plans in Polarion
+                  - listitem [ref=e405]:
+                    - generic [ref=e406]: —
+                    - generic [ref=e407]: Used Docker for scalable deployment environments
+                - generic [ref=e408]:
+                  - generic [ref=e409]: Go
+                  - generic [ref=e410]: Docker
+                  - generic [ref=e411]: Polarion
+              - generic [ref=e412]:
+                - generic [ref=e413]: Jun 2022 — Aug 2022
+                - heading "NLP Intern" [level=4] [ref=e414]
+                - paragraph [ref=e415]: BraynixAI · Remote
+                - list [ref=e416]:
+                  - listitem [ref=e417]:
+                    - generic [ref=e418]: —
+                    - generic [ref=e419]: Enhanced legal document classification accuracy by 10% using Transformer models
+                  - listitem [ref=e420]:
+                    - generic [ref=e421]: —
+                    - generic [ref=e422]: Built FastAPI ML services for document processing at scale
+                - generic [ref=e423]:
+                  - generic [ref=e424]: Python
+                  - generic [ref=e425]: Transformers
+                  - generic [ref=e426]: FastAPI
+          - generic [ref=e427]:
+            - generic [ref=e428]: Education
+            - generic [ref=e429]:
+              - generic [ref=e430]:
+                - generic [ref=e431]: 2024 — 2026
+                - heading "Master of Science" [level=4] [ref=e432]
+                - paragraph [ref=e433]: Arizona State University · Tempe, AZ
+                - paragraph [ref=e434]: "Field: Data Science"
+                - paragraph [ref=e435]: "GPA: 4.00/4.00"
+                - list [ref=e436]:
+                  - listitem [ref=e437]:
+                    - generic [ref=e438]: —
+                    - generic [ref=e439]: Research Assistant — Cloud & AI
+                  - listitem [ref=e440]:
+                    - generic [ref=e441]: —
+                    - generic [ref=e442]: "Courses: Software Security, Data Mining, Statistical Machine Learning"
+              - generic [ref=e443]:
+                - generic [ref=e444]: 2019 — 2023
+                - heading "Bachelor of Technology" [level=4] [ref=e445]
+                - paragraph [ref=e446]: Dr. Akhilesh Das Gupta Institute of Technology and Management · Delhi, India
+                - paragraph [ref=e447]: "Field: Information Technology"
+                - paragraph [ref=e448]: "GPA: 9.0/10"
+                - list [ref=e449]:
+                  - listitem [ref=e450]:
+                    - generic [ref=e451]: —
+                    - generic [ref=e452]: Published 'Monument Tracker' Deep Learning research paper
+    - generic [ref=e455]:
+      - generic: "05"
+      - generic [ref=e456]:
+        - generic [ref=e457]:
+          - generic [ref=e458]:
+            - generic [ref=e459]: Selected Work
+            - heading "Recent case studies." [level=2] [ref=e460]
+          - generic [ref=e461]:
+            - generic [ref=e462]: 03 Projects
+            - generic [ref=e463]:
+              - button "All" [ref=e464] [cursor=pointer]
+              - button "Featured" [ref=e465] [cursor=pointer]:
+                - img [ref=e466]
+                - text: Featured
+        - generic [ref=e468]:
+          - generic [ref=e469] [cursor=pointer]:
+            - generic [ref=e470]:
+              - img "ReAct-Based Medical Chatbot" [ref=e471]
+              - generic [ref=e472]:
+                - img [ref=e473]
+                - text: Featured
+            - generic [ref=e476]:
+              - generic [ref=e477]:
+                - generic [ref=e478]: Python
+                - generic [ref=e479]: LangChain
+                - generic [ref=e480]: "+6"
+              - heading "ReAct-Based Medical Chatbot" [level=3] [ref=e481]
+              - paragraph [ref=e482]: Agentic medical AI chatbot using hybrid LLM orchestration
+              - generic [ref=e483]:
+                - text: Explore case
+                - img [ref=e484]
+          - generic [ref=e486] [cursor=pointer]:
+            - generic [ref=e487]:
+              - img "Walmart Sales Forecasting" [ref=e488]
+              - generic [ref=e489]:
+                - img [ref=e490]
+                - text: Featured
+            - generic [ref=e493]:
+              - generic [ref=e494]:
+                - generic [ref=e495]: Python
+                - generic [ref=e496]: Pandas
+                - generic [ref=e497]: "+4"
+              - heading "Walmart Sales Forecasting" [level=3] [ref=e498]
+              - paragraph [ref=e499]: Retail demand forecasting using ML & Deep Learning
+              - generic [ref=e500]:
+                - text: Explore case
+                - img [ref=e501]
+          - generic [ref=e503] [cursor=pointer]:
+            - img "Waterbot" [ref=e505]
+            - generic [ref=e507]:
+              - generic [ref=e508]:
+                - generic [ref=e509]: Python
+                - generic [ref=e510]: AWS
+                - generic [ref=e511]: "+4"
+              - heading "Waterbot" [level=3] [ref=e512]
+              - paragraph [ref=e513]: AI-powered educational chatbot for water literacy with multilingual & voice support
+              - generic [ref=e514]:
+                - text: Explore case
+                - img [ref=e515]
+    - generic [ref=e519]:
+      - generic: "06"
+      - generic [ref=e520]:
+        - generic [ref=e521]:
+          - generic [ref=e522]: Credentials
+          - heading "Professional Certifications" [level=2] [ref=e523]
+        - generic [ref=e524]:
+          - generic [ref=e525]:
+            - img "DeepLearning.AI" [ref=e527]
+            - heading "Generative AI with Large Language Models" [level=3] [ref=e528]
+            - paragraph [ref=e529]: DeepLearning.AI
+            - paragraph [ref=e530]: Feb 2024
+            - link "View" [ref=e531] [cursor=pointer]:
+              - /url: https://www.coursera.org/account/accomplishments/verify/C22JZ8SFYQZL
+              - img [ref=e532]
+              - text: View
+          - generic [ref=e536]:
+            - img "Udemy" [ref=e538]
+            - heading "Complete Machine Learning and Data Science Bootcamp 2021" [level=3] [ref=e539]
+            - paragraph [ref=e540]: Udemy
+            - paragraph [ref=e541]: Sep 2021
+            - link "View" [ref=e542] [cursor=pointer]:
+              - /url: https://udemy-certificate.s3.amazonaws.com/pdf/UC-0a270215-e08e-4608-ba61-52259eeeb0a4.pdf
+              - img [ref=e543]
+              - text: View
+          - generic [ref=e547]:
+            - img "Coursera" [ref=e549]
+            - heading "Machine Learning" [level=3] [ref=e550]
+            - paragraph [ref=e551]: Coursera
+            - paragraph [ref=e552]: Jun 2021
+            - link "View" [ref=e553] [cursor=pointer]:
+              - /url: https://www.coursera.org/account/accomplishments/certificate/WXGSLPAFFVAM
+              - img [ref=e554]
+              - text: View
+          - generic [ref=e558]:
+            - img "GUVI" [ref=e560]
+            - heading "Built a Face Recognition Application using Python" [level=3] [ref=e561]
+            - paragraph [ref=e562]: GUVI
+            - paragraph [ref=e563]: Apr 2021
+            - link "View" [ref=e564] [cursor=pointer]:
+              - /url: https://www.guvi.in/verify-certificate?id=g91596x1Tr37H1a3q9
+              - img [ref=e565]
+              - text: View
+          - generic [ref=e569]:
+            - img "Google Cloud / Qwiklabs" [ref=e571]
+            - heading "30 Days of Google Cloud" [level=3] [ref=e572]
+            - paragraph [ref=e573]: Google Cloud / Qwiklabs
+            - paragraph [ref=e574]: Nov 2020
+            - link "View" [ref=e575] [cursor=pointer]:
+              - /url: https://www.skills.google/public_profiles/797612e1-a43f-4631-909c-7c7b46190978
+              - img [ref=e576]
+              - text: View
+    - generic [ref=e583]:
+      - generic [ref=e584]:
+        - heading "Get In Touch" [level=2] [ref=e585]
+        - paragraph [ref=e587]: I'm always open to new opportunities and interesting projects. Let's connect and create something amazing together!
+      - generic [ref=e594]: Establishing neural uplink...
+    - generic [ref=e596]:
+      - generic [ref=e597]:
+        - generic [ref=e598]:
+          - heading "Jacob Kuriakose" [level=3] [ref=e599]
+          - paragraph [ref=e600]: Building intelligent systems with LLMs, NLP, and cloud-first AI pipelines
+        - generic [ref=e601]:
+          - generic [ref=e602]: Navigation
+          - list [ref=e603]:
+            - listitem [ref=e604]:
+              - link "About" [ref=e605] [cursor=pointer]:
+                - /url: "#about"
+            - listitem [ref=e606]:
+              - link "Projects" [ref=e607] [cursor=pointer]:
+                - /url: "#projects"
+            - listitem [ref=e608]:
+              - link "Experience" [ref=e609] [cursor=pointer]:
+                - /url: "#experience"
+            - listitem [ref=e610]:
+              - link "Certifications" [ref=e611] [cursor=pointer]:
+                - /url: "#certifications"
+            - listitem [ref=e612]:
+              - link "Contact" [ref=e613] [cursor=pointer]:
+                - /url: "#contact"
+            - listitem [ref=e614]:
+              - button "Download Resume" [ref=e615] [cursor=pointer]:
+                - text: Download Resume
+                - img [ref=e616]
+        - generic [ref=e620]:
+          - generic [ref=e621]: Connect
+          - generic [ref=e622]:
+            - link "github" [ref=e623] [cursor=pointer]:
+              - /url: https://github.com/jacobjk03
+              - img [ref=e624]
+            - link "linkedin" [ref=e627] [cursor=pointer]:
+              - /url: https://linkedin.com/in/jacob-kuriakose
+              - img [ref=e628]
+            - link "website" [ref=e632] [cursor=pointer]:
+              - /url: https://jacobkuriakose.com
+              - img [ref=e633]
+            - link "Email" [ref=e636] [cursor=pointer]:
+              - /url: mailto:jkuriak3@asu.edu
+              - img [ref=e637]
+      - generic [ref=e640]:
+        - paragraph [ref=e641]: © 2026 Jacob Kuriakose
+        - generic [ref=e642]:
+          - 'button "Recruiter Mode: OFF" [ref=e643] [cursor=pointer]'
+          - button "Scroll to top" [ref=e644] [cursor=pointer]:
+            - img [ref=e645]
+  - button "Open AI Assistant" [ref=e647] [cursor=pointer]:
+    - img [ref=e649]
+  - generic [ref=e652]: Ask Jacob AI
