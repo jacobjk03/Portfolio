@@ -6,6 +6,8 @@ import { ExternalLink, Github, X, Sparkles, ArrowRight } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import NeonDNALoader from "./NeonDNALoader";
 import { useCardTilt } from "@/hooks/useCardTilt";
+import { Scroll3DReveal } from "@/components/Scroll3DReveal";
+import { SectionNumber } from "@/components/SectionNumber";
 
 function ProjectCard({ project, index, onClick }: { project: typeof resumeData.projects[0]; index: number; onClick: () => void }) {
   const { cardRef, onMouseMove, onMouseLeave } = useCardTilt(8);
@@ -107,10 +109,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      <span className="absolute top-6 right-6 md:right-12 lg:right-20 font-serif font-bold text-foreground/[0.035] leading-none select-none pointer-events-none"
-        style={{ fontSize: "clamp(6rem, 16vw, 14rem)" }}>
-        05
-      </span>
+      <SectionNumber number="05" />
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 
         {/* Header row */}
@@ -120,10 +119,12 @@ export default function Projects() {
           }`}
         >
           <div>
-            <span className="editorial-label block mb-4">Selected Work</span>
-            <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground max-w-md">
-              Recent case studies.
-            </h2>
+            <Scroll3DReveal>
+              <span className="editorial-label block mb-4">Selected Work</span>
+              <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground max-w-md">
+                Recent case studies.
+              </h2>
+            </Scroll3DReveal>
           </div>
           <div className="flex gap-3 items-center">
             <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/30 hidden sm:block">

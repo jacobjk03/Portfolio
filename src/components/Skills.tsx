@@ -2,6 +2,8 @@
 
 import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { Scroll3DReveal } from "@/components/Scroll3DReveal";
+import { SectionNumber } from "@/components/SectionNumber";
 
 export default function Skills() {
   const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1, rootMargin: "-80px", triggerOnce: true });
@@ -11,21 +13,16 @@ export default function Skills() {
 
   return (
     <section id="skills" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      <span className="absolute top-6 right-6 md:right-12 lg:right-20 font-serif font-bold text-foreground/[0.035] leading-none select-none pointer-events-none"
-        style={{ fontSize: "clamp(6rem, 16vw, 14rem)" }}>
-        03
-      </span>
+      <SectionNumber number="03" />
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 
-        <div
-          className={`mb-20 transition-all duration-500 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <span className="editorial-label block mb-4">Core Competencies</span>
-          <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground">
-            Skills & Expertise
-          </h2>
+        <div className="mb-20">
+          <Scroll3DReveal>
+            <span className="editorial-label block mb-4">Core Competencies</span>
+            <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground">
+              Skills & Expertise
+            </h2>
+          </Scroll3DReveal>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">

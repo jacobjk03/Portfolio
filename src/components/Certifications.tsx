@@ -5,6 +5,8 @@ import { motion, useInView } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { certLogos, certEmojis, getCleanIssuerName } from "@/data/certLogos";
+import { Scroll3DReveal } from "@/components/Scroll3DReveal";
+import { SectionNumber } from "@/components/SectionNumber";
 
 export default function Certifications() {
   const ref = useRef(null);
@@ -14,10 +16,7 @@ export default function Certifications() {
 
   return (
     <section id="certifications" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      <span className="absolute top-6 right-6 md:right-12 lg:right-20 font-serif font-bold text-foreground/[0.035] leading-none select-none pointer-events-none"
-        style={{ fontSize: "clamp(6rem, 16vw, 14rem)" }}>
-        06
-      </span>
+      <SectionNumber number="06" />
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 
         <motion.div
@@ -26,10 +25,12 @@ export default function Certifications() {
           transition={{ duration: 0.5 }}
           className="mb-20"
         >
-          <span className="editorial-label block mb-4">Credentials</span>
-          <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground">
-            Professional Certifications
-          </h2>
+          <Scroll3DReveal>
+            <span className="editorial-label block mb-4">Credentials</span>
+            <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground">
+              Professional Certifications
+            </h2>
+          </Scroll3DReveal>
         </motion.div>
 
         <motion.div
