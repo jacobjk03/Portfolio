@@ -49,14 +49,14 @@ export default function ScrollProgress() {
   if (prefersReducedMotion) {
     return (
       <div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8A2BE2] via-[#8B5CF6] to-[#00CFFF] origin-left z-50"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-[#4D77FF] origin-left z-50"
         style={{ transform: `scaleX(${scrollProgress})` }}
       />
     );
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 h-1 z-50 overflow-hidden">
+    <div className="fixed top-0 left-0 right-0 h-[2px] z-50 overflow-hidden">
       {/* Background track */}
       <div className="absolute inset-0 bg-gray-200/20 dark:bg-gray-800/20" />
       
@@ -66,8 +66,8 @@ export default function ScrollProgress() {
         style={{
           transform: `scaleX(${scrollProgress})`,
           width: "100%",
-          background: "linear-gradient(90deg, #8A2BE2 0%, #8B5CF6 50%, #00CFFF 100%)",
-          boxShadow: scrollProgress > 0 ? "0 0 10px rgba(138, 43, 226, 0.5), 0 0 20px rgba(0, 207, 255, 0.3)" : "none",
+          background: "#4D77FF",
+          boxShadow: scrollProgress > 0 ? "0 0 8px rgba(77, 119, 255, 0.4)" : "none",
           willChange: "transform",
         }}
       />

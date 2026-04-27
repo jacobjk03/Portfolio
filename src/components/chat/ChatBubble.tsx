@@ -1,7 +1,8 @@
 "use client";
 
-import { MessageCircle, User } from "lucide-react";
-import { motion } from "framer-motion"; // Animations
+import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ChatBubbleProps {
   message: string;
@@ -9,51 +10,59 @@ interface ChatBubbleProps {
   isTyping?: boolean;
 }
 
-/**
- * Chat Bubble Component
- * Displays individual messages with neon styling
- */
 export function ChatBubble({ message, isUser, isTyping }: ChatBubbleProps) {
   return (
     <motion.div
-      className={`flex items-start gap-3 mb-4 ${isUser ? "flex-row-reverse" : "flex-row"}`}
-      initial={{ opacity: 0, y: 8, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
+      className={`flex items-end gap-2 ${isUser ? "flex-row-reverse" : "flex-row"}`}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.15, ease: "easeOut" }}
     >
-      {/* Avatar */}
-      <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${isUser ? "bg-primary/20 text-primary" : "bg-gradient-to-br from-purple-500/20 to-cyan-500/20 text-purple-400"}`}>
-        {isUser ? (
-          <User className="w-4 h-4 text-white" />
-        ) : (
-          <div className="relative">
-            <MessageCircle className="w-4 h-4" />
-            {/* Glow ring - tweak color here */}
-            <span className="absolute -inset-1 rounded-full blur-[6px] bg-purple-500/30" />
-          </div>
-        )}
-      </div>
+      {/* Avatar dot */}
+      {!isUser && (
+        <div className="w-6 h-6 rounded-full bg-cobalt flex items-center justify-center shrink-0 mb-0.5">
+          <span className="text-white text-[9px] font-bold">JK</span>
+        </div>
+      )}
 
-      {/* Message Bubble */}
+      {/* Bubble */}
       <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+        className={`max-w-[82%] px-4 py-2.5 text-sm leading-relaxed ${
           isUser
-            ? "bg-[#2b2b2f] border border-pink-500/30 text-white"
-            : "bg-secondary/50 border border-purple-400/30 text-foreground shadow-[0_0_20px_rgba(139,92,246,0.15)]"
+            ? "bg-cobalt text-white"
+            : "bg-foreground/5 text-foreground border border-foreground/8"
         }`}
       >
         {isTyping ? (
-          <div className="flex items-center gap-1">
-            {/* Typing dots - tweak color here */}
-            <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-            <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-            <span className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+          <div className="flex items-center gap-1 py-0.5">
+            <span className="w-1.5 h-1.5 bg-cobalt rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+            <span className="w-1.5 h-1.5 bg-cobalt rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+            <span className="w-1.5 h-1.5 bg-cobalt rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
           </div>
+        ) : isUser ? (
+          <p className="whitespace-pre-wrap">{message}</p>
         ) : (
-          <p className="text-sm leading-relaxed whitespace-pre-wrap">{message}</p>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+              strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+              ul: ({ children }) => <ul className="list-none space-y-0.5 my-1">{children}</ul>,
+              li: ({ children }) => (
+                <li className="flex gap-2 text-sm">
+                  <span className="text-cobalt mt-0.5 shrink-0">•</span>
+                  <span>{children}</span>
+                </li>
+              ),
+              code: ({ children }) => (
+                <code className="px-1 py-0.5 bg-foreground/8 text-[12px] font-mono">{children}</code>
+              ),
+            }}
+          >
+            {message}
+          </ReactMarkdown>
         )}
       </div>
     </motion.div>
   );
 }
-

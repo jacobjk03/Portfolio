@@ -12,6 +12,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import { VisionSection } from "@/components/VisionSection";
+import { MarqueeTicker } from "@/components/MarqueeTicker";
 
 export default function Home() {
   return (
@@ -37,8 +38,11 @@ export default function Home() {
         <Hero />
       </VisionSection>
 
+      {/* Marquee ticker strip */}
+      <MarqueeTicker />
+
       {/* About - Minimal effects */}
-      <VisionSection 
+      <VisionSection
         delay={100} 
         bokehDensity={0.2}
         bokehColors={["#3b82f6", "#60a5fa", "#93c5fd"]}

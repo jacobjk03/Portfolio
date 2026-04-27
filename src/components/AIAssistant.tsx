@@ -439,166 +439,154 @@ export function AIAssistant() {
 
   return (
     <>
-      {/* Floating Button - Premium orb */}
-      <motion.button
-        onClick={() => {
-          setIsOpen(!isOpen);
-          userOpenedRef.current = true; // mark manual interaction; prevents auto-close on scroll
-        }}
-        aria-label="Open AI Assistant"
-        initial={{ scale: 0.95, opacity: 0.9 }}
-        whileHover={{ scale: 1.05, boxShadow: "0 0 24px rgba(139,92,246,0.6), 0 0 48px rgba(0,207,255,0.4)" }}
-        whileTap={{ scale: 0.98 }}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md bg-gradient-to-br from-purple-500 to-cyan-500 shadow-lg overflow-visible group ${animClass}`}
-        style={{ boxShadow: "0 0 18px rgba(139, 92, 246, 0.45), 0 0 36px rgba(0, 207, 255, 0.28)" }}
-      >
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          // Keep halo; CSS animation handles main motion
-          animate={{ boxShadow: [
-            "0 0 0px rgba(139,92,246,0.0)",
-            "0 0 18px rgba(139,92,246,0.28)",
-            "0 0 0px rgba(139,92,246,0.0)"
-          ] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          animate={{ rotate: [0, 8, -8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="relative"
+      {/* FAB — cobalt square button with hover tooltip */}
+      <div className="fixed bottom-6 right-6 z-50 group flex items-center gap-2">
+        {/* Tooltip label — slides in from right on hover */}
+        <span className="opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-200 text-[9px] font-semibold tracking-[0.15em] uppercase text-foreground/50 whitespace-nowrap pointer-events-none bg-background border border-foreground/10 px-2.5 py-1.5 shadow-sm">
+          Ask Jacob AI
+        </span>
+        <motion.button
+          onClick={() => { setIsOpen(!isOpen); userOpenedRef.current = true; }}
+          aria-label="Ask Jacob AI"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.96 }}
+          className={`flex items-center justify-center shadow-lg shrink-0 ${animClass}`}
+          style={{
+            width: 52,
+            height: 52,
+            background: "#4D77FF",
+            boxShadow: "0 4px 20px rgba(77,119,255,0.35)",
+          }}
         >
-          <Bot className="w-6 h-6 text-white" />
-        </motion.div>
-      </motion.button>
-
-      {/* Badge Text */}
-      <div className="fixed bottom-20 right-6 z-50 text-xs text-muted-foreground text-right max-w-[140px]">
-        AI-powered portfolio
+          <motion.div
+            animate={{ rotate: [0, 6, -6, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Bot className="w-5 h-5 text-white" />
+          </motion.div>
+        </motion.button>
       </div>
 
-      {/* Chat Window - bottom-right widget */}
+      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             className="fixed z-50 pointer-events-none"
-            style={{ bottom: 100, right: 20 }}
-            initial={{ opacity: 0, scale: 0.8, y: 20, transformOrigin: "bottom right" }}
-            animate={{ opacity: 1, scale: 1, y: 0, transformOrigin: "bottom right" }}
-            exit={{ opacity: 0, scale: 0.85, y: 10, transformOrigin: "bottom right" }}
-            transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+            style={{ bottom: 76, right: 20 }}
+            initial={{ opacity: 0, y: 12, transformOrigin: "bottom right" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
           >
-            <motion.div
-              className="pointer-events-auto rounded-2xl flex flex-col border w-[92vw] max-w-[520px] h-[60vh] max-h-[720px]"
-              // Glass + gradient border
-              style={{
-                background: "linear-gradient(180deg, rgba(17,17,20,0.8), rgba(17,17,20,0.6))",
-                backdropFilter: "blur(14px)",
-                WebkitBackdropFilter: "blur(14px)",
-                boxShadow: "0 0 48px rgba(139,92,246,0.22)",
-                borderImage: "linear-gradient(135deg, rgba(168,85,247,0.65), rgba(34,211,238,0.45)) 1",
-              }}
+            <div
+              className="pointer-events-auto flex flex-col w-[92vw] max-w-[400px] h-[60vh] max-h-[580px] bg-background border border-foreground/10"
+              style={{ boxShadow: "0 8px 48px rgba(0,0,0,0.12)" }}
             >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-purple-500/20">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-foreground/8">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-cobalt flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground leading-none mb-0.5">Ask Jacob AI</h3>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+                      <p className="text-[10px] font-medium tracking-wide text-foreground/40 uppercase">Online</p>
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">Ask Jacob AI</h3>
-                  <p className="text-xs text-muted-foreground">Online</p>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setShowSettings(!showSettings)}
+                    className="p-2 text-foreground/40 hover:text-foreground transition-colors"
+                    aria-label="Settings"
+                  >
+                    <Settings2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 text-foreground/40 hover:text-foreground transition-colors"
+                    aria-label="Close"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+
+              {/* Settings panel */}
+              {showSettings && (
+                <div className="px-5 py-3 border-b border-foreground/8 bg-secondary/40">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-[11px] font-semibold tracking-[0.1em] uppercase text-foreground/50">Model</span>
+                    <span className="text-[11px] text-foreground/40">Llama 4 Scout</span>
+                  </div>
+                  <button
+                    onClick={handleReset}
+                    className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/50 hover:text-primary transition-colors"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Reset Conversation
+                  </button>
+                </div>
+              )}
+
+              {/* Messages */}
+              <div ref={chatRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+                {messages.map((msg, idx) => {
+                  if (msg.role === "typing") {
+                    return <ChatBubble key={msg.id || idx} message="" isUser={false} isTyping={true} />;
+                  }
+                  return <ChatBubble key={msg.id || idx} message={msg.content} isUser={msg.role === "user"} />;
+                })}
+              </div>
+
+              {/* Input area */}
+              <div className="px-4 pb-4 pt-3 border-t border-foreground/8">
+                {/* Quick action */}
                 <button
-                  onClick={() => setShowSettings(!showSettings)}
-                  className="p-2 hover:bg-secondary rounded-lg transition-colors"
-                  aria-label="Settings"
+                  onClick={handleWorkAuthClick}
+                  className="mb-3 w-full px-4 py-2 border border-cobalt/30 text-[11px] font-semibold tracking-[0.1em] uppercase text-cobalt hover:bg-cobalt/5 transition-colors"
                 >
-                  <Settings2 className="w-4 h-4" />
+                  Work Authorization Info
                 </button>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 hover:bg-secondary rounded-lg transition-colors"
-                  aria-label="Close"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <div className="flex items-end gap-2">
+                  <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Ask about Jacob's background..."
+                    rows={2}
+                    className="flex-1 px-3 py-2.5 bg-secondary/50 border border-foreground/10 resize-none focus:outline-none focus:border-cobalt/50 text-sm text-foreground placeholder:text-foreground/30 transition-colors"
+                    style={{ minHeight: 56, maxHeight: 100 }}
+                  />
+                  <button
+                    onClick={() => handleSend()}
+                    disabled={!input.trim()}
+                    className="w-10 h-10 bg-cobalt text-white flex items-center justify-center disabled:opacity-30 hover:brightness-110 active:scale-95 transition-all shrink-0"
+                    aria-label="Send"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
-
-            {/* Settings Panel */}
-            {showSettings && (
-              <div className="p-4 border-b border-purple-500/20 bg-secondary/30">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium">Model</span>
-                          <span className="text-xs text-muted-foreground">Llama 4 Scout</span>
-                </div>
-                <button
-                  onClick={handleReset}
-                  className="flex items-center gap-2 w-full px-3 py-1.5 text-xs rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  Reset Chat
-                </button>
-              </div>
-            )}
-
-            {/* Messages Area - Always visible */}
-            <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.map((msg, idx) => {
-                if (msg.role === "typing") {
-                  return <ChatBubble key={msg.id || idx} message="" isUser={false} isTyping={true} />;
-                }
-                return <ChatBubble key={msg.id || idx} message={msg.content} isUser={msg.role === "user"} />;
-              })}
-            </div>
-
-            {/* Input Area - Always visible */}
-            <div className="p-4 border-t border-purple-500/20">
-              {/* Quick Action Button */}
-              <button
-                onClick={handleWorkAuthClick}
-                className="mb-3 w-full px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 text-foreground hover:from-purple-500/30 hover:to-cyan-500/30 transition-all duration-200 flex items-center justify-center gap-2"
-              >
-                <span>Work Authorization Info</span>
-              </button>
-              <div className="flex items-end gap-2">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Ask about Jacob's background, skills, or projects..."
-                  className="flex-1 min-h-[60px] max-h-[120px] px-4 py-3 bg-secondary/50 border border-gray-700 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm text-white placeholder:text-gray-400"
-                  disabled={false}
-                />
-                <button
-                  onClick={() => handleSend()}
-                  disabled={!input.trim()}
-                  className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
-                  aria-label="Send message"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Local CSS keyframes for FAB animations */}
+
       <style jsx global>{`
         @keyframes fab-bounce {
-          0% { transform: translateY(0) scale(1); }
-          35% { transform: translateY(-6px) scale(1.08); }
-          100% { transform: translateY(0) scale(1); }
+          0% { transform: translateY(0); }
+          40% { transform: translateY(-5px); }
+          100% { transform: translateY(0); }
         }
         @keyframes fab-pulse {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.03); }
+          50% { transform: scale(1.04); }
         }
-        .chat-bounce { animation: fab-bounce 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; transform-origin: center; }
-        .chat-pulse { animation: fab-pulse 3s ease-in-out infinite; transform-origin: center; }
+        .chat-bounce { animation: fab-bounce 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
+        .chat-pulse  { animation: fab-pulse 2.5s ease-in-out infinite; }
       `}</style>
     </>
   );

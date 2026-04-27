@@ -4,40 +4,40 @@
 
 @layer base {
   :root {
-    --background: 0 0% 96%; /* Light mode: #F5F5F5 equivalent */
-    --foreground: 222.2 84% 4.9%;
+    --background: 40 14% 97%;    /* warm off-white #F8F7F4 */
+    --foreground: 0 0% 7%;       /* near black #111 */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 262 83% 58%;
-    --radius: 0.5rem;
+    --card-foreground: 0 0% 7%;
+    --primary: 225 100% 65%;     /* cobalt #4D77FF */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 10% 94%;     /* warm light gray */
+    --secondary-foreground: 0 0% 20%;
+    --muted: 40 8% 92%;
+    --muted-foreground: 0 0% 46%;
+    --accent: 40 8% 92%;
+    --accent-foreground: 0 0% 20%;
+    --border: 40 6% 87%;
+    --input: 40 6% 87%;
+    --ring: 225 100% 65%;
+    --radius: 0rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --primary: 263 70% 65%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 263 70% 65%;
+    --background: 0 0% 7%;
+    --foreground: 40 8% 90%;
+    --card: 0 0% 10%;
+    --card-foreground: 40 8% 90%;
+    --primary: 225 100% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 0 0% 85%;
+    --muted: 0 0% 13%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 13%;
+    --accent-foreground: 0 0% 85%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 225 100% 65%;
   }
 }
 
@@ -53,6 +53,154 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* ========================================
+   Dot grid hero background
+   ======================================== */
+.dot-grid-bg {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.055) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+.dark .dot-grid-bg {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+}
+
+/* ========================================
+   Marquee / ticker strip
+   ======================================== */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ========================================
+   Scramble / glitch text
+   ======================================== */
+.glitch-char {
+  display: inline-block;
+  transition: color 0.05s;
+}
+
+/* ========================================
+   Available pulse indicator
+   ======================================== */
+@keyframes availPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+.avail-dot {
+  animation: availPulse 1.8s ease-in-out infinite;
+}
+
+/* ========================================
+   Count-up number animation
+   ======================================== */
+.count-up-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ========================================
+   Hero 3D Rotating Cube
+   ======================================== */
+@keyframes rotateCube {
+  0%   { transform: rotateX(-18deg) rotateY(0deg); }
+  100% { transform: rotateX(-18deg) rotateY(360deg); }
+}
+
+.cube-scene {
+  perspective: 900px;
+}
+
+.cube {
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 14s linear infinite;
+}
+
+.cube:hover {
+  animation-play-state: paused;
+}
+
+.cube-face {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: visible;
+  background: rgba(248, 247, 244, 0.92);
+  border: 1px solid rgba(77, 119, 255, 0.18);
+}
+
+.dark .cube-face {
+  background: rgba(20, 20, 22, 0.92);
+  border: 1px solid rgba(77, 119, 255, 0.22);
+}
+
+.cube-face-top {
+  background: #4D77FF !important;
+  border-color: #4D77FF !important;
+}
+
+.cube-face-bottom {
+  background: rgba(0, 0, 0, 0.06) !important;
+}
+
+.dark .cube-face-bottom {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* ========================================
+   Project Card 3D Tilt + Specular
+   ======================================== */
+.card-tilt {
+  transition: transform 0.12s ease-out, box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card-tilt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--spec-x, 50%) var(--spec-y, 50%),
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.06) 35%,
+    transparent 65%
+  );
+  opacity: var(--spec-opacity, 0);
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.card-tilt:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.13), 0 4px 16px rgba(77, 119, 255, 0.1);
+}
+
+.dark .card-tilt:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(77, 119, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cube { animation: none !important; }
+  .card-tilt { transition: none !important; }
+  .card-tilt::after { display: none !important; }
 }
 
 /* Custom scrollbar */
@@ -74,29 +222,53 @@ html {
   @apply bg-primary/60;
 }
 
-/* Glassmorphism effect */
+/* Glassmorphism effect — kept for dark mode components */
 .glass {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .dark .glass {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Gradient text */
+/* Gradient text — cobalt-based */
 .gradient-text {
-  @apply bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+  color: #4D77FF;
 }
 
-/* Light mode: darker neon shades for better visibility */
-.light .gradient-text {
-  @apply bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
+.dark .gradient-text {
+  color: #7296ff;
+}
+
+/* Editorial label utility */
+.editorial-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #4D77FF;
+}
+
+/* Minimal skill bar */
+.skill-bar {
+  height: 2px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.dark .skill-bar {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.skill-progress {
+  height: 100%;
+  background: #4D77FF;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Animated gradient background */
@@ -124,7 +296,7 @@ html {
   }
 }
 
-/* Subtle hover glow - premium sci-fi aesthetic */
+/* Editorial hover — subtle lift, no neon */
 .card-hover,
 .hover-glow {
   @apply transition-all duration-300;
@@ -132,15 +304,19 @@ html {
 
 .card-hover:hover,
 .hover-glow:hover {
-  filter: drop-shadow(0 0 8px rgba(120, 97, 255, 0.25)) !important;
   transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Soft button hover effects - no overpowering neon */
+.dark .card-hover:hover,
+.dark .hover-glow:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
 button:hover,
 a[class*="button"]:hover,
 .btn:hover {
-  filter: drop-shadow(0 0 6px rgba(120, 97, 255, 0.2));
+  filter: none;
 }
 
 button:active,
@@ -298,61 +474,16 @@ a,
    Spatial depth with blur-to-focus reveal
    ======================================== */
 
+/* GPU-composited only: opacity + translateY, no filter/blur/box-shadow */
 @keyframes visionLiftIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.98);
-    filter: blur(8px) brightness(0.9);
-  }
-  50% {
-    filter: blur(2px) brightness(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0px) brightness(1);
-  }
+  0%   { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes visionGlow {
-  0% {
-    box-shadow: 
-      0 0 0px rgba(139, 92, 246, 0),
-      0 0 0px rgba(6, 182, 212, 0),
-      inset 0 0 0px rgba(139, 92, 246, 0);
-  }
-  50% {
-    box-shadow: 
-      0 10px 40px rgba(139, 92, 246, 0.15),
-      0 5px 20px rgba(6, 182, 212, 0.1),
-      inset 0 1px 2px rgba(139, 92, 246, 0.05);
-  }
-  100% {
-    box-shadow: 
-      0 5px 20px rgba(139, 92, 246, 0.08),
-      0 2px 10px rgba(6, 182, 212, 0.05),
-      inset 0 1px 1px rgba(139, 92, 246, 0.03);
-  }
-}
-
-@keyframes visionLightSweep {
-  0% {
-    background-position: -100% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-/* Vision Section base state - hidden before scroll into view */
+/* Vision Section base state */
 .vision-section {
   opacity: 0;
   position: relative;
-  /* Only add will-change when actually animating */
-}
-
-.vision-section.vision-visible {
-  will-change: transform, opacity;
 }
 
 /* Ensure first section (Hero) is immediately visible */
@@ -360,82 +491,19 @@ a,
   opacity: 1;
 }
 
-/* Vision Section visible state - animate in */
+/* Animate in — only opacity + transform (compositor-only, never triggers layout/paint) */
 .vision-section.vision-visible {
-  animation: 
-    visionLiftIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-    visionGlow 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: visionLiftIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Add subtle light sweep overlay on enter */
-.vision-section.vision-visible::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(139, 92, 246, 0) 0%,
-    rgba(139, 92, 246, 0.03) 50%,
-    rgba(6, 182, 212, 0.02) 75%,
-    rgba(139, 92, 246, 0) 100%
-  );
-  background-size: 200% 100%;
-  animation: visionLightSweep 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  pointer-events: none;
-  z-index: 0;
-  border-radius: inherit;
-  opacity: 0.6;
-}
+/* No ::before pseudo sweep — removes a full paint layer per section */
 
-/* Stagger children elements slightly for depth */
-.vision-section.vision-visible > * {
-  animation: visionLiftIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
+/* Children stagger removed — individual components handle their own entrance animations */
 
-.vision-section.vision-visible > *:nth-child(1) {
-  animation-delay: 0ms;
-}
-
-.vision-section.vision-visible > *:nth-child(2) {
-  animation-delay: 50ms;
-}
-
-.vision-section.vision-visible > *:nth-child(3) {
-  animation-delay: 100ms;
-}
-
-.vision-section.vision-visible > *:nth-child(4) {
-  animation-delay: 150ms;
-}
-
-.vision-section.vision-visible > *:nth-child(5) {
-  animation-delay: 200ms;
-}
-
-/* Mobile: reduce motion intensity */
+/* Mobile: same animation, slightly faster */
 @media (max-width: 768px) {
-  @keyframes visionLiftIn {
-    0% {
-      opacity: 0;
-      transform: translateY(15px) scale(0.99);
-      filter: blur(4px) brightness(0.95);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0px) brightness(1);
-    }
-  }
-
   .vision-section.vision-visible {
-    animation-duration: 0.7s;
-  }
-
-  .vision-section.vision-visible::before {
-    opacity: 0.3;
+    animation-duration: 0.45s;
   }
 }
 

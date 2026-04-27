@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, Linkedin, Mail, Twitter, Heart, ArrowUp, Globe, FileDown } from "lucide-react";
+import { Github, Linkedin, Mail, Globe, ArrowUp, FileDown } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { useResumeDownload } from "@/hooks/useResumeDownload";
 import { useRecruiterMode } from "@/hooks/useRecruiterMode";
@@ -9,54 +9,44 @@ import { RecruiterToast } from "@/components/RecruiterToast";
 export default function Footer() {
   const { downloadResume, isDownloading } = useResumeDownload();
   const { isRecruiterMode, toggleRecruiterMode, showToast } = useRecruiterMode();
-  
+
   const socialIcons: Record<string, any> = {
     github: Github,
     linkedin: Linkedin,
-    twitter: Twitter,
     website: Globe,
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   const handleResumeDownload = (e: React.MouseEvent) => {
     e.preventDefault();
-    downloadResume({
-      delay: 300,
-    });
-  };
-
-  const handleRecruiterToggle = () => {
-    toggleRecruiterMode(true);
+    downloadResume({ delay: 300 });
   };
 
   return (
-    <footer className="py-12 border-t border-border bg-secondary/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+    <footer className="border-t border-foreground/8 py-16">
+      <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
+
+        {/* Main footer row */}
+        <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-bold gradient-text mb-4">
+            <h3 className="font-serif font-medium text-xl text-foreground mb-3">
               {resumeData.personal.name}
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               {resumeData.personal.tagline}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Building the future, one line of code at a time.
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick links */}
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+            <span className="editorial-label block mb-5">Navigation</span>
+            <ul className="space-y-2.5">
               {[
-                { name: "Home", href: "#home" },
                 { name: "About", href: "#about" },
                 { name: "Projects", href: "#projects" },
+                { name: "Experience", href: "#experience" },
                 { name: "Certifications", href: "#certifications" },
                 { name: "Contact", href: "#contact" },
               ].map((link) => (
@@ -73,19 +63,19 @@ export default function Footer() {
                 <button
                   onClick={handleResumeDownload}
                   disabled={isDownloading}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 cursor-pointer"
-                  aria-label="Download Resume PDF"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5"
                 >
-                  Download Resume <FileDown className="w-3 h-3 inline" />
+                  Download Resume
+                  <FileDown className="w-3.5 h-3.5" />
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Social Links */}
+          {/* Social + connect */}
           <div>
-            <h4 className="font-semibold mb-4">Connect</h4>
-            <div className="flex flex-wrap gap-3">
+            <span className="editorial-label block mb-5">Connect</span>
+            <div className="flex flex-wrap gap-2.5">
               {Object.entries(resumeData.socials).map(([key, value]) => {
                 if (!value) return null;
                 const Icon = socialIcons[key as keyof typeof socialIcons];
@@ -96,53 +86,47 @@ export default function Footer() {
                     href={value}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-all shadow-sm hover:shadow-md hover:-translate-y-1"
+                    className="w-10 h-10 border border-foreground/15 flex items-center justify-center text-foreground/50 hover:border-primary hover:text-primary transition-all"
                     aria-label={key}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-4 h-4" />
                   </a>
                 );
               })}
               <a
                 href={`mailto:${resumeData.personal.email}`}
-                className="p-3 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-all shadow-sm hover:shadow-md hover:-translate-y-1"
+                className="w-10 h-10 border border-foreground/15 flex items-center justify-center text-foreground/50 hover:border-primary hover:text-primary transition-all"
                 aria-label="Email"
               >
-                <Mail className="w-5 h-5" />
+                <Mail className="w-4 h-4" />
               </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground text-center flex items-center gap-2">
-            Made with <Heart className="w-4 h-4 text-red-500 fill-current animate-pulse" /> by{" "}
-            {resumeData.personal.name}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} All rights reserved.
+        {/* Bottom bar */}
+        <div className="pt-8 border-t border-foreground/8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[11px] font-medium tracking-[0.1em] uppercase text-foreground/35">
+            © {new Date().getFullYear()} {resumeData.personal.name}
           </p>
           <div className="flex items-center gap-4">
             <button
-              onClick={handleRecruiterToggle}
-              className="px-4 py-2 rounded-lg border border-primary/30 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 transition-all text-sm font-medium text-primary"
-              aria-label="Toggle Recruiter Mode"
+              onClick={() => toggleRecruiterMode(true)}
+              className="text-[11px] font-semibold tracking-[0.1em] uppercase text-foreground/40 hover:text-primary transition-colors border border-foreground/12 hover:border-primary/40 px-4 py-2"
             >
               Recruiter Mode: {isRecruiterMode ? "ON" : "OFF"}
             </button>
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+              className="w-9 h-9 border border-foreground/15 flex items-center justify-center text-foreground/40 hover:border-primary hover:text-primary transition-all"
               aria-label="Scroll to top"
             >
-              <ArrowUp className="w-5 h-5" />
+              <ArrowUp className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Recruiter Mode Toast */}
       <RecruiterToast
         message={isRecruiterMode ? "Recruiter mode activated ✅ Optimized for hiring review." : "Recruiter mode deactivated"}
         isVisible={showToast}
@@ -150,4 +134,3 @@ export default function Footer() {
     </footer>
   );
 }
-

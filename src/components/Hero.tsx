@@ -1,317 +1,277 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Twitter, Globe, FileDown } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Globe, FileDown } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { useResumeDownload } from "@/hooks/useResumeDownload";
 import { DownloadToast } from "@/components/DownloadToast";
 import { useRecruiterMode } from "@/hooks/useRecruiterMode";
 import { RecruiterToast } from "@/components/RecruiterToast";
+import { ScrambleText } from "@/components/ScrambleText";
+import HeroCube from "@/components/HeroCube";
 
 export default function Hero() {
   const [toastState, setToastState] = useState<{ message: string; position: { x: number; y: number } } | null>(null);
   const { downloadResume, isDownloading, showSuccessBadge } = useResumeDownload();
   const { isRecruiterMode, toggleRecruiterMode, showToast } = useRecruiterMode();
-  
-  // Easter egg: click name 5 times fast
+
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const nameRef = useRef<HTMLSpanElement>(null);
 
   const socialIcons: Record<string, any> = {
     github: Github,
     linkedin: Linkedin,
-    twitter: Twitter,
     website: Globe,
   };
 
   const handleNameClick = () => {
     clickCountRef.current += 1;
-    
-    if (clickTimerRef.current) {
-      clearTimeout(clickTimerRef.current);
-    }
-
+    if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
     if (clickCountRef.current >= 5) {
-      if (!isRecruiterMode) {
-        toggleRecruiterMode(true);
-      }
+      if (!isRecruiterMode) toggleRecruiterMode(true);
       clickCountRef.current = 0;
     }
-
-    clickTimerRef.current = setTimeout(() => {
-      clickCountRef.current = 0;
-    }, 2000); // Reset after 2 seconds
+    clickTimerRef.current = setTimeout(() => { clickCountRef.current = 0; }, 2000);
   };
 
-  // Get graduation date from education
   const graduationDate = resumeData.education.find(edu => edu.endDate === "2026")?.endDate || "2026";
-  const graduationMonth = "May"; // You can extract this from education data if needed
 
   const handleResumeDownload = (e: React.MouseEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const clickPosition = {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
-
     downloadResume({
       showToast: (message, position) => {
         setToastState({ message, position });
         setTimeout(() => setToastState(null), 500);
       },
-      clickPosition,
-      onSuccess: () => {
-        // Button pulse handled by CSS class
-      },
+      clickPosition: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
     });
-
-    // Add pulse animation class
     const button = e.currentTarget as HTMLElement;
     button.classList.add("download-button-pulse");
-    setTimeout(() => {
-      button.classList.remove("download-button-pulse");
-    }, 500);
+    setTimeout(() => button.classList.remove("download-button-pulse"), 500);
   };
 
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16"
+      className="min-h-screen flex flex-col justify-center pt-16 border-b border-foreground/8 relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-        <div className="text-center">
+      {/* Dot grid texture */}
+      <div className="dot-grid-bg absolute inset-0 pointer-events-none" />
+
+      {/* Big background section number */}
+      <span className="absolute bottom-8 right-6 md:right-12 lg:right-20 font-serif font-bold text-foreground/[0.035] leading-none select-none pointer-events-none"
+        style={{ fontSize: "clamp(8rem, 22vw, 20rem)" }}>
+        01
+      </span>
+
+      <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20 py-24 w-full relative z-10">
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+        <div className="lg:col-span-7">
+          {/* Top row: label + available indicator */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-6"
+            className="flex items-center justify-between mb-8 flex-wrap gap-4"
           >
-            <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-              {resumeData.personal.tagline}
+            <span className="editorial-label">
+              {resumeData.personal.title}
             </span>
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6">
-              <span 
-                ref={nameRef}
-                onClick={handleNameClick}
-                className="gradient-text cursor-pointer select-none"
-                style={{ userSelect: "none" }}
-              >
-                {resumeData.personal.name}
-              </span>
-            </h1>
-            
-            {/* Recruiter Mode Badge */}
-            <AnimatePresence>
-              {isRecruiterMode && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="mb-4"
-                >
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 recruiter-badge">
-                    <span className="text-lg">🎯</span>
-                    <span className="text-sm font-medium text-primary">
-                      Recruiter Mode Active — Quick Access Enabled
-                    </span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Resume Download CTA (Recruiter Mode) */}
-            <AnimatePresence>
-              {isRecruiterMode && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="mb-6"
-                >
-                  <button
-                    onClick={handleResumeDownload}
-                    disabled={isDownloading}
-                    className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:shadow-primary/20 flex items-center gap-2 mx-auto"
-                    aria-label="Download Resume PDF"
-                  >
-                    <FileDown className="w-4 h-4" />
-                    Download Resume PDF
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Quick Facts Bar (Recruiter Mode) */}
-            <AnimatePresence>
-              {isRecruiterMode && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ 
-                    duration: 0.4, 
-                    delay: 0.2,
-                    ease: "easeOut"
-                  }}
-                  className="mb-8"
-                >
-                  <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center gap-2">
-                      <span>📍</span>
-                      <span>{resumeData.personal.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span>US Work Eligibility</span>
-                      <span className="text-green-500">✅</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span>{graduationMonth} {graduationDate} Graduation</span>
-                      <span>🎓</span>
-                    </div>
-                  </div>
-                  {/* Projects Summary PDF Link (Placeholder) */}
-                  <div className="text-center">
-                    <a
-                      href="#projects"
-                      className="text-sm text-primary hover:text-primary/80 transition-colors underline underline-offset-2"
-                    >
-                      View Projects Summary PDF →
-                    </a>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Available for work indicator */}
+            <span className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.12em] uppercase text-foreground/50">
+              <span className="w-2 h-2 rounded-full bg-green-500 avail-dot inline-block" />
+              Open to Work
+            </span>
           </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-xl sm:text-2xl md:text-3xl text-muted-foreground mb-8 font-medium"
-          >
-            {resumeData.personal.title}
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
-          >
-            {resumeData.personal.bio}
-          </motion.p>
-
-          {/* Social Links */}
+          {/* Name — scramble on hover */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex items-center justify-center flex-wrap gap-4 mb-12"
+            transition={{ duration: 0.6, delay: 0.05 }}
           >
-            {Object.entries(resumeData.socials).map(([key, value]) => {
-              if (!value) return null;
-              const Icon = socialIcons[key as keyof typeof socialIcons];
-              if (!Icon) return null;
-              return (
-                <motion.a
-                  key={key}
-                  href={value}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors shadow-lg"
-                  aria-label={key}
-                >
-                  <Icon className="w-6 h-6" />
-                </motion.a>
-              );
-            })}
-            <motion.a
-              href={`mailto:${resumeData.personal.email}`}
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-3 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors shadow-lg"
-              aria-label="Email"
+            <h1
+              onClick={handleNameClick}
+              className="font-serif font-medium leading-[0.95] tracking-tight text-foreground cursor-pointer select-none mb-10"
+              style={{ fontSize: "clamp(3.5rem, 9vw, 7rem)", userSelect: "none" }}
             >
-              <Mail className="w-6 h-6" />
-            </motion.a>
+              <ScrambleText text={resumeData.personal.name.split(" ")[0]} />
+              <br />
+              <ScrambleText text={resumeData.personal.name.split(" ").slice(1).join(" ") + "."} />
+            </h1>
           </motion.div>
 
-          {/* CTA Buttons */}
+          {/* Recruiter Mode Badge */}
+          <AnimatePresence>
+            {isRecruiterMode && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="mb-6"
+              >
+                <div className="inline-flex items-center gap-2 px-4 py-2 border border-primary/30 bg-primary/5 recruiter-badge">
+                  <span className="text-sm">🎯</span>
+                  <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-primary">
+                    Recruiter Mode — Quick Access Enabled
+                  </span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Recruiter Mode Quick Facts */}
+          <AnimatePresence>
+            {isRecruiterMode && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ delay: 0.1 }}
+                className="mb-8 flex flex-wrap gap-6 text-sm text-muted-foreground"
+              >
+                <span className="flex items-center gap-2">📍 {resumeData.personal.location}</span>
+                <span className="flex items-center gap-2">US Work Eligible <span className="text-green-600">✓</span></span>
+                <span className="flex items-center gap-2">🎓 May {graduationDate} Graduation</span>
+                <a href="#projects" className="text-primary hover:underline underline-offset-4">
+                  View Projects →
+                </a>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Tagline */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="font-serif italic text-xl md:text-2xl text-foreground/60 max-w-2xl mb-14 leading-relaxed"
+          >
+            {resumeData.personal.bio.split(".")[0] + "."}
+          </motion.p>
+
+          {/* CTA Row */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 relative"
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="flex flex-wrap items-center gap-4 mb-14 relative"
           >
             <a
               href="#projects"
-              className="px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:shadow-primary/20"
+              className="px-8 py-3.5 bg-primary text-white text-[11px] font-semibold tracking-[0.15em] uppercase hover:brightness-110 active:scale-95 transition-all"
             >
               View My Work
             </a>
             <a
               href="#contact"
-              className="px-8 py-4 border-2 border-primary text-primary rounded-full font-medium hover:bg-primary hover:text-primary-foreground transition-all shadow-lg"
+              className="px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase hover:border-primary hover:text-primary active:scale-95 transition-all"
             >
               Get In Touch
             </a>
             <button
               onClick={handleResumeDownload}
               disabled={isDownloading}
-              className="px-8 py-4 border-2 border-primary/70 text-primary rounded-full font-medium hover:bg-primary hover:text-primary-foreground transition-all shadow-lg hover:shadow-xl hover:shadow-primary/20 flex items-center gap-2"
-              aria-label="Download Resume PDF"
+              className="px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase hover:border-primary hover:text-primary active:scale-95 transition-all flex items-center gap-2"
             >
-              <FileDown className="w-4 h-4" />
-              Download Resume
+              <FileDown className="w-3.5 h-3.5" />
+              Resume
             </button>
+
+            {/* Recruiter Mode Resume Download */}
+            <AnimatePresence>
+              {isRecruiterMode && (
+                <motion.button
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -8 }}
+                  onClick={handleResumeDownload}
+                  disabled={isDownloading}
+                  className="px-8 py-3.5 bg-foreground text-background text-[11px] font-semibold tracking-[0.15em] uppercase hover:opacity-80 active:scale-95 transition-all flex items-center gap-2"
+                >
+                  <FileDown className="w-3.5 h-3.5" />
+                  Download Resume PDF
+                </motion.button>
+              )}
+            </AnimatePresence>
+
             {showSuccessBadge && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 download-success-badge"
-              >
-                <span className="text-sm text-primary font-medium flex items-center gap-1">
-                  <span>✅</span> Secure PDF delivered
-                </span>
-              </motion.div>
+              <span className="absolute -bottom-7 left-0 text-xs text-primary font-medium download-success-badge">
+                ✓ Resume delivered
+              </span>
             )}
+          </motion.div>
+
+          {/* Social links */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            className="flex items-center gap-4"
+          >
+            {Object.entries(resumeData.socials).map(([key, value]) => {
+              if (!value) return null;
+              const Icon = socialIcons[key as keyof typeof socialIcons];
+              if (!Icon) return null;
+              return (
+                <a
+                  key={key}
+                  href={value}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 border border-foreground/15 flex items-center justify-center text-foreground/50 hover:border-primary hover:text-primary transition-all"
+                  aria-label={key}
+                >
+                  <Icon className="w-4 h-4" />
+                </a>
+              );
+            })}
+            <a
+              href={`mailto:${resumeData.personal.email}`}
+              className="w-10 h-10 border border-foreground/15 flex items-center justify-center text-foreground/50 hover:border-primary hover:text-primary transition-all"
+              aria-label="Email"
+            >
+              <Mail className="w-4 h-4" />
+            </a>
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* 3D Cube — desktop only */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="lg:col-span-5 hidden lg:flex items-center justify-center"
         >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="flex flex-col items-center gap-2"
-          >
-            <span className="text-sm text-muted-foreground">Scroll Down</span>
-            <ArrowDown className="w-6 h-6 text-muted-foreground" />
-          </motion.div>
+          <div className="relative">
+            {/* Glow behind cube */}
+            <div className="absolute inset-0 -m-16 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+            <HeroCube />
+          </div>
         </motion.div>
+
+        </div>
       </div>
 
-      {/* Download Toast */}
-      {toastState && (
-        <DownloadToast
-          message={toastState.message}
-          position={toastState.position}
-        />
-      )}
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity }}
+        >
+          <ArrowDown className="w-4 h-4 text-foreground/30" />
+        </motion.div>
+      </motion.div>
 
-      {/* Recruiter Mode Toast */}
+      {toastState && (
+        <DownloadToast message={toastState.message} position={toastState.position} />
+      )}
       <RecruiterToast
         message={isRecruiterMode ? "Recruiter mode activated ✅ Optimized for hiring review." : "Recruiter mode deactivated"}
         isVisible={showToast}
@@ -319,4 +279,3 @@ export default function Hero() {
     </section>
   );
 }
-

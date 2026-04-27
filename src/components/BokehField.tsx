@@ -59,6 +59,7 @@ export function BokehField({
   const animationRef = useRef<number>();
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const lastFrameTime = useRef(0);
   const frameThrottle = 16; // ~60fps cap
 
@@ -68,11 +69,20 @@ export function BokehField({
     setIsMobile(window.innerWidth < 768);
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setPrefersReducedMotion(mediaQuery.matches);
+    setIsDarkMode(document.documentElement.classList.contains("dark"));
+
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -136,8 +146,8 @@ export function BokehField({
       );
     });
 
-    // Only animate if visible and not reduced motion
-    if (!isVisible || prefersReducedMotion) {
+    // Skip animation loop when invisible (light mode) or reduced motion
+    if (!isVisible || prefersReducedMotion || !isDarkMode) {
       return;
     }
 
@@ -197,7 +207,7 @@ export function BokehField({
       }
       resizeObserver.disconnect();
     };
-  }, [density, colors, layers, seed, isVisible, isMobile, prefersReducedMotion]);
+  }, [density, colors, layers, seed, isVisible, isMobile, prefersReducedMotion, isDarkMode]);
 
   return (
     <div

@@ -35,6 +35,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        cobalt: "#4D77FF",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -43,6 +44,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)"],
+        serif: ["var(--font-newsreader)"],
         mono: ["var(--font-geist-mono)"],
       },
       animation: {

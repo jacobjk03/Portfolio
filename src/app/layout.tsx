@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import NeonCursor from "@/components/NeonCursor";
 import PageTransition from "@/components/PageTransition";
-import AIBackdrop from "@/components/AIBackdrop";
 import { MagneticEffects } from "@/components/MagneticEffects";
 import { AIAssistant } from "@/components/AIAssistant";
 
-const inter = Inter({ 
-  subsets: ["latin"], 
+const inter = Inter({
+  subsets: ["latin"],
   variable: "--font-geist-sans",
-  display: "swap"
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-newsreader",
+  display: "swap",
+  style: ["normal", "italic"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -32,16 +39,16 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jacob Kuriakose - Portfolio"
-      }
-    ]
+        alt: "Jacob Kuriakose - Portfolio",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Jacob Kuriakose - Data Scientist & ML Engineer",
     description: "Portfolio showcasing my work in Machine Learning, NLP, and AI systems",
     images: ["/og-image.jpg"],
-    creator: "@jacobkuriakose"
+    creator: "@jacobkuriakose",
   },
   viewport: {
     width: "device-width",
@@ -49,8 +56,8 @@ export const metadata: Metadata = {
     maximumScale: 5,
   },
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#F8F7F4" },
+    { media: "(prefers-color-scheme: dark)", color: "#111111" },
   ],
   robots: {
     index: true,
@@ -77,9 +84,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${newsreader.variable} font-sans`}>
         <ThemeProvider>
-          <AIBackdrop />
           <PageTransition />
           <NeonCursor />
           <MagneticEffects />
@@ -90,4 +96,3 @@ export default function RootLayout({
     </html>
   );
 }
-
