@@ -879,15 +879,14 @@ a[data-ripple] {
 
 @keyframes recruiterCardGlow {
   0%, 100% {
-    box-shadow: 
-      0 0 20px rgba(139, 92, 246, 0.2),
-      0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 0 60px rgba(139, 92, 246, 0.10),
+      0 0 120px rgba(139, 92, 246, 0.05);
   }
   50% {
-    box-shadow: 
-      0 0 30px rgba(139, 92, 246, 0.4),
-      0 0 50px rgba(34, 211, 238, 0.3),
-      0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 0 80px rgba(139, 92, 246, 0.18),
+      0 0 160px rgba(34, 211, 238, 0.08);
   }
 }
 
