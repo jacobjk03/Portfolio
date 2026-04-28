@@ -182,7 +182,6 @@ export default function Hero() {
               Resume
             </button>
 
-
             {showSuccessBadge && (
               <span className="absolute -bottom-7 left-0 text-xs text-primary font-medium download-success-badge">
                 ✓ Resume delivered

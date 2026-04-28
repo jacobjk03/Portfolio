@@ -27,7 +27,7 @@ export function ChatBubble({ message, isUser, isTyping }: ChatBubbleProps) {
 
       {/* Bubble */}
       <div
-        className={`max-w-[82%] px-4 py-2.5 text-sm leading-relaxed ${
+        className={`max-w-[82%] px-4 py-2.5 text-xs leading-relaxed ${
           isUser
             ? "bg-cobalt text-white"
             : "bg-foreground/5 text-foreground border border-foreground/8"
@@ -49,7 +49,7 @@ export function ChatBubble({ message, isUser, isTyping }: ChatBubbleProps) {
               strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
               ul: ({ children }) => <ul className="list-none space-y-0.5 my-1">{children}</ul>,
               li: ({ children }) => (
-                <li className="flex gap-2 text-sm">
+                <li className="flex gap-2 text-xs">
                   <span className="text-cobalt mt-0.5 shrink-0">•</span>
                   <span>{children}</span>
                 </li>

@@ -120,12 +120,14 @@ export const resumeData: ResumeData = {
       description: [
         "Led migration of production-grade AI chatbot (Waterbot) to CISA AWS environment",
         "Provisioned AWS CDK stack — ECS, ECR, ALB, CloudFront, S3, RDS PostgreSQL, DynamoDB, Lambda",
+        "Built multi-stage RAG pipeline using AWS Bedrock Knowledge Base + GPT-4.1: safety moderation → intent detection → language detection → semantic retrieval → source citation linking",
+        "Engineered FastAPI backend with 13 REST & WebSocket endpoints; implemented per-session memory management and pluggable ModelAdapter pattern (OpenAI / Bedrock) for swappable LLM backends",
+        "Developed real-time voice transcription via WebSocket with S3 storage and presigned URL downloads; added English/Spanish auto-detection using langdetect",
         "Implemented secure RDS integration via Secrets Manager & IAM roles",
         "Built & pushed Docker images to ECR; switched to ECS CLI redeploys reducing deploy time ~85%",
-        "Resolved IAM & CloudShell issues improving deployment stability ~30%",
         "Restored chatbot access for 2,000+ users by removing unintended CloudFront auth"
       ],
-      technologies: ["AWS CDK", "Docker", "ECS Fargate", "PostgreSQL", "Python", "Lambda"]
+      technologies: ["AWS CDK", "AWS Bedrock", "FastAPI", "RAG", "GPT-4.1", "Docker", "ECS Fargate", "PostgreSQL", "Python", "WebSocket", "Lambda"]
     },
     {
       company: "Red Hat",
@@ -231,22 +233,10 @@ export const resumeData: ResumeData = {
       link: "https://www.coursera.org/account/accomplishments/verify/C22JZ8SFYQZL"
     },
     {
-      name: "Complete Machine Learning and Data Science Bootcamp 2021",
-      issuer: "Udemy (Logo)",
-      date: "Sep 2021",
-      link: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-0a270215-e08e-4608-ba61-52259eeeb0a4.pdf"
-    },
-    {
       name: "Machine Learning",
       issuer: "Coursera (Logo)",
       date: "Jun 2021",
       link: "https://www.coursera.org/account/accomplishments/certificate/WXGSLPAFFVAM"
-    },
-    {
-      name: "Built a Face Recognition Application using Python",
-      issuer: "GUVI (Logo)",
-      date: "Apr 2021",
-      link: "https://www.guvi.in/verify-certificate?id=g91596x1Tr37H1a3q9"
     },
     {
       name: "30 Days of Google Cloud",

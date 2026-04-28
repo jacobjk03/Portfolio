@@ -1,16 +1,107 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, ReactNode } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import emailjs from "@emailjs/browser";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
+import { ScrollTiltSection } from "@/components/ScrollTiltSection";
 
 const EMAILJS_PUBLIC_KEY = "Lcf71Be-dQHjlqah-";
 const EMAILJS_SERVICE_ID = "service_pwj70j5";
 const EMAILJS_TEMPLATE_ID = "template_voc2hhi";
+
+// ── Option A: Typewriter heading ──────────────────────────────────────────────
+function TypewriterHeading({ text, trigger }: { text: string; trigger: boolean }) {
+  const [displayed, setDisplayed] = useState("");
+  const [cursorOn, setCursorOn] = useState(true);
+  const hasRun = useRef(false);
+  const done = displayed.length === text.length && trigger;
+
+  useEffect(() => {
+    if (!trigger || hasRun.current) return;
+    hasRun.current = true;
+    let i = 0;
+    const start = setTimeout(() => {
+      const tick = setInterval(() => {
+        i++;
+        setDisplayed(text.slice(0, i));
+        if (i >= text.length) clearInterval(tick);
+      }, 46);
+      return () => clearInterval(tick);
+    }, 350);
+    return () => clearTimeout(start);
+  }, [trigger, text]);
+
+  // Blink only after typing finishes
+  useEffect(() => {
+    if (!done) return;
+    const id = setInterval(() => setCursorOn(v => !v), 520);
+    return () => clearInterval(id);
+  }, [done]);
+
+  return (
+    <span>
+      {trigger ? displayed : ""}
+      <span
+        className="inline-block w-[3px] rounded-sm align-middle ml-0.5 bg-foreground"
+        style={{
+          height: "0.82em",
+          opacity: done ? (cursorOn ? 1 : 0) : trigger ? 1 : 0,
+          transition: "opacity 0s",
+        }}
+      />
+    </span>
+  );
+}
+
+// ── Option B: Glowing focus field wrapper ─────────────────────────────────────
+function FocusField({
+  label,
+  focused,
+  children,
+}: {
+  label: string;
+  focused: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div>
+      <label
+        className="block text-[10px] font-semibold tracking-[0.12em] uppercase mb-2 transition-colors duration-200"
+        style={{ color: focused ? "rgb(124,58,237)" : "rgba(var(--foreground-rgb, 0 0 0) / 0.4)" }}
+      >
+        {label}
+      </label>
+      <div className="relative">
+        {children}
+
+        {/* Glow ring on focus */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{
+            boxShadow: focused
+              ? "0 0 0 1px rgba(124,58,237,0.55), 0 0 16px rgba(124,58,237,0.12)"
+              : "0 0 0 0px rgba(124,58,237,0)",
+          }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+        />
+
+        {/* Left-to-right sweep underline */}
+        <motion.div
+          className="absolute bottom-0 left-0 h-[1.5px] bg-primary pointer-events-none"
+          animate={{ scaleX: focused ? 1 : 0 }}
+          transition={{ duration: 0.38, ease: [0.23, 1, 0.32, 1] }}
+          style={{ transformOrigin: "left", originX: 0 }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 export default function Contact() {
   const ref = useRef(null);
@@ -18,6 +109,7 @@ export default function Contact() {
 
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -49,14 +141,14 @@ export default function Contact() {
     }
   };
 
-  const inputClass = "w-full px-4 py-3 bg-background border border-foreground/15 text-foreground text-sm placeholder:text-foreground/30 focus:border-primary focus:outline-none transition-colors disabled:opacity-40";
+  const baseInput = "w-full px-4 py-3 bg-background border border-foreground/15 text-foreground text-sm placeholder:text-foreground/30 focus:border-primary focus:outline-none transition-colors duration-200 disabled:opacity-40";
 
   return (
     <section id="contact" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      {/* Section number */}
       <SectionNumber number="08" />
-
+      <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -66,13 +158,17 @@ export default function Contact() {
         >
           <Scroll3DReveal>
             <span className="editorial-label block mb-4">Get In Touch</span>
-            <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground max-w-xl">
-              Let's build something together.
+            <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground max-w-xl min-h-[1.2em]">
+              <TypewriterHeading
+                text="Let's build something together."
+                trigger={isInView}
+              />
             </h2>
           </Scroll3DReveal>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-0">
+
           {/* Left: contact info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -90,8 +186,14 @@ export default function Contact() {
                 { Icon: Mail, label: "Email", value: resumeData.personal.email, href: `mailto:${resumeData.personal.email}` },
                 { Icon: Phone, label: "Phone", value: resumeData.personal.phone, href: `tel:${resumeData.personal.phone}` },
                 { Icon: MapPin, label: "Location", value: resumeData.personal.location, href: null },
-              ].map(({ Icon, label, value, href }) => (
-                <div key={label} className="flex items-start gap-4">
+              ].map(({ Icon, label, value, href }, i) => (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
+                  className="flex items-start gap-4"
+                >
                   <div className="w-9 h-9 border border-foreground/12 flex items-center justify-center shrink-0 mt-0.5">
                     <Icon className="w-3.5 h-3.5 text-primary" />
                   </div>
@@ -103,7 +205,7 @@ export default function Contact() {
                       <p className="text-sm text-foreground">{value}</p>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -123,42 +225,48 @@ export default function Contact() {
             className="lg:pl-16 pt-16 lg:pt-0"
           >
             <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="block text-[10px] font-semibold tracking-[0.12em] uppercase text-foreground/50 mb-2">Name</label>
+
+              <FocusField label="Name" focused={focusedField === "name"}>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  onFocus={() => setFocusedField("name")}
+                  onBlur={() => setFocusedField(null)}
                   disabled={status === "sending"}
                   placeholder="Your full name"
-                  className={inputClass}
+                  className={baseInput}
                 />
-              </div>
-              <div>
-                <label className="block text-[10px] font-semibold tracking-[0.12em] uppercase text-foreground/50 mb-2">Email</label>
+              </FocusField>
+
+              <FocusField label="Email" focused={focusedField === "email"}>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  onFocus={() => setFocusedField("email")}
+                  onBlur={() => setFocusedField(null)}
                   disabled={status === "sending"}
                   placeholder="your@email.com"
-                  className={inputClass}
+                  className={baseInput}
                 />
-              </div>
-              <div>
-                <label className="block text-[10px] font-semibold tracking-[0.12em] uppercase text-foreground/50 mb-2">Message</label>
+              </FocusField>
+
+              <FocusField label="Message" focused={focusedField === "message"}>
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
+                  onFocus={() => setFocusedField("message")}
+                  onBlur={() => setFocusedField(null)}
                   disabled={status === "sending"}
                   rows={5}
                   placeholder="Tell me about your project or opportunity..."
-                  className={`${inputClass} resize-none`}
+                  className={`${baseInput} resize-none`}
                 />
-              </div>
+              </FocusField>
 
               <motion.button
                 type="submit"
@@ -193,8 +301,10 @@ export default function Contact() {
               </motion.button>
             </form>
           </motion.div>
+
         </div>
       </div>
+      </ScrollTiltSection>
     </section>
   );
 }

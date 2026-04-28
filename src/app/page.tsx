@@ -19,7 +19,6 @@ export default function Home() {
     <main className="min-h-screen">
       <ScrollProgress />
       <Navbar />
-      
       {/* Hero - Keep effects for hero section only */}
       <VisionSection 
         enableLightBeams={true}

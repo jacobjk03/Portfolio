@@ -5,6 +5,7 @@ import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
+import { ScrollTiltSection } from "@/components/ScrollTiltSection";
 
 const DIGIT_H = 56;
 const ROLL_CYCLES = 3;
@@ -72,6 +73,7 @@ export default function About() {
     <section id="about" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
       {/* Section number */}
       <SectionNumber number="02" />
+      <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
         <div className="grid lg:grid-cols-12 gap-16 items-start">
 
@@ -168,6 +170,7 @@ export default function About() {
 
         </div>
       </div>
+      </ScrollTiltSection>
       <AnimatedDivider />
     </section>
   );

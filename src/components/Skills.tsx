@@ -1,10 +1,47 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
+import { ScrollTiltSection } from "@/components/ScrollTiltSection";
+
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+function ScrambleTag({ text, trigger, delay }: { text: string; trigger: boolean; delay: number }) {
+  const [display, setDisplay] = useState(text);
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (!trigger || hasRun.current) return;
+    hasRun.current = true;
+    const timeout = setTimeout(() => {
+      let frame = 0;
+      const totalFrames = Math.ceil(text.length * 2.2);
+      const interval = setInterval(() => {
+        if (frame >= totalFrames) {
+          setDisplay(text);
+          clearInterval(interval);
+          return;
+        }
+        setDisplay(
+          text.split("").map((char, i) => {
+            if (char === " " || char === "." || char === "+" || char === "#" || char === "/") return char;
+            if (i < frame / 2.2) return char;
+            return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          }).join("")
+        );
+        frame++;
+      }, 28);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [trigger, text, delay]);
+
+  return <>{display}</>;
+}
 
 export default function Skills() {
   const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1, rootMargin: "-80px", triggerOnce: true });
@@ -15,6 +52,7 @@ export default function Skills() {
   return (
     <section id="skills" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
       <SectionNumber number="03" />
+      <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 
         <div className="mb-20">
@@ -30,18 +68,18 @@ export default function Skills() {
           {resumeData.skills.map((skillGroup, index) => {
             const proficiency = getProficiency(skillGroup.items.length);
             return (
-              <div
+              <motion.div
                 key={skillGroup.category}
-                className={`transition-all duration-500 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                }`}
+                className={`transition-opacity duration-500 ${isVisible ? "opacity-100" : "opacity-0"}`}
                 style={{ transitionDelay: `${100 + index * 80}ms` }}
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 380, damping: 22 }}
               >
                 <h3 className="font-serif font-medium text-xl text-foreground mb-6">
                   {skillGroup.category}
                 </h3>
 
-                {/* Minimal 2px progress bar */}
+                {/* Amber progress bar */}
                 <div className="mb-1">
                   <div className="flex justify-between text-[10px] font-semibold tracking-[0.12em] uppercase text-foreground/40 mb-2">
                     <span>Proficiency</span>
@@ -55,23 +93,41 @@ export default function Skills() {
                   </div>
                 </div>
 
-                {/* Skill tags */}
-                <div className="flex flex-wrap gap-1.5 mt-6">
-                  {skillGroup.items.map((skill) => (
-                    <span
+                {/* Skill tags — staggered cascade + scramble decode on entry */}
+                <motion.div
+                  className="flex flex-wrap gap-1.5 mt-6"
+                  variants={{
+                    hidden: {},
+                    show: { transition: { staggerChildren: 0.045, delayChildren: 0.18 + index * 0.09 } },
+                  }}
+                  initial="hidden"
+                  animate={isVisible ? "show" : "hidden"}
+                >
+                  {skillGroup.items.map((skill, i) => (
+                    <motion.span
                       key={skill}
-                      className="px-2.5 py-1 border border-foreground/12 text-[10px] font-semibold tracking-[0.1em] uppercase text-foreground/60 hover:border-primary hover:text-primary transition-all"
+                      variants={{
+                        hidden: { opacity: 0, y: 10, scale: 0.86 },
+                        show: { opacity: 1, y: 0, scale: 1 },
+                      }}
+                      transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+                      className="px-2.5 py-1 border border-foreground/12 text-[10px] font-semibold tracking-[0.1em] uppercase text-foreground/60 hover:border-primary hover:text-primary transition-colors cursor-default"
                     >
-                      {skill}
-                    </span>
+                      <ScrambleTag
+                        text={skill}
+                        trigger={isVisible}
+                        delay={220 + index * 90 + i * 42}
+                      />
+                    </motion.span>
                   ))}
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             );
           })}
         </div>
 
       </div>
+      </ScrollTiltSection>
       <AnimatedDivider />
     </section>
   );

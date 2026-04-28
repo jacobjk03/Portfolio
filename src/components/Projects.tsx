@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, X, Sparkles, ArrowRight } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import NeonDNALoader from "./NeonDNALoader";
@@ -9,10 +9,24 @@ import { useCardTilt } from "@/hooks/useCardTilt";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
+import { ScrollTiltSection } from "@/components/ScrollTiltSection";
 
 function ProjectCard({ project, index, onClick }: { project: typeof resumeData.projects[0]; index: number; onClick: () => void }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const { cardRef, onMouseMove, onMouseLeave } = useCardTilt(8);
+
+  const { scrollYProgress } = useScroll({
+    target: scrollRef,
+    offset: ["start end", "end start"],
+  });
+  const popScale = useTransform(scrollYProgress, [0, 0.28, 0.5, 0.72, 1], [0.93, 0.97, 1.03, 0.97, 0.93]);
+  const popY = useTransform(scrollYProgress, [0, 0.28, 0.5, 0.72, 1], [22, 5, 0, -5, -22]);
+
   return (
+    <motion.div
+      ref={scrollRef}
+      style={{ scale: popScale, y: popY, willChange: "transform" }}
+    >
     <motion.div
       variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
       ref={cardRef}
@@ -71,6 +85,7 @@ function ProjectCard({ project, index, onClick }: { project: typeof resumeData.p
         </span>
       </div>
     </motion.div>
+    </motion.div>
   );
 }
 
@@ -111,6 +126,7 @@ export default function Projects() {
   return (
     <section id="projects" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
       <SectionNumber number="05" />
+      <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 
         {/* Header row */}
@@ -295,6 +311,7 @@ export default function Projects() {
           )}
         </AnimatePresence>
       </div>
+      </ScrollTiltSection>
       <AnimatedDivider />
     </section>
   );
