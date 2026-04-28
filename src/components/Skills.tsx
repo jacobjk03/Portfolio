@@ -4,6 +4,7 @@ import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 export default function Skills() {
   const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1, rootMargin: "-80px", triggerOnce: true });
@@ -71,6 +72,7 @@ export default function Skills() {
         </div>
 
       </div>
+      <AnimatedDivider />
     </section>
   );
 }

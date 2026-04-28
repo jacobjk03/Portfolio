@@ -8,6 +8,7 @@ import NeonDNALoader from "./NeonDNALoader";
 import { useCardTilt } from "@/hooks/useCardTilt";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 function ProjectCard({ project, index, onClick }: { project: typeof resumeData.projects[0]; index: number; onClick: () => void }) {
   const { cardRef, onMouseMove, onMouseLeave } = useCardTilt(8);
@@ -292,6 +293,7 @@ export default function Projects() {
           )}
         </AnimatePresence>
       </div>
+      <AnimatedDivider />
     </section>
   );
 }

@@ -194,6 +194,7 @@ export const resumeData: ResumeData = {
         "HuggingFace", "Flask", "Cross-Encoder", "LLaMA-3"
       ],
       github: "https://github.com/jacobjk03/Medical_chatbot",
+      link: "https://huggingface.co/spaces/jacob03/medical_chatbot",
       featured: true
     },
     {

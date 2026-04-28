@@ -5,6 +5,7 @@ import { useRecruiterMode } from "@/hooks/useRecruiterMode";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 export default function Experience() {
   const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1, rootMargin: "-80px", triggerOnce: true });
@@ -120,6 +121,7 @@ export default function Experience() {
 
         </div>
       </div>
+      <AnimatedDivider />
     </section>
   );
 }

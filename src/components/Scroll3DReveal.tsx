@@ -21,14 +21,13 @@ export function Scroll3DReveal({ children, className = "", delay = 0 }: Scroll3D
     offset: ["start 95%", "start 30%"],
   });
 
-  const rotateX = useTransform(scrollYProgress, [0, 1], ["-20deg", "0deg"]);
-  const opacity  = useTransform(scrollYProgress, [0, 0.35, 1], [0, 0.6, 1]);
-  const translateY = useTransform(scrollYProgress, [0, 1], ["10px", "0px"]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], ["-25deg", "0deg"]);
+  const translateY = useTransform(scrollYProgress, [0, 1], ["16px", "0px"]);
 
   return (
-    <div ref={ref} style={{ perspective: "1000px" }} className={className}>
+    <div ref={ref} style={{ perspective: "1200px" }} className={className}>
       <motion.div
-        style={{ rotateX, opacity, y: translateY, transformOrigin: "top center" }}
+        style={{ rotateX, y: translateY, transformOrigin: "top center" }}
         transition={{ delay }}
       >
         {children}

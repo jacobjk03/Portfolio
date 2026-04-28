@@ -5,6 +5,7 @@ import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
+import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 function useCountUp(target: number, isVisible: boolean, duration = 1200) {
   const [count, setCount] = useState(0);
@@ -145,6 +146,7 @@ export default function About() {
 
         </div>
       </div>
+      <AnimatedDivider />
     </section>
   );
 }

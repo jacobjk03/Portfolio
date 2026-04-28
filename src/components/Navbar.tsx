@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { Moon, Sun, Menu, X, FileDown } from "lucide-react";
 import { useTheme } from "next-themes";
 import { resumeData } from "@/config/resume-data";
@@ -16,12 +16,22 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [toastState, setToastState] = useState<{ message: string; position: { x: number; y: number } } | null>(null);
   const { downloadResume, isDownloading } = useResumeDownload();
+  const lockInControls = useAnimation();
+  const prevScrolled = useRef(false);
 
   useEffect(() => {
     setMounted(true);
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const scrolled = window.scrollY > 50;
+      if (scrolled && !prevScrolled.current) {
+        lockInControls.start({
+          rotateX: [-3, 0],
+          transition: { duration: 0.45, ease: [0.23, 1, 0.32, 1] },
+        });
+      }
+      prevScrolled.current = scrolled;
+      setIsScrolled(scrolled);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -123,6 +133,7 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
+      style={{ perspective: "800px" }}
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
           ? "bg-background/95 backdrop-blur-md border-b border-foreground/8 shadow-sm"
@@ -130,7 +141,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
-        <div className="flex items-center justify-between h-16">
+        <motion.div animate={lockInControls} className="flex items-center justify-between h-16">
           {/* Brand */}
           <a
             href="#home"
@@ -146,25 +157,29 @@ export default function Navbar() {
               const sectionId = item.href.replace("#", "");
               const isActive = activeSection === sectionId;
               return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
-                  className={`text-[11px] font-semibold tracking-[0.15em] uppercase transition-colors duration-200 relative pb-0.5 ${
-                    isActive
-                      ? "text-primary"
-                      : "text-foreground/50 hover:text-foreground"
-                  }`}
-                >
-                  {item.name}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute bottom-0 left-0 right-0 h-px bg-primary"
-                      transition={{ type: "spring", duration: 0.4 }}
-                    />
-                  )}
-                </a>
+                <div key={item.name} style={{ perspective: "200px" }}>
+                  <motion.a
+                    href={item.href}
+                    onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
+                    whileHover={{ rotateX: 14, y: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                    style={{ display: "inline-block", transformOrigin: "50% 100%" }}
+                    className={`text-[11px] font-semibold tracking-[0.15em] uppercase transition-colors duration-200 relative pb-0.5 ${
+                      isActive
+                        ? "text-primary"
+                        : "text-foreground/50 hover:text-foreground"
+                    }`}
+                  >
+                    {item.name}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute bottom-0 left-0 right-0 h-px bg-primary"
+                        transition={{ type: "spring", duration: 0.4 }}
+                      />
+                    )}
+                  </motion.a>
+                </div>
               );
             })}
           </div>
@@ -219,7 +234,7 @@ export default function Navbar() {
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Mobile Menu */}
