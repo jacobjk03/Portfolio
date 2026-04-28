@@ -164,12 +164,13 @@ export default function Contact() {
                 disabled={status === "sending" || status === "success"}
                 animate={status === "error" ? { x: [0, -8, 8, -8, 8, 0] } : {}}
                 transition={{ duration: 0.35 }}
-                className={`w-full py-4 text-[11px] font-semibold tracking-[0.15em] uppercase flex items-center justify-center gap-2 transition-all ${
+                data-ripple="true" data-ripple-color="rgba(255,255,255,0.25)"
+                className={`btn-shimmer w-full py-4 text-[11px] font-semibold tracking-[0.15em] uppercase flex items-center justify-center gap-2 transition-all ${
                   status === "success"
                     ? "bg-green-600 text-white"
                     : status === "error"
                     ? "bg-red-500/10 border border-red-400 text-red-500"
-                    : "bg-primary text-white hover:brightness-110 disabled:opacity-60"
+                    : "bg-primary text-white disabled:opacity-60"
                 }`}
               >
                 {status === "sending" ? (

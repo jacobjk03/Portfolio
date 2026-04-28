@@ -53,6 +53,8 @@ export function MagneticEffects() {
 
       let rafId: number;
 
+      const noGlow = element.hasAttribute("data-no-glow");
+
       const handleMouseMove = (e: MouseEvent) => {
         if (rafId) return;
 
@@ -64,21 +66,14 @@ export function MagneticEffects() {
           const deltaX = e.clientX - centerX;
           const deltaY = e.clientY - centerY;
 
-          // Magnetic effect
           const magnetX = deltaX * spring;
           const magnetY = deltaY * spring;
           const clampedX = Math.max(-magnet, Math.min(magnet, magnetX));
           const clampedY = Math.max(-magnet, Math.min(magnet, magnetY));
 
-          // Parallax tilt
           const rotateX = (deltaY / rect.height) * rotate;
           const rotateY = -(deltaX / rect.width) * rotate;
 
-          // Glow intensity
-          const tiltAmount = Math.sqrt(rotateX ** 2 + rotateY ** 2);
-          const glowIntensity = Math.min(1, tiltAmount / rotate) * 0.4;
-
-          // Apply transforms
           element.style.transform = `
             translate3d(${clampedX}px, ${clampedY}px, 0)
             perspective(1000px)
@@ -86,10 +81,14 @@ export function MagneticEffects() {
             rotateY(${rotateY}deg)
           `;
 
-          element.style.filter = `
-            drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(139, 92, 246, ${glowIntensity}))
-            drop-shadow(0 ${Math.abs(rotateY)}px ${15 + Math.abs(rotateY) * 2}px rgba(6, 182, 212, ${glowIntensity * 0.6}))
-          `;
+          if (!noGlow) {
+            const tiltAmount = Math.sqrt(rotateX ** 2 + rotateY ** 2);
+            const glowIntensity = Math.min(1, tiltAmount / rotate) * 0.4;
+            element.style.filter = `
+              drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(77, 119, 255, ${glowIntensity}))
+              drop-shadow(0 ${Math.abs(rotateY)}px ${15 + Math.abs(rotateY) * 2}px rgba(77, 119, 255, ${glowIntensity * 0.5}))
+            `;
+          }
 
           rafId = 0 as unknown as number;
         });

@@ -1,7 +1,6 @@
 "use client";
 
 import { resumeData } from "@/config/resume-data";
-import { useRecruiterMode } from "@/hooks/useRecruiterMode";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
@@ -9,7 +8,6 @@ import { AnimatedDivider } from "@/components/AnimatedDivider";
 
 export default function Experience() {
   const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1, rootMargin: "-80px", triggerOnce: true });
-  const { isRecruiterMode } = useRecruiterMode();
 
   return (
     <section id="experience" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
@@ -36,7 +34,7 @@ export default function Experience() {
                   key={index}
                   className={`transition-all duration-600 ${
                     isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                  } ${isRecruiterMode ? "recruiter-card-glow" : ""}`}
+                  }`}
                   style={{ transitionDelay: `${100 + index * 80}ms` }}
                 >
                   <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/35 block mb-2">

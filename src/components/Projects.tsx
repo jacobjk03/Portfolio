@@ -134,20 +134,22 @@ export default function Projects() {
             <div className="flex gap-1.5">
               <button
                 onClick={() => setFilter("all")}
-                className={`px-4 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition-all ${
+                data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
+                className={`btn-shimmer px-4 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition-all ${
                   filter === "all"
                     ? "bg-primary text-white"
-                    : "border border-foreground/15 text-foreground/50 hover:border-primary hover:text-primary"
+                    : "btn-fill border border-foreground/15 text-foreground/50"
                 }`}
               >
                 All
               </button>
               <button
                 onClick={() => setFilter("featured")}
-                className={`px-4 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition-all flex items-center gap-1.5 ${
+                data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
+                className={`btn-shimmer px-4 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition-all flex items-center gap-1.5 ${
                   filter === "featured"
                     ? "bg-primary text-white"
-                    : "border border-foreground/15 text-foreground/50 hover:border-primary hover:text-primary"
+                    : "btn-fill border border-foreground/15 text-foreground/50"
                 }`}
               >
                 <Sparkles className="w-3 h-3" />

@@ -160,41 +160,28 @@ export default function Hero() {
           >
             <a
               href="#projects"
-              className="px-8 py-3.5 bg-primary text-white text-[11px] font-semibold tracking-[0.15em] uppercase hover:brightness-110 active:scale-95 transition-all"
+              className="btn-shimmer magnetic tilt px-8 py-3.5 bg-primary text-white text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all"
+              data-magnet="8" data-rotate="4" data-no-glow data-ripple="true" data-ripple-color="rgba(255,255,255,0.25)"
             >
               View My Work
             </a>
             <a
               href="#contact"
-              className="px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase hover:border-primary hover:text-primary active:scale-95 transition-all"
+              className="btn-fill px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all"
+              data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
             >
               Get In Touch
             </a>
             <button
               onClick={handleResumeDownload}
               disabled={isDownloading}
-              className="px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase hover:border-primary hover:text-primary active:scale-95 transition-all flex items-center gap-2"
+              className="btn-fill px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all flex items-center gap-2"
+              data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
             >
               <FileDown className="w-3.5 h-3.5" />
               Resume
             </button>
 
-            {/* Recruiter Mode Resume Download */}
-            <AnimatePresence>
-              {isRecruiterMode && (
-                <motion.button
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  onClick={handleResumeDownload}
-                  disabled={isDownloading}
-                  className="px-8 py-3.5 bg-foreground text-background text-[11px] font-semibold tracking-[0.15em] uppercase hover:opacity-80 active:scale-95 transition-all flex items-center gap-2"
-                >
-                  <FileDown className="w-3.5 h-3.5" />
-                  Download Resume PDF
-                </motion.button>
-              )}
-            </AnimatePresence>
 
             {showSuccessBadge && (
               <span className="absolute -bottom-7 left-0 text-xs text-primary font-medium download-success-badge">

@@ -209,7 +209,8 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); handleNavClick("#contact"); }}
-              className="px-5 py-2 bg-primary text-white text-[11px] font-semibold tracking-[0.15em] uppercase hover:brightness-110 active:scale-95 transition-all"
+              className="btn-shimmer magnetic tilt px-5 py-2 bg-primary text-white text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all"
+              data-magnet="6" data-rotate="3" data-no-glow data-ripple="true" data-ripple-color="rgba(255,255,255,0.25)"
             >
               Connect
             </a>
