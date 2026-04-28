@@ -454,8 +454,8 @@ export function AIAssistant() {
           style={{
             width: 52,
             height: 52,
-            background: "#4D77FF",
-            boxShadow: "0 4px 20px rgba(77,119,255,0.35)",
+            background: "#7C3AED",
+            boxShadow: "0 4px 20px rgba(124,58,237,0.35)",
           }}
         >
           <motion.div

@@ -134,7 +134,7 @@ export default function Projects() {
             <div className="flex gap-1.5">
               <button
                 onClick={() => setFilter("all")}
-                data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
+                data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
                 className={`btn-shimmer px-4 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition-all ${
                   filter === "all"
                     ? "bg-primary text-white"
@@ -145,7 +145,7 @@ export default function Projects() {
               </button>
               <button
                 onClick={() => setFilter("featured")}
-                data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
+                data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
                 className={`btn-shimmer px-4 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition-all flex items-center gap-1.5 ${
                   filter === "featured"
                     ? "bg-primary text-white"

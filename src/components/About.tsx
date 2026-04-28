@@ -1,31 +1,61 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 
-function useCountUp(target: number, isVisible: boolean, duration = 1200) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!isVisible) return;
-    let start = 0;
-    const steps = Math.ceil(duration / 16);
-    const increment = target / steps;
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [isVisible, target, duration]);
-  return count;
+const DIGIT_H = 56;
+const ROLL_CYCLES = 3;
+
+function OdometerDigit({ digit, delay, isVisible }: {
+  digit: number;
+  delay: number;
+  isVisible: boolean;
+}) {
+  const totalItems = ROLL_CYCLES * 10 + digit + 1;
+  const finalY = (ROLL_CYCLES * 10 + digit) * DIGIT_H;
+
+  return (
+    <span style={{ display: "inline-block", height: DIGIT_H, overflow: "hidden", verticalAlign: "top" }}>
+      <span
+        style={{
+          display: "block",
+          transform: isVisible ? `translateY(-${finalY}px)` : "translateY(0px)",
+          transition: isVisible
+            ? `transform 1.6s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
+            : "none",
+          willChange: "transform",
+        }}
+      >
+        {Array.from({ length: totalItems }, (_, i) => (
+          <span key={i} style={{ display: "block", height: DIGIT_H, lineHeight: `${DIGIT_H}px` }}>
+            {i % 10}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+function OdometerNumber({ value, isVisible, delay }: {
+  value: number;
+  isVisible: boolean;
+  delay: number;
+}) {
+  const digits = String(value).split("").map(Number);
+  return (
+    <span
+      className="font-serif font-medium text-primary count-up-num"
+      style={{ fontSize: "2.25rem", display: "inline-flex", alignItems: "flex-start", height: DIGIT_H }}
+    >
+      {digits.map((digit, i) => (
+        <OdometerDigit key={i} digit={digit} isVisible={isVisible} delay={delay + i * 100} />
+      ))}
+      <span style={{ lineHeight: `${DIGIT_H}px`, paddingLeft: 2 }}>+</span>
+    </span>
+  );
 }
 
 export default function About() {
@@ -37,12 +67,6 @@ export default function About() {
     { raw: resumeData.skills.reduce((acc, s) => acc + s.items.length, 0), label: "Technologies" },
     { raw: resumeData.certifications?.length || 0, label: "Certifications" },
   ];
-
-  const c0 = useCountUp(rawStats[0].raw, isVisible, 900);
-  const c1 = useCountUp(rawStats[1].raw, isVisible, 1000);
-  const c2 = useCountUp(rawStats[2].raw, isVisible, 1200);
-  const c3 = useCountUp(rawStats[3].raw, isVisible, 1050);
-  const counts = [c0, c1, c2, c3];
 
   return (
     <section id="about" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
@@ -122,7 +146,7 @@ export default function About() {
                 </span>
               </div>
 
-              {/* Stats grid — animated count-up */}
+              {/* Stats grid — odometer animation */}
               <div className="grid grid-cols-2 gap-0">
                 {rawStats.map((stat, i) => (
                   <div
@@ -130,12 +154,10 @@ export default function About() {
                     className={`pt-6 pb-6 border-t border-foreground/10 transition-all duration-500 ${
                       i % 2 === 1 ? "pl-8 border-l border-l-foreground/10" : "pr-8"
                     } ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-                    style={{ transitionDelay: `${300 + i * 80}ms` }}
+                    style={{ transitionDelay: `${200 + i * 60}ms` }}
                   >
-                    <span className="block text-3xl font-serif font-medium text-primary mb-1 count-up-num">
-                      {counts[i]}+
-                    </span>
-                    <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/40">
+                    <OdometerNumber value={stat.raw} isVisible={isVisible} delay={300 + i * 120} />
+                    <span className="block text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/40 mt-1">
                       {stat.label}
                     </span>
                   </div>

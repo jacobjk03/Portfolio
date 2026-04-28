@@ -168,7 +168,7 @@ export default function Hero() {
             <a
               href="#contact"
               className="btn-fill px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all"
-              data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
+              data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
             >
               Get In Touch
             </a>
@@ -176,7 +176,7 @@ export default function Hero() {
               onClick={handleResumeDownload}
               disabled={isDownloading}
               className="btn-fill px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all flex items-center gap-2"
-              data-ripple="true" data-ripple-color="rgba(77,119,255,0.3)"
+              data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
             >
               <FileDown className="w-3.5 h-3.5" />
               Resume

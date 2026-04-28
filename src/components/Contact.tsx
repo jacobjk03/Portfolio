@@ -9,7 +9,7 @@ import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
 
 const EMAILJS_PUBLIC_KEY = "Lcf71Be-dQHjlqah-";
-const EMAILJS_SERVICE_ID = "service_k08yehc";
+const EMAILJS_SERVICE_ID = "service_pwj70j5";
 const EMAILJS_TEMPLATE_ID = "template_voc2hhi";
 
 export default function Contact() {
@@ -42,7 +42,8 @@ export default function Contact() {
       setStatus("success");
       setFormData({ name: "", email: "", message: "" });
       setTimeout(() => setStatus("idle"), 4000);
-    } catch {
+    } catch (err) {
+      console.error("[EmailJS error]", err);
       setStatus("error");
       setTimeout(() => setStatus("idle"), 5000);
     }

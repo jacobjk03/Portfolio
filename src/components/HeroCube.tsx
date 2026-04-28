@@ -24,7 +24,7 @@ const faceTransforms: Record<string, string> = {
 };
 
 const faceShadows: Record<string, React.CSSProperties> = {
-  front: { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 60px rgba(77,119,255,0.05)" },
+  front: { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 60px rgba(124,58,237,0.05)" },
   back:  {},
   right: { boxShadow: "inset -4px 0 20px rgba(0,0,0,0.03)" },
   left:  { boxShadow: "inset 4px 0 20px rgba(0,0,0,0.03)" },
@@ -131,7 +131,7 @@ export default function HeroCube() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(77,119,255,0.10) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,58,237,0.10) 0%, transparent 70%)",
         }}
       />
 
@@ -162,7 +162,7 @@ export default function HeroCube() {
           >
             {pos === "bottom" ? (
               /* Bottom face — dot grid accent */
-              <div style={{ width: "100%", height: "100%", opacity: 0.25, backgroundImage: "radial-gradient(circle, rgba(77,119,255,0.8) 1px, transparent 1px)", backgroundSize: "18px 18px" }} />
+              <div style={{ width: "100%", height: "100%", opacity: 0.25, backgroundImage: "radial-gradient(circle, rgba(124,58,237,0.8) 1px, transparent 1px)", backgroundSize: "18px 18px" }} />
             ) : pos === "top" ? (
               /* Top face — name with shimmer overlay */
               <div className="flex flex-col items-center justify-center gap-2 px-5 text-center relative w-full h-full">
@@ -183,7 +183,7 @@ export default function HeroCube() {
                 </span>
                 {sub && (
                   <>
-                    <div style={{ width: 24, height: 1, background: "rgba(77,119,255,0.3)", marginBottom: 8 }} />
+                    <div style={{ width: 24, height: 1, background: "rgba(124,58,237,0.3)", marginBottom: 8 }} />
                     <span className="text-[9px] font-semibold tracking-[0.14em] uppercase text-primary/55">
                       {sub}
                     </span>
@@ -204,7 +204,7 @@ export default function HeroCube() {
           transform: "translateX(-50%)",
           width: SIZE * 0.75,
           height: 20,
-          background: "radial-gradient(ellipse, rgba(77,119,255,0.18) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, transparent 70%)",
           filter: "blur(6px)",
         }}
       />

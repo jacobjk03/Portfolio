@@ -4,40 +4,40 @@
 
 @layer base {
   :root {
-    --background: 40 14% 97%;    /* warm off-white #F8F7F4 */
-    --foreground: 0 0% 7%;       /* near black #111 */
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
-    --primary: 225 100% 65%;     /* cobalt #4D77FF */
+    --background: 40 25% 97%;    /* warm cream #FAFAF7 */
+    --foreground: 24 10% 10%;    /* warm dark #1C1917 */
+    --card: 40 20% 99%;
+    --card-foreground: 24 10% 10%;
+    --primary: 262 83% 58%;      /* violet #7C3AED */
     --primary-foreground: 0 0% 100%;
-    --secondary: 40 10% 94%;     /* warm light gray */
-    --secondary-foreground: 0 0% 20%;
-    --muted: 40 8% 92%;
-    --muted-foreground: 0 0% 46%;
-    --accent: 40 8% 92%;
-    --accent-foreground: 0 0% 20%;
-    --border: 40 6% 87%;
-    --input: 40 6% 87%;
-    --ring: 225 100% 65%;
+    --secondary: 38 20% 93%;     /* warm tinted gray */
+    --secondary-foreground: 24 8% 20%;
+    --muted: 38 12% 90%;
+    --muted-foreground: 30 6% 45%;
+    --accent: 38 12% 90%;
+    --accent-foreground: 24 8% 20%;
+    --border: 38 10% 86%;
+    --input: 38 10% 86%;
+    --ring: 262 83% 58%;
     --radius: 0rem;
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 40 8% 90%;
-    --card: 0 0% 10%;
-    --card-foreground: 40 8% 90%;
-    --primary: 225 100% 65%;
+    --background: 20 10% 10%;    /* warm black #1C1917 */
+    --foreground: 40 12% 90%;    /* warm off-white */
+    --card: 20 8% 13%;
+    --card-foreground: 40 12% 90%;
+    --primary: 262 75% 72%;      /* lighter violet for dark bg */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 13%;
-    --secondary-foreground: 0 0% 85%;
-    --muted: 0 0% 13%;
-    --muted-foreground: 0 0% 55%;
-    --accent: 0 0% 13%;
-    --accent-foreground: 0 0% 85%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 225 100% 65%;
+    --secondary: 20 7% 14%;
+    --secondary-foreground: 40 10% 85%;
+    --muted: 20 7% 14%;
+    --muted-foreground: 30 5% 55%;
+    --accent: 20 7% 14%;
+    --accent-foreground: 40 10% 85%;
+    --border: 20 5% 20%;
+    --input: 20 5% 20%;
+    --ring: 262 75% 72%;
   }
 }
 
@@ -142,33 +142,33 @@ html {
   align-items: center;
   justify-content: center;
   backface-visibility: visible;
-  background: linear-gradient(160deg, rgba(255,255,255,0.98) 0%, rgba(240,244,255,0.96) 100%);
-  border: 1px solid rgba(77,119,255,0.18);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 60px rgba(77,119,255,0.05);
+  background: linear-gradient(160deg, rgba(255,255,255,0.98) 0%, rgba(250,248,255,0.96) 100%);
+  border: 1px solid rgba(124,58,237,0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 60px rgba(124,58,237,0.05);
 }
 
 .dark .cube-face {
-  background: linear-gradient(160deg, rgba(22,24,40,0.97) 0%, rgba(14,16,30,0.95) 100%);
-  border: 1px solid rgba(77,119,255,0.22);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), inset 0 0 40px rgba(77,119,255,0.06);
+  background: linear-gradient(160deg, rgba(32,26,24,0.97) 0%, rgba(20,16,14,0.95) 100%);
+  border: 1px solid rgba(124,58,237,0.22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), inset 0 0 40px rgba(124,58,237,0.06);
 }
 
 .cube-face-top {
-  background: linear-gradient(135deg, #6690FF 0%, #4D77FF 45%, #3355EE 100%) !important;
-  border-color: #5078F5 !important;
+  background: linear-gradient(135deg, #C4B5FD 0%, #7C3AED 45%, #5B21B6 100%) !important;
+  border-color: #6D28D9 !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -1px 0 rgba(0,0,30,0.15) !important;
 }
 
 .cube-face-bottom {
-  background: linear-gradient(135deg, #1a1f3a 0%, #0f1228 100%) !important;
-  border: 1px solid rgba(77,119,255,0.25) !important;
-  box-shadow: inset 0 0 40px rgba(77,119,255,0.15) !important;
+  background: linear-gradient(135deg, #2e1a1a 0%, #1c1917 100%) !important;
+  border: 1px solid rgba(124,58,237,0.25) !important;
+  box-shadow: inset 0 0 40px rgba(124,58,237,0.15) !important;
 }
 
 .dark .cube-face-bottom {
-  background: linear-gradient(135deg, #0d0f1f 0%, #06080f 100%) !important;
-  border: 1px solid rgba(77,119,255,0.18) !important;
-  box-shadow: inset 0 0 30px rgba(77,119,255,0.10) !important;
+  background: linear-gradient(135deg, #1a0f0f 0%, #0a0806 100%) !important;
+  border: 1px solid rgba(124,58,237,0.18) !important;
+  box-shadow: inset 0 0 30px rgba(124,58,237,0.10) !important;
 }
 
 /* ========================================
@@ -197,11 +197,11 @@ html {
 }
 
 .card-tilt:hover {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.13), 0 4px 16px rgba(77, 119, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.13), 0 4px 16px rgba(124, 58, 237, 0.1);
 }
 
 .dark .card-tilt:hover {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(77, 119, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(124, 58, 237, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -244,22 +244,26 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Gradient text — cobalt-based */
+/* Gradient text */
 .gradient-text {
-  color: #4D77FF;
+  color: #7C3AED;
 }
 
 .dark .gradient-text {
-  color: #7296ff;
+  color: #A78BFA;
 }
 
-/* Editorial label utility */
+/* Editorial label utility — amber accent for section headings */
 .editorial-label {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #4D77FF;
+  color: #D97706;
+}
+
+.dark .editorial-label {
+  color: #FCD34D;
 }
 
 /* Minimal skill bar */
@@ -274,7 +278,7 @@ html {
 
 .skill-progress {
   height: 100%;
-  background: #4D77FF;
+  background: linear-gradient(90deg, #F59E0B, #FBBF24);
   transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -282,10 +286,10 @@ html {
 .gradient-bg {
   background: linear-gradient(
     -45deg,
-    rgba(99, 102, 241, 0.1),
-    rgba(168, 85, 247, 0.1),
-    rgba(236, 72, 153, 0.1),
-    rgba(59, 130, 246, 0.1)
+    rgba(124, 58, 237, 0.1),
+    rgba(245, 158, 11, 0.08),
+    rgba(124, 58, 237, 0.07),
+    rgba(251, 191, 36, 0.08)
   );
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
@@ -580,8 +584,8 @@ a,
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    var(--ripple-color, rgba(77, 119, 255, 0.35)) 0%,
-    rgba(77, 119, 255, 0.15) 40%,
+    var(--ripple-color, rgba(124, 58, 237, 0.35)) 0%,
+    rgba(124, 58, 237, 0.15) 40%,
     transparent 100%
   );
   pointer-events: none;

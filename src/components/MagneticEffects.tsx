@@ -85,8 +85,8 @@ export function MagneticEffects() {
             const tiltAmount = Math.sqrt(rotateX ** 2 + rotateY ** 2);
             const glowIntensity = Math.min(1, tiltAmount / rotate) * 0.4;
             element.style.filter = `
-              drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(77, 119, 255, ${glowIntensity}))
-              drop-shadow(0 ${Math.abs(rotateY)}px ${15 + Math.abs(rotateY) * 2}px rgba(77, 119, 255, ${glowIntensity * 0.5}))
+              drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(124, 58, 237, ${glowIntensity}))
+              drop-shadow(0 ${Math.abs(rotateY)}px ${15 + Math.abs(rotateY) * 2}px rgba(124, 58, 237, ${glowIntensity * 0.5}))
             `;
           }
 
