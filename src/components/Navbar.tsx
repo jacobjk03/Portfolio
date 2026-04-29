@@ -57,8 +57,7 @@ export default function Navbar() {
             let newActive = previousActive;
             for (const id of sections) {
               if (intersectingSections.has(id)) {
-                newActive = id;
-                break;
+                newActive = id; // keep updating — picks the lowest visible section
               }
             }
 
@@ -83,7 +82,7 @@ export default function Navbar() {
             }
           });
         },
-        { rootMargin: "-20% 0px -60% 0px", threshold: 0.1 }
+        { rootMargin: "-30% 0px -55% 0px", threshold: 0 }
       );
 
       observer.observe(element);

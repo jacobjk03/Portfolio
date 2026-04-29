@@ -290,10 +290,13 @@ export function AIAssistant() {
           )}
         </AnimatePresence>
 
-        <span className="opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-200 text-[9px] font-semibold tracking-[0.15em] uppercase text-foreground/50 whitespace-nowrap pointer-events-none bg-background border border-foreground/10 px-2.5 py-1.5 shadow-sm">
-          Ask Jacob AI
-        </span>
         <div className="relative shrink-0">
+          {/* Name label above button */}
+          <div
+            className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold tracking-[0.13em] uppercase text-foreground/50 pointer-events-none select-none"
+          >
+            Jacob.ai
+          </div>
           {/* Ambient pulsing ring */}
           <motion.div
             className="absolute inset-[-5px] bg-primary/15"
@@ -302,7 +305,7 @@ export function AIAssistant() {
           />
           <motion.button
             onClick={() => { setIsOpen(!isOpen); userOpenedRef.current = true; }}
-            aria-label="Ask Jacob AI"
+            aria-label="Jacob.ai"
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.95 }}
             className={`flex items-center justify-center shadow-lg relative ${animClass}`}
@@ -366,7 +369,7 @@ export function AIAssistant() {
                     />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-foreground leading-none mb-1">Ask Jacob AI</h3>
+                    <h3 className="text-sm font-semibold text-foreground leading-none mb-1">Jacob.ai</h3>
                     <span className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
                       <p className="text-[10px] font-medium tracking-wide text-foreground/40 uppercase">Online</p>
