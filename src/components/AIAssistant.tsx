@@ -34,6 +34,7 @@ export function AIAssistant() {
   const lastPulseRef = useRef(false);
   const userOpenedRef = useRef(false);
   const welcomeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const welcomeSeenRef = useRef(false);
 
   // Scroll-driven animation class swap: bounce → pulse near Experience
   useEffect(() => {
@@ -105,16 +106,36 @@ export function AIAssistant() {
     return () => clearTimeout(show);
   }, []);
 
-  // Typewriter welcome — restarts when messages cleared (reset)
+  // Sync welcomeSeenRef from sessionStorage on mount
+  useEffect(() => {
+    if (sessionStorage.getItem("welcomeSeen") === "1") {
+      welcomeSeenRef.current = true;
+    }
+  }, []);
+
+  // Typewriter welcome — skips animation if already seen this session
   useEffect(() => {
     if (!isOpen || messages.length > 0) return;
+
+    if (welcomeTimerRef.current) clearTimeout(welcomeTimerRef.current);
+
+    if (welcomeSeenRef.current) {
+      setWelcomeText(WELCOME_TEXT);
+      setWelcomeDone(true);
+      return;
+    }
+
     setWelcomeText("");
     setWelcomeDone(false);
-    if (welcomeTimerRef.current) clearTimeout(welcomeTimerRef.current);
 
     let i = 0;
     const typeNext = () => {
-      if (i >= WELCOME_TEXT.length) { setWelcomeDone(true); return; }
+      if (i >= WELCOME_TEXT.length) {
+        setWelcomeDone(true);
+        welcomeSeenRef.current = true;
+        sessionStorage.setItem("welcomeSeen", "1");
+        return;
+      }
       i++;
       setWelcomeText(WELCOME_TEXT.slice(0, i));
       const char = WELCOME_TEXT[i - 1];

@@ -275,7 +275,8 @@ export default function Hero() {
         <DownloadToast message={toastState.message} position={toastState.position} />
       )}
       <RecruiterToast
-        message={isRecruiterMode ? "Recruiter mode activated ✅ Optimized for hiring review." : "Recruiter mode deactivated"}
+        message=""
+        isOn={isRecruiterMode}
         isVisible={showToast}
       />
     </section>
