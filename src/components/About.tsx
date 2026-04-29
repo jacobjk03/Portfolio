@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Linkedin, Github, ArrowUpRight } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
@@ -297,7 +297,7 @@ export default function About() {
               </div>
 
               {/* Stats grid — odometer animation */}
-              <div className="grid grid-cols-2 gap-0" ref={statsRef}>
+              <div className="grid grid-cols-2 gap-0" ref={statsRef as React.RefObject<HTMLDivElement>}>
                 {rawStats.map((stat, i) => (
                   <div
                     key={stat.label}
