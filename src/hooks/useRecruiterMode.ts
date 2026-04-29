@@ -79,12 +79,14 @@ export function useRecruiterMode() {
   const toggleRecruiterMode = useCallback(
     (showNotification = false) => {
       const newValue = !isRecruiterMode;
-      setIsRecruiterMode(newValue);
       saveToStorage(newValue);
 
       if (showNotification) {
+        setIsRecruiterMode(newValue);
         setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        setTimeout(() => window.location.reload(), 700);
+      } else {
+        window.location.reload();
       }
     },
     [isRecruiterMode, saveToStorage]

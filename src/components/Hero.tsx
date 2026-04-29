@@ -147,6 +147,7 @@ export default function Hero() {
                 <span className="flex items-center gap-2">📍 {resumeData.personal.location}</span>
                 <span className="flex items-center gap-2">US Work Eligible <span className="text-green-600">✓</span></span>
                 <span className="flex items-center gap-2">🎓 {graduationDate} Graduate</span>
+                <span className="flex items-center gap-2 text-primary font-medium">✈️ Open to relocate</span>
                 <a href="#projects" className="text-primary hover:underline underline-offset-4">
                   View Projects →
                 </a>
