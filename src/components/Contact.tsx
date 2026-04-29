@@ -44,17 +44,17 @@ function CyclingTypewriter({ active }: { active: boolean }) {
 
     if (phase === "typing") {
       if (displayed.length < phrase.length) {
-        const t = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length + 1)), 26);
+        const t = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length + 1)), 18);
         return () => clearTimeout(t);
       } else {
-        const t = setTimeout(() => setPhase("erasing"), 1800);
+        const t = setTimeout(() => setPhase("erasing"), 1400);
         return () => clearTimeout(t);
       }
     }
 
     if (phase === "erasing") {
       if (displayed.length > 0) {
-        const t = setTimeout(() => setDisplayed(d => d.slice(0, -1)), 12);
+        const t = setTimeout(() => setDisplayed(d => d.slice(0, -1)), 8);
         return () => clearTimeout(t);
       } else {
         setPhraseIndex(i => (i + 1) % HEADING_PHRASES.length);

@@ -15,7 +15,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
     <NextThemesProvider
       attribute="class"
       defaultTheme="light"
-      enableSystem
+      enableSystem={false}
       storageKey="portfolio-theme"
       disableTransitionOnChange={false}
       {...props}

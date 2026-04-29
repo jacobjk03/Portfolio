@@ -118,10 +118,10 @@ export function AIAssistant() {
       i++;
       setWelcomeText(WELCOME_TEXT.slice(0, i));
       const char = WELCOME_TEXT[i - 1];
-      const delay = char === "\n" ? 100 : ".!?".includes(char) ? 55 : 13;
+      const delay = char === "\n" ? 40 : ".!?".includes(char) ? 20 : 5;
       welcomeTimerRef.current = setTimeout(typeNext, delay);
     };
-    welcomeTimerRef.current = setTimeout(typeNext, 400);
+    welcomeTimerRef.current = setTimeout(typeNext, 120);
     return () => { if (welcomeTimerRef.current) clearTimeout(welcomeTimerRef.current); };
   }, [isOpen, messages.length]);
 
@@ -149,6 +149,9 @@ export function AIAssistant() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        if (response.status === 429 || errorData.error === "rate_limited") {
+          throw new Error("rate_limited");
+        }
         throw new Error(errorData.error || "⚠️ AI is unavailable. Try again.");
       }
 
@@ -206,7 +209,10 @@ export function AIAssistant() {
     } catch (err: any) {
       setMessages(prev => prev.filter(m => m.id !== typingId));
       if (err.name !== "AbortError") {
-        setMessages(prev => [...prev, { role: "assistant", content: err.message || "⚠️ AI is unavailable. Try again." }]);
+        const msg = err.message === "rate_limited"
+          ? "You've sent a lot of messages — please wait an hour before trying again."
+          : err.message || "⚠️ AI is unavailable. Try again.";
+        setMessages(prev => [...prev, { role: "assistant", content: msg }]);
       }
     } finally {
       abortControllerRef.current = null;

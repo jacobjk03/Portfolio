@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Linkedin, Github, ArrowUpRight } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Mail, Linkedin, Github, ArrowUpRight, PlaneTakeoff } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
@@ -10,22 +10,38 @@ import { SectionNumber } from "@/components/SectionNumber";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 import { ScrollTiltSection } from "@/components/ScrollTiltSection";
 
-function HighlightWord({ children, isVisible, delay = 0 }: {
+function HighlightWord({ children, delay = 0 }: {
   children: React.ReactNode;
-  isVisible: boolean;
   delay?: number;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref as any, { once: true, margin: "-50px 0px" });
   return (
-    <strong className="relative inline-block text-foreground font-medium">
+    <strong ref={ref} className="relative inline-block text-foreground font-medium">
       {children}
       <motion.span
         className="absolute left-0 w-full bg-primary pointer-events-none"
         style={{ bottom: "-1px", height: "1.5px", transformOrigin: "left" }}
         initial={{ scaleX: 0 }}
-        animate={{ scaleX: isVisible ? 1 : 0 }}
+        animate={{ scaleX: isInView ? 1 : 0 }}
         transition={{ duration: 0.65, delay, ease: [0.23, 1, 0.32, 1] }}
       />
     </strong>
+  );
+}
+
+function FadeParagraph({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref as any, { once: true, margin: "-50px 0px" });
+  return (
+    <motion.p
+      ref={ref}
+      initial={{ opacity: 0, y: 14 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+    >
+      {children}
+    </motion.p>
   );
 }
 
@@ -78,6 +94,49 @@ function OdometerNumber({ value, isVisible, delay }: {
       ))}
       <span style={{ lineHeight: `${DIGIT_H}px`, paddingLeft: 2 }}>+</span>
     </span>
+  );
+}
+
+const BADGES = [
+  { icon: "📍", label: resumeData.personal.location, variant: "plain" as const },
+  { icon: "💼", label: "Available for work",          variant: "plain" as const },
+  { icon: null,  label: "Open to relocate",           variant: "accent" as const },
+];
+
+function FlipBadges() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref as any, { once: true, margin: "-60px 0px" });
+
+  return (
+    <div
+      ref={ref}
+      className="flex flex-wrap items-center gap-3 mb-12"
+      style={{ perspective: "600px" }}
+    >
+      {BADGES.map((badge, i) => (
+        <motion.span
+          key={badge.label}
+          initial={{ opacity: 0, rotateX: 80, y: -4 }}
+          animate={isInView ? { opacity: 1, rotateX: 0, y: 0 } : {}}
+          transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 18,
+            delay: i * 0.13,
+          }}
+          style={{ transformOrigin: "top center", display: "inline-flex" }}
+          className={
+            badge.variant === "accent"
+              ? "items-center gap-1.5 px-3 py-1.5 border border-primary/40 text-primary text-[11px] font-semibold tracking-[0.12em] uppercase bg-primary/5"
+              : "items-center gap-2 text-sm text-muted-foreground px-3 py-1.5 border border-foreground/10 bg-secondary/30"
+          }
+        >
+          {badge.icon && <span>{badge.icon}</span>}
+          {badge.variant === "accent" && <PlaneTakeoff className="w-3 h-3" />}
+          {badge.label}
+        </motion.span>
+      ))}
+    </div>
   );
 }
 
@@ -265,36 +324,27 @@ export default function About() {
               </Scroll3DReveal>
 
               <div className="space-y-5 mb-12 text-base text-muted-foreground leading-relaxed">
-                <p>
+                <FadeParagraph>
                   I build AI that thinks, plans, and acts. Not just responds.
-                  My focus is <HighlightWord isVisible={isVisible} delay={0.45}>Agentic AI</HighlightWord> and{" "}
-                  <HighlightWord isVisible={isVisible} delay={0.6}>RAG systems</HighlightWord> powered by memory,
+                  My focus is <HighlightWord>Agentic AI</HighlightWord> and{" "}
+                  <HighlightWord>RAG systems</HighlightWord> powered by memory,
                   tool-use, and multi-step reasoning.
-                </p>
-                <p>
+                </FadeParagraph>
+                <FadeParagraph>
                   I ship production-ready LLM applications on{" "}
-                  <HighlightWord isVisible={isVisible} delay={0.75}>AWS</HighlightWord>, architected for speed,
+                  <HighlightWord>AWS</HighlightWord>, architected for speed,
                   reliability, and enterprise scale. Blending research and engineering, I design AI agents
                   you can trust, from real-time decision systems to voice-enabled assistants.
-                </p>
-                <p>
+                </FadeParagraph>
+                <FadeParagraph>
                   Recently graduated from{" "}
-                  <HighlightWord isVisible={isVisible} delay={0.9}>Arizona State University</HighlightWord> with
+                  <HighlightWord>Arizona State University</HighlightWord> with
                   an MS in Data Science, focused on cloud-native AI systems and next-gen autonomous intelligence.
-                </p>
+                </FadeParagraph>
               </div>
 
-              {/* Location badge */}
-              <div className="flex items-center gap-6 mb-12 text-sm text-muted-foreground">
-                <span className="flex items-center gap-2">
-                  <span>📍</span>
-                  {resumeData.personal.location}
-                </span>
-                <span className="flex items-center gap-2">
-                  <span>💼</span>
-                  Available for work
-                </span>
-              </div>
+              {/* Location badges — flip-up reveal */}
+              <FlipBadges />
 
               {/* Stats grid — odometer animation */}
               <div className="grid grid-cols-2 gap-0" ref={statsRef as React.RefObject<HTMLDivElement>}>

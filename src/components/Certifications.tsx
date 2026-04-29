@@ -40,7 +40,7 @@ const TICKS = buildTicks();
 
 function CertBadge({ cert, index }: { cert: Cert; index: number }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
   const [hovered, setHovered] = useState(false);
 
   const topArcId = `topArc-${index}`;
@@ -59,7 +59,7 @@ function CertBadge({ cert, index }: { cert: Cert; index: number }) {
       ref={ref}
       initial={{ scale: 0, opacity: 0 }}
       animate={isInView ? { scale: 1, opacity: 1 } : {}}
-      transition={{ type: "spring", stiffness: 180, damping: 16, delay: index * 0.2 }}
+      transition={{ type: "spring", stiffness: 180, damping: 16, delay: 0.05 }}
       className="flex flex-col items-center gap-8 group"
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}

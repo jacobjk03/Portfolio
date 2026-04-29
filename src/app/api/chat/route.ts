@@ -6,6 +6,26 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY || "",
 });
 
+// ── In-memory rate limiter ────────────────────────────────────────────────────
+const RATE_LIMIT = 20;          // max requests
+const WINDOW_MS  = 60 * 60 * 1000; // per hour
+
+const ipStore = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetAt: number } {
+  const now = Date.now();
+  let entry = ipStore.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    entry = { count: 0, resetAt: now + WINDOW_MS };
+    ipStore.set(ip, entry);
+  }
+
+  entry.count += 1;
+  const remaining = Math.max(0, RATE_LIMIT - entry.count);
+  return { allowed: entry.count <= RATE_LIMIT, remaining, resetAt: entry.resetAt };
+}
+
 /**
  * Build system prompt from resume data
  */
@@ -93,6 +113,29 @@ export async function POST(request: NextRequest) {
       return new Response(
         JSON.stringify({ error: "Add your GROQ_API_KEY in Vercel settings" }),
         { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Rate limit by IP
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+
+    const { allowed, remaining, resetAt } = checkRateLimit(ip);
+    if (!allowed) {
+      const retryAfterSec = Math.ceil((resetAt - Date.now()) / 1000);
+      return new Response(
+        JSON.stringify({ error: "rate_limited" }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": String(retryAfterSec),
+            "X-RateLimit-Limit": String(RATE_LIMIT),
+            "X-RateLimit-Remaining": "0",
+          },
+        }
       );
     }
 

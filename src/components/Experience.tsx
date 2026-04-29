@@ -1,7 +1,7 @@
 "use client";
 
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { ReactNode, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
@@ -131,6 +131,13 @@ function TagList({
   );
 }
 
+// ── Per-entry observer so each item reveals when it scrolls into view ─────────
+function TimelineEntry({ children }: { children: (isVisible: boolean) => ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref as any, { once: true, margin: "-80px 0px" });
+  return <div ref={ref} className="relative">{children(isInView)}</div>;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function Experience() {
@@ -165,46 +172,34 @@ export default function Experience() {
             <div className="lg:pr-16 lg:border-r border-foreground/10">
               <span className="editorial-label block mb-10">Experience</span>
               <TimelineColumn isVisible={isVisible} lineDelay={0.2}>
-                {resumeData.experience.map((exp, index) => {
-                  const entryDelay = 0.3 + index * 0.18;
-                  const bulletDelay = entryDelay + 0.2;
-                  const tagDelay = bulletDelay + exp.description.length * 0.075 + 0.05;
-                  return (
-                    <motion.div
-                      key={index}
-                      className="relative"
-                      initial={{ opacity: 0, y: 14 }}
-                      animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                      transition={{ duration: 0.45, delay: entryDelay }}
-                    >
-                      <DiamondMarker isVisible={isVisible} delay={entryDelay + 0.1} />
-
-                      <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/35 block mb-2">
-                        {exp.startDate} — {exp.endDate}
-                      </span>
-                      <h4 className="font-serif font-medium text-xl text-foreground mb-1">
-                        {exp.position}
-                      </h4>
-                      <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-primary mb-4">
-                        {exp.company} · {exp.location}
-                      </p>
-
-                      <BulletList
-                        items={exp.description}
-                        isVisible={isVisible}
-                        baseDelay={bulletDelay}
-                      />
-
-                      {exp.technologies && (
-                        <TagList
-                          tags={exp.technologies}
-                          isVisible={isVisible}
-                          baseDelay={tagDelay}
-                        />
-                      )}
-                    </motion.div>
-                  );
-                })}
+                {resumeData.experience.map((exp, index) => (
+                  <TimelineEntry key={index}>
+                    {(entryVisible) => (
+                      <>
+                        <DiamondMarker isVisible={entryVisible} delay={0.1} />
+                        <motion.div
+                          initial={{ opacity: 0, y: 14 }}
+                          animate={entryVisible ? { opacity: 1, y: 0 } : {}}
+                          transition={{ duration: 0.45, delay: 0.05 }}
+                        >
+                          <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/35 block mb-2">
+                            {exp.startDate} — {exp.endDate}
+                          </span>
+                          <h4 className="font-serif font-medium text-xl text-foreground mb-1">
+                            {exp.position}
+                          </h4>
+                          <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-primary mb-4">
+                            {exp.company} · {exp.location}
+                          </p>
+                          <BulletList items={exp.description} isVisible={entryVisible} baseDelay={0.15} />
+                          {exp.technologies && (
+                            <TagList tags={exp.technologies} isVisible={entryVisible} baseDelay={0.25} />
+                          )}
+                        </motion.div>
+                      </>
+                    )}
+                  </TimelineEntry>
+                ))}
               </TimelineColumn>
             </div>
 
@@ -212,55 +207,49 @@ export default function Experience() {
             <div className="lg:pl-16 mt-16 lg:mt-0">
               <span className="editorial-label block mb-10">Education</span>
               <TimelineColumn isVisible={isVisible} lineDelay={0.35}>
-                {resumeData.education.map((edu, index) => {
-                  const entryDelay = 0.4 + index * 0.18;
-                  return (
-                    <motion.div
-                      key={index}
-                      className="relative"
-                      initial={{ opacity: 0, y: 14 }}
-                      animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                      transition={{ duration: 0.45, delay: entryDelay }}
-                    >
-                      <DiamondMarker isVisible={isVisible} delay={entryDelay + 0.1} />
-
-                      <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/35 block mb-2">
-                        {edu.startDate} — {edu.endDate}
-                      </span>
-                      <h4 className="font-serif font-medium text-xl text-foreground mb-1">
-                        {edu.degree}
-                      </h4>
-                      <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-primary mb-4">
-                        {edu.institution} · {edu.location}
-                      </p>
-
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={isVisible ? { opacity: 1 } : {}}
-                        transition={{ delay: entryDelay + 0.25, duration: 0.4 }}
-                      >
-                        <p className="text-sm text-muted-foreground mb-2">
-                          <span className="font-medium text-foreground/70">Field: </span>
-                          {edu.field}
-                        </p>
-                        {edu.gpa && (
-                          <p className="text-sm text-muted-foreground mb-4">
-                            <span className="font-medium text-foreground/70">GPA: </span>
-                            {edu.gpa}
+                {resumeData.education.map((edu, index) => (
+                  <TimelineEntry key={index}>
+                    {(entryVisible) => (
+                      <>
+                        <DiamondMarker isVisible={entryVisible} delay={0.1} />
+                        <motion.div
+                          initial={{ opacity: 0, y: 14 }}
+                          animate={entryVisible ? { opacity: 1, y: 0 } : {}}
+                          transition={{ duration: 0.45, delay: 0.05 }}
+                        >
+                          <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/35 block mb-2">
+                            {edu.startDate} — {edu.endDate}
+                          </span>
+                          <h4 className="font-serif font-medium text-xl text-foreground mb-1">
+                            {edu.degree}
+                          </h4>
+                          <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-primary mb-4">
+                            {edu.institution} · {edu.location}
                           </p>
-                        )}
-                      </motion.div>
-
-                      {edu.achievements && edu.achievements.length > 0 && (
-                        <BulletList
-                          items={edu.achievements}
-                          isVisible={isVisible}
-                          baseDelay={entryDelay + 0.35}
-                        />
-                      )}
-                    </motion.div>
-                  );
-                })}
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={entryVisible ? { opacity: 1 } : {}}
+                            transition={{ delay: 0.2, duration: 0.4 }}
+                          >
+                            <p className="text-sm text-muted-foreground mb-2">
+                              <span className="font-medium text-foreground/70">Field: </span>
+                              {edu.field}
+                            </p>
+                            {edu.gpa && (
+                              <p className="text-sm text-muted-foreground mb-4">
+                                <span className="font-medium text-foreground/70">GPA: </span>
+                                {edu.gpa}
+                              </p>
+                            )}
+                          </motion.div>
+                          {edu.achievements && edu.achievements.length > 0 && (
+                            <BulletList items={edu.achievements} isVisible={entryVisible} baseDelay={0.25} />
+                          )}
+                        </motion.div>
+                      </>
+                    )}
+                  </TimelineEntry>
+                ))}
               </TimelineColumn>
             </div>
 
