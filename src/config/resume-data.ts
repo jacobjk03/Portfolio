@@ -47,6 +47,8 @@ export interface ResumeData {
     link?: string;
     github?: string;
     featured: boolean;
+    isPrivate?: boolean;
+    category: "personal" | "team";
   }[];
   certifications?: {
     name: string;
@@ -164,7 +166,7 @@ export const resumeData: ResumeData = {
       field: "Data Science",
       location: "Tempe, AZ",
       startDate: "2024",
-      endDate: "2026",
+      endDate: "May 2026",
       gpa: "4.00/4.00",
       achievements: [
         "Research Assistant — Cloud & AI",
@@ -187,9 +189,26 @@ export const resumeData: ResumeData = {
 
   projects: [
     {
+      title: "Navia",
+      description: "Co-founded AI companion for neurodivergent adults — multi-agent orchestration, Pinecone memory, E2EE peer messaging",
+      longDescription: "Co-founded and lead AI engineering at Navia (joinnavia.com), an AI companion for neurodivergent adults navigating college and the workforce. Designed the multi-agent orchestration system with an intent router that dynamically classifies queries across tasks, brain dumps, email, calendar, and conversation — routing to the correct handler without hardcoding. Built the Pinecone vector memory layer for persistent long-term user context across sessions. Engineered the full LLM pipeline from Groq/Llama through GPT-4.1 and GPT-4.1-mini with tone-optimized prompt engineering. Built Gmail integration (reply detection, draft generation, inbox surfacing) and Google Calendar integration (add/modify/delete via chat). Architected client-side E2EE for all peer messaging with passkey auth (SimpleWebAuthn) and a recovery code fallback system. Built an energy-adaptive AI response system and Magic Mode — a deeper interaction layer with personalized entry messages. Peer matching backend with connection requests, name masking until mutual reveal, block/report/remove, and a full notification system.",
+      image: "/assets/projects/navia.jpg",
+      technologies: [
+        "Next.js", "React 19", "TypeScript", "Tailwind CSS",
+        "OpenAI GPT-4.1", "Pinecone", "Groq", "Hume AI", "Tavily",
+        "Supabase", "Redis", "Firebase",
+        "SimpleWebAuthn", "E2EE", "Vercel", "Zustand"
+      ],
+      link: "https://www.joinnavia.com/",
+      github: "https://github.com/jacobjk03/Navia",
+      featured: true,
+      isPrivate: true,
+      category: "team"
+    },
+    {
       title: "ReAct-Based Medical Chatbot",
-      description: "Agentic medical AI chatbot using hybrid LLM orchestration",
-      longDescription: "Built a ReAct-style medical chatbot using MedGemma + LLaMA-3 with Pinecone retrieval, cross-encoder reranking, and chain-of-thought execution. Implemented evaluation guardrails and memory compression.",
+      description: "Agentic medical AI chatbot with ReAct reasoning, dual search, and safety classification",
+      longDescription: "Aceso is a medical AI chatbot built on a LangGraph ReAct StateGraph — explicit Thought → Action → Observation loops powered by LLaMA-3.3-70b. Implements dual retrieval: a Pinecone vector store (Gale Encyclopedia of Medicine) for established facts and DuckDuckGo web search filtered to trusted medical sources (WHO, NIH, CDC, PubMed, Mayo Clinic). Retrieved chunks are reranked with BAAI/bge-reranker-large CrossEncoder for relevance. Every response passes through a dedicated LLaMA-3.1-8b safety classifier before being shown to the user. Conversation history is maintained across turns with automatic summarization for long sessions. Features a collapsible reasoning trace so users can inspect the full Thought-Action-Observation chain. Deployed on Hugging Face Spaces via Docker.",
       image: "/assets/projects/medical_chatbot.jpg",
       technologies: [
         "Python", "LangChain", "LangGraph", "Pinecone",
@@ -197,7 +216,8 @@ export const resumeData: ResumeData = {
       ],
       github: "https://github.com/jacobjk03/Medical_chatbot",
       link: "https://huggingface.co/spaces/jacob03/medical_chatbot",
-      featured: true
+      featured: true,
+      category: "personal"
     },
     {
       title: "Walmart Sales Forecasting",
@@ -209,7 +229,8 @@ export const resumeData: ResumeData = {
         "TensorFlow", "Keras", "Matplotlib"
       ],
       github: "https://github.com/jacobjk03/Data-Driven-Walmart-Sales-Predictions",
-      featured: true
+      featured: true,
+      category: "personal"
     },
     {
       title: "Waterbot",
@@ -221,7 +242,8 @@ export const resumeData: ResumeData = {
       ],
       link: "https://azwaterbot.org",
       github: "https://github.com/jacobjk03/waterbot",
-      featured: false
+      featured: false,
+      category: "team"
     }
   ],
 

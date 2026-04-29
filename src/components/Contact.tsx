@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, ReactNode } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import emailjs from "@emailjs/browser";
@@ -13,51 +13,72 @@ const EMAILJS_PUBLIC_KEY = "Lcf71Be-dQHjlqah-";
 const EMAILJS_SERVICE_ID = "service_pwj70j5";
 const EMAILJS_TEMPLATE_ID = "template_voc2hhi";
 
-// ── Option A: Typewriter heading ──────────────────────────────────────────────
-function TypewriterHeading({ text, trigger }: { text: string; trigger: boolean }) {
+// ── Cycling typewriter for the section heading ────────────────────────────────
+const HEADING_PHRASES = [
+  "Let's build something together.",
+  "Looking to hire? Let's talk.",
+  "Got a project in mind?",
+  "Let's ship something great.",
+  "Have an AI problem to solve?",
+  "Interested in collaborating?",
+  "Let's make it real.",
+  "Recruiting for an AI role?",
+  "Let's create something new.",
+  "Open to full-time opportunities.",
+];
+
+function CyclingTypewriter({ active }: { active: boolean }) {
+  const [phraseIndex, setPhraseIndex] = useState(0);
   const [displayed, setDisplayed] = useState("");
-  const [cursorOn, setCursorOn] = useState(true);
-  const hasRun = useRef(false);
-  const done = displayed.length === text.length && trigger;
+  const [phase, setPhase] = useState<"typing" | "holding" | "erasing">("typing");
+  const started = useRef(false);
 
   useEffect(() => {
-    if (!trigger || hasRun.current) return;
-    hasRun.current = true;
-    let i = 0;
-    const start = setTimeout(() => {
-      const tick = setInterval(() => {
-        i++;
-        setDisplayed(text.slice(0, i));
-        if (i >= text.length) clearInterval(tick);
-      }, 46);
-      return () => clearInterval(tick);
-    }, 350);
-    return () => clearTimeout(start);
-  }, [trigger, text]);
+    if (!active || started.current) return;
+    started.current = true;
+  }, [active]);
 
-  // Blink only after typing finishes
   useEffect(() => {
-    if (!done) return;
-    const id = setInterval(() => setCursorOn(v => !v), 520);
-    return () => clearInterval(id);
-  }, [done]);
+    if (!active) return;
+    const phrase = HEADING_PHRASES[phraseIndex];
+
+    if (phase === "typing") {
+      if (displayed.length < phrase.length) {
+        const t = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length + 1)), 42);
+        return () => clearTimeout(t);
+      } else {
+        const t = setTimeout(() => setPhase("erasing"), 2800);
+        return () => clearTimeout(t);
+      }
+    }
+
+    if (phase === "erasing") {
+      if (displayed.length > 0) {
+        const t = setTimeout(() => setDisplayed(d => d.slice(0, -1)), 20);
+        return () => clearTimeout(t);
+      } else {
+        setPhraseIndex(i => (i + 1) % HEADING_PHRASES.length);
+        setPhase("typing");
+      }
+    }
+  }, [phase, displayed, phraseIndex, active]);
 
   return (
-    <span>
-      {trigger ? displayed : ""}
+    <>
+      {displayed}
       <span
-        className="inline-block w-[3px] rounded-sm align-middle ml-0.5 bg-foreground"
+        className="inline-block w-[3px] rounded-sm align-middle ml-1 bg-foreground"
         style={{
-          height: "0.82em",
-          opacity: done ? (cursorOn ? 1 : 0) : trigger ? 1 : 0,
-          transition: "opacity 0s",
+          height: "0.78em",
+          opacity: phase === "erasing" || displayed.length < HEADING_PHRASES[phraseIndex].length ? 1 : 0.85,
+          transition: "opacity 0.1s",
         }}
       />
-    </span>
+    </>
   );
 }
 
-// ── Option B: Glowing focus field wrapper ─────────────────────────────────────
+// ── Glowing focus field wrapper ───────────────────────────────────────────────
 function FocusField({
   label,
   focused,
@@ -145,7 +166,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      <SectionNumber number="08" />
+      <SectionNumber number="06" />
       <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 
@@ -158,11 +179,8 @@ export default function Contact() {
         >
           <Scroll3DReveal>
             <span className="editorial-label block mb-4">Get In Touch</span>
-            <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground max-w-xl min-h-[1.2em]">
-              <TypewriterHeading
-                text="Let's build something together."
-                trigger={isInView}
-              />
+            <h2 className="font-serif font-medium text-3xl md:text-4xl text-foreground max-w-xl min-h-[1.3em]">
+              <CyclingTypewriter active={isInView} />
             </h2>
           </Scroll3DReveal>
         </motion.div>

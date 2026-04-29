@@ -20,17 +20,18 @@ function ScrambleTag({ text, trigger, delay }: { text: string; trigger: boolean;
     hasRun.current = true;
     const timeout = setTimeout(() => {
       let frame = 0;
-      const totalFrames = Math.ceil(text.length * 2.2);
+      const totalFrames = Math.min(Math.ceil(text.length * 2.2), 48);
       const interval = setInterval(() => {
         if (frame >= totalFrames) {
           setDisplay(text);
           clearInterval(interval);
           return;
         }
+        const revealUpTo = (frame / totalFrames) * text.length;
         setDisplay(
           text.split("").map((char, i) => {
             if (char === " " || char === "." || char === "+" || char === "#" || char === "/") return char;
-            if (i < frame / 2.2) return char;
+            if (i < revealUpTo) return char;
             return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
           }).join("")
         );
@@ -51,7 +52,7 @@ export default function Skills() {
 
   return (
     <section id="skills" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      <SectionNumber number="03" />
+      <SectionNumber number="02" />
       <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 

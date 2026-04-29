@@ -232,7 +232,7 @@ export default function Certifications() {
       className="py-28 border-b border-foreground/8 relative overflow-hidden"
       ref={ref}
     >
-      <SectionNumber number="06" />
+      <SectionNumber number="05" />
       <ScrollTiltSection>
         <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 

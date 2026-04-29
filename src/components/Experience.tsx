@@ -146,7 +146,7 @@ export default function Experience() {
       className="py-28 border-b border-foreground/8 relative overflow-hidden"
       ref={ref}
     >
-      <SectionNumber number="04" />
+      <SectionNumber number="03" />
       <ScrollTiltSection>
         <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 

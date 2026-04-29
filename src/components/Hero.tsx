@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail, Globe, FileDown } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
@@ -10,14 +10,32 @@ import { useRecruiterMode } from "@/hooks/useRecruiterMode";
 import { RecruiterToast } from "@/components/RecruiterToast";
 import { ScrambleText } from "@/components/ScrambleText";
 import HeroCube from "@/components/HeroCube";
+import { SectionNumber } from "@/components/SectionNumber";
 
 export default function Hero() {
   const [toastState, setToastState] = useState<{ message: string; position: { x: number; y: number } } | null>(null);
   const { downloadResume, isDownloading, showSuccessBadge } = useResumeDownload();
   const { isRecruiterMode, toggleRecruiterMode, showToast } = useRecruiterMode();
 
+  const [tagline, setTagline] = useState("");
+  const [taglineDone, setTaglineDone] = useState(false);
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const taglineTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const TAGLINE = "Data Scientist specializing in Machine Learning and NLP with hands-on experience in deploying generative AI systems and cloud-native architectures.";
+
+  useEffect(() => {
+    let i = 0;
+    const typeNext = () => {
+      if (i >= TAGLINE.length) { setTaglineDone(true); return; }
+      i++;
+      setTagline(TAGLINE.slice(0, i));
+      taglineTimerRef.current = setTimeout(typeNext, 7);
+    };
+    taglineTimerRef.current = setTimeout(typeNext, 800);
+    return () => { if (taglineTimerRef.current) clearTimeout(taglineTimerRef.current); };
+  }, []);
 
   const socialIcons: Record<string, any> = {
     github: Github,
@@ -35,7 +53,7 @@ export default function Hero() {
     clickTimerRef.current = setTimeout(() => { clickCountRef.current = 0; }, 2000);
   };
 
-  const graduationDate = resumeData.education.find(edu => edu.endDate === "2026")?.endDate || "2026";
+  const graduationDate = resumeData.education.find(edu => edu.endDate?.includes("2026"))?.endDate || "May 2026";
 
   const handleResumeDownload = (e: React.MouseEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -59,11 +77,6 @@ export default function Hero() {
       {/* Dot grid texture */}
       <div className="dot-grid-bg absolute inset-0 pointer-events-none" />
 
-      {/* Big background section number */}
-      <span className="absolute bottom-8 right-6 md:right-12 lg:right-20 font-serif font-bold text-foreground/[0.035] leading-none select-none pointer-events-none"
-        style={{ fontSize: "clamp(8rem, 22vw, 20rem)" }}>
-        01
-      </span>
 
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20 py-24 w-full relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -133,7 +146,7 @@ export default function Hero() {
               >
                 <span className="flex items-center gap-2">📍 {resumeData.personal.location}</span>
                 <span className="flex items-center gap-2">US Work Eligible <span className="text-green-600">✓</span></span>
-                <span className="flex items-center gap-2">🎓 May {graduationDate} Graduation</span>
+                <span className="flex items-center gap-2">🎓 {graduationDate} Graduate</span>
                 <a href="#projects" className="text-primary hover:underline underline-offset-4">
                   View Projects →
                 </a>
@@ -141,14 +154,17 @@ export default function Hero() {
             )}
           </AnimatePresence>
 
-          {/* Tagline */}
+          {/* Tagline — typewriter */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="font-serif italic text-xl md:text-2xl text-foreground/60 max-w-2xl mb-14 leading-relaxed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.7 }}
+            className="font-serif italic text-xl md:text-2xl text-foreground/60 max-w-2xl mb-14 leading-relaxed min-h-[2em]"
           >
-            {resumeData.personal.bio.split(".")[0] + "."}
+            {tagline}
+            {!taglineDone && (
+              <span className="inline-block w-[2px] h-[0.85em] bg-foreground/40 align-middle ml-0.5 animate-pulse" />
+            )}
           </motion.p>
 
           {/* CTA Row */}
