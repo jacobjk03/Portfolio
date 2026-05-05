@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Globe, FileDown } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Globe, FileDown, Eye } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { useResumeDownload } from "@/hooks/useResumeDownload";
 import { DownloadToast } from "@/components/DownloadToast";
@@ -189,15 +189,29 @@ export default function Hero() {
             >
               Get In Touch
             </a>
-            <button
-              onClick={handleResumeDownload}
-              disabled={isDownloading}
-              className="btn-fill px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all flex items-center gap-2"
-              data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
-            >
-              <FileDown className="w-3.5 h-3.5" />
-              Resume
-            </button>
+            {/* Split Resume button: left = view, right = download */}
+            <div className="flex border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase overflow-hidden">
+              <a
+                href="/Jacob-Kuriakose-Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-fill flex items-center gap-2 px-6 py-3.5 hover:bg-foreground/5 active:scale-95 transition-all"
+                data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                Resume
+              </a>
+              <div className="w-px bg-foreground/20 self-stretch" />
+              <button
+                onClick={handleResumeDownload}
+                disabled={isDownloading}
+                className="btn-fill px-4 py-3.5 hover:bg-foreground/5 active:scale-95 transition-all flex items-center justify-center"
+                data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
+                title="Download Resume"
+              >
+                <FileDown className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
             {showSuccessBadge && (
               <span className="absolute -bottom-7 left-0 text-xs text-primary font-medium download-success-badge">
