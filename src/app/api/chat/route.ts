@@ -27,6 +27,36 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number; rese
 }
 
 /**
+ * Strip em and en dashes from a streamed chunk.
+ *
+ * The system prompt already forbids them, but a prompt is a request, not a
+ * guarantee: the model still emitted "your name, email, and message—it goes
+ * straight to him". Since the whole point is that the assistant should not read
+ * as machine-written, the constraint is enforced here where it cannot fail.
+ *
+ * Safe to run per chunk because both characters are single code points, so
+ * neither can be split across a chunk boundary.
+ */
+function stripDashes(text: string): string {
+  return (
+    text
+      // Between numbers a dash is a range, so it reads as "to":
+      // "2026 – 2027" and "56.5%—92.3%" keep their meaning.
+      .replace(/(\d\s*%?)\s*[—–]\s*(?=\d)/g, "$1 to ")
+      // Everywhere else it is punctuation. Blindly using "to" turned the
+      // model's own heading into "Jacob Kuriakose to Data Scientist".
+      .replace(/\s*[—–]\s*/g, ", ")
+      // Tidy what those swaps can leave behind
+      .replace(/\s+,/g, ",")
+      .replace(/,\s*([.,;:!?])/g, "$1")
+      .replace(/,\s*,/g, ",")
+      // Collapse runs of spaces BETWEEN words only. Trailing double spaces are
+      // markdown line breaks and the replies rely on them, so they must survive.
+      .replace(/(\S) {2,}(\S)/g, "$1 $2")
+  );
+}
+
+/**
  * Build system prompt from resume data
  */
 function buildSystemPrompt(): string {
@@ -251,12 +281,36 @@ export async function POST(request: NextRequest) {
       async start(controller) {
         try {
           const stream = await createStreamWithFallback();
+
+          // stripDashes needs to see what sits either side of a dash, but the
+          // model streams a few tokens at a time and a dash routinely lands on a
+          // chunk edge, which produced "Sep 2026 ,  Present". So a trailing
+          // dash (with the digits that may make it a range) or trailing
+          // whitespace is held back until the next chunk supplies the context.
+          const HOLD_BACK = /(?:[\d.,%]*\s*[—–]\s*|\s+)$/;
+          let carry = "";
+
+          const send = (text: string) => {
+            if (!text) return;
+            controller.enqueue(
+              encoder.encode(`data: ${JSON.stringify({ content: text })}\n\n`)
+            );
+          };
+
           for await (const chunk of stream) {
             const content = chunk.choices[0]?.delta?.content;
-            if (content) {
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
-            }
+            if (!content) continue;
+
+            carry += content;
+            const boundary = carry.match(HOLD_BACK);
+            const ready = boundary ? carry.slice(0, -boundary[0].length) : carry;
+            carry = boundary ? boundary[0] : "";
+
+            send(stripDashes(ready));
           }
+          // Whatever was still held back when the model stopped talking
+          send(stripDashes(carry));
+
           // Always send DONE when the stream completes naturally
           controller.enqueue(encoder.encode("data: [DONE]\n\n"));
           controller.close();

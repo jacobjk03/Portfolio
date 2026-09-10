@@ -103,8 +103,13 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-foreground/8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Built as one interpolated string on purpose. Writing it as
+              `© {year} {name}` makes React emit three separate text nodes
+              separated by <!-- --> comments, so the raw HTML reads
+              "© <!-- -->2026<!-- --> <!-- -->Jacob Kuriakose" and anything
+              parsing the markup for a copyright line finds nothing. */}
           <p className="text-[11px] font-medium tracking-[0.1em] uppercase text-foreground/35">
-            © {new Date().getFullYear()} {resumeData.personal.name}
+            {`Copyright © ${new Date().getFullYear()} ${resumeData.personal.name}. All rights reserved.`}
           </p>
           <div className="flex items-center gap-4">
             <button
