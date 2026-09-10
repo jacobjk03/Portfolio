@@ -25,7 +25,7 @@ interface Step {
 }
 
 const STEPS: Step[] = [
-  { kind: "thought", text: "Question is clinical — check the verified corpus first." },
+  { kind: "thought", text: "Question is clinical, so check the verified corpus first." },
   { kind: "action", text: 'pinecone.search("…", top_k=8)' },
   { kind: "observation", text: "8 passages · reranked by CrossEncoder → 3 kept" },
   { kind: "thought", text: "Grounded but dated. Look for current guidance." },

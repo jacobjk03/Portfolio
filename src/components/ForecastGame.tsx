@@ -250,7 +250,7 @@ export function ForecastGame({ onOpenProject }: { onOpenProject?: () => void }) 
             {project.title}
             <ArrowUpRight className="w-3 h-3" />
           </button>
-          {" "}— try to beat it
+          {" "}and try to beat it
         </p>
       )}
 
@@ -440,14 +440,14 @@ export function ForecastGame({ onOpenProject }: { onOpenProject?: () => void }) 
             </div>
             <p className="text-[12px] pt-1 text-foreground">
               {userWins
-                ? "You beat it. Genuinely well done — most people don't."
+                ? "You beat it. Most people do not."
                 : "The model wins this round. Lower RMSE is better."}
             </p>
           </div>
         ) : (
           <p className="text-[11px] text-foreground/40 font-mono">
             {complete
-              ? "line complete — hit reveal"
+              ? "line complete, hit reveal"
               : `${guess.filter((g) => g !== null).length}/${HORIZON} days drawn`}
           </p>
         )}
@@ -476,7 +476,7 @@ export function ForecastGame({ onOpenProject }: { onOpenProject?: () => void }) 
       </div>
 
       <p className="text-[10px] text-foreground/30 mt-4 leading-snug">
-        Synthetic weekly-seasonal series, not project data. The model is real —
+        Synthetic weekly-seasonal series, not project data. The model is real:
         Holt-Winters exponential smoothing, fitted live on the visible history.
       </p>
     </div>

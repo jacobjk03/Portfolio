@@ -86,7 +86,7 @@ function BulletList({
           transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
           className="text-sm text-muted-foreground flex gap-3 leading-relaxed"
         >
-          <span className="text-primary mt-1.5 shrink-0">—</span>
+          <span className="w-1.5 h-1.5 bg-primary mt-[7px] shrink-0" />
           <span>{desc}</span>
         </motion.li>
       ))}
@@ -185,7 +185,7 @@ export default function Experience() {
                           transition={{ duration: 0.45, delay: 0.05 }}
                         >
                           <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/35 block mb-2">
-                            {exp.startDate} — {exp.endDate}
+                            {exp.startDate} to {exp.endDate}
                           </span>
                           <h4 className="font-serif font-medium text-xl text-foreground mb-1">
                             {exp.position}
@@ -223,7 +223,7 @@ export default function Experience() {
                           transition={{ duration: 0.45, delay: 0.05 }}
                         >
                           <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-foreground/35 block mb-2">
-                            {edu.startDate} — {edu.endDate}
+                            {edu.startDate} to {edu.endDate}
                           </span>
                           <h4 className="font-serif font-medium text-xl text-foreground mb-1">
                             {edu.degree}

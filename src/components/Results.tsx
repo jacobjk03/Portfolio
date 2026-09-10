@@ -33,7 +33,7 @@ export default function Results() {
           {/* Fine-tuning slopes */}
           <div className="lg:col-span-7">
             <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-primary mb-1">
-              Granite 4.1 8B — AT&amp;T change risk
+              Granite 4.1 8B on AT&amp;T change risk
             </p>
             <p className="text-sm text-muted-foreground mb-8 max-w-md leading-relaxed">
               Fine-tuned a small language model on synthetic change tickets, judged by

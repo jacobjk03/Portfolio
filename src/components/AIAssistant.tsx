@@ -14,7 +14,7 @@ interface Message {
 // The four bullets this used to list were the same four topics as the suggestion
 // chips directly below it — the greeting now points at them instead of repeating
 // them, which also gets the message down to two lines.
-const WELCOME_TEXT = `Hi — I'm Jacob's AI assistant.\n\nAsk me anything about his work, or start with one of these:`;
+const WELCOME_TEXT = `Hi, I am Jacob's AI assistant.\n\nAsk me anything about his work, or start with one of these:`;
 
 const CHIPS = [
   "Experience summary?",
@@ -234,7 +234,7 @@ export function AIAssistant() {
       setMessages(prev => prev.filter(m => m.id !== typingId));
       if (err.name !== "AbortError") {
         const msg = err.message === "rate_limited"
-          ? "You've sent a lot of messages — please wait an hour before trying again."
+          ? "You have sent a lot of messages. Please wait an hour before trying again."
           : err.message || "⚠️ AI is unavailable. Try again.";
         setMessages(prev => [...prev, { role: "assistant", content: msg }]);
       }

@@ -280,7 +280,7 @@ export default function Projects() {
                         selectedProject.isPrivate ? (
                           <span
                             className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] uppercase text-foreground/35 cursor-default select-none"
-                            title="Private team repository — source not publicly available"
+                            title="Private team repository, source not publicly available"
                           >
                             <Lock className="w-3.5 h-3.5" />
                             Private Repo · Team Project

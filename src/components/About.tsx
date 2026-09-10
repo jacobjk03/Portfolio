@@ -334,19 +334,19 @@ export default function About() {
                   tool-use, and multi-step reasoning.
                 </FadeParagraph>
                 <FadeParagraph>
-                  I ship production-grade LLM systems on{" "}
-                  <HighlightWord>AWS</HighlightWord> —{" "}
+                  Most of that work runs on{" "}
+                  <HighlightWord>AWS</HighlightWord>:{" "}
                   <HighlightWord>fine-tuned small language models</HighlightWord>,
-                  multi-agent workflows, and retrieval pipelines built for reliability
-                  at enterprise scale. Blending research and engineering, I design AI agents
-                  you can trust, from real-time decision systems to voice-enabled assistants.
+                  multi-agent workflows, and retrieval pipelines that hold up once
+                  real people are using them. I have taken a model from 56% to 92%
+                  accuracy and kept a chatbot running for 2,000 students.
                 </FadeParagraph>
                 <FadeParagraph>
-                  Currently a{" "}
+                  I am a{" "}
                   <HighlightWord>Platform Engineer at Wipro</HighlightWord> in
-                  Plano, TX — following an MS in Data Science from{" "}
-                  <HighlightWord>Arizona State University</HighlightWord> and AI
-                  engineering work spanning enterprise deployments and university research.
+                  Plano, TX. Before that came an MS in Data Science at{" "}
+                  <HighlightWord>Arizona State University</HighlightWord>, a
+                  research assistantship, and a startup I co-founded.
                 </FadeParagraph>
               </div>
 

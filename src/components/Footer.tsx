@@ -91,9 +91,9 @@ export default function Footer() {
                 );
               })}
               <a
-                href={`mailto:${resumeData.personal.email}`}
+                href="#contact"
                 className="w-10 h-10 border border-foreground/15 flex items-center justify-center text-foreground/50 hover:border-primary hover:text-primary transition-all"
-                aria-label="Email"
+                aria-label="Go to the contact form"
               >
                 <Mail className="w-4 h-4" />
               </a>

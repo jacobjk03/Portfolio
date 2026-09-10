@@ -7,7 +7,7 @@ import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 const faqData = [
   {
     question: "Currently",
-    answer: "Platform Engineer at Wipro — open to opportunities"
+    answer: "Platform Engineer at Wipro, open to opportunities"
   },
   {
     question: "Work eligibility?",

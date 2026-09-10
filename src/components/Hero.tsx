@@ -22,7 +22,7 @@ export default function Hero() {
 
   // Kept shorter than personal.bio on purpose — this types out char-by-char
   // and has to stay within a few lines at the hero's width.
-  const TAGLINE = "Data Scientist specializing in NLP, time series forecasting, and multi-agent AI systems — shipping production-grade AI on the cloud.";
+  const TAGLINE = "Data Scientist specializing in NLP, time series forecasting, and multi-agent AI systems, shipping production-grade AI on the cloud.";
 
   useEffect(() => {
     let i = 0;
@@ -226,9 +226,9 @@ export default function Hero() {
               );
             })}
             <a
-              href={`mailto:${resumeData.personal.email}`}
+              href="#contact"
               className="w-10 h-10 border border-foreground/15 flex items-center justify-center text-foreground/50 hover:border-primary hover:text-primary transition-all"
-              aria-label="Email"
+              aria-label="Go to the contact form"
             >
               <Mail className="w-4 h-4" />
             </a>

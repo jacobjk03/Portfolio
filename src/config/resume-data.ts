@@ -185,7 +185,7 @@ export const resumeData: ResumeData = {
       startDate: "Jun 2026",
       endDate: "Aug 2026",
       description: [
-        "Fine-tuned a Granite 4.1 8B SLM for AT&T change risk management — accuracy 56.5% → 92.3% and macro F1 0.50 → 0.92, using Claude as an LLM judge for explanation correctness and action relevance",
+        "Fine-tuned a Granite 4.1 8B SLM for AT&T change risk management, taking accuracy from 56.5% to 92.3% and macro F1 from 0.50 to 0.92, using Claude as an LLM judge for explanation correctness and action relevance",
         "Built an end-to-end synthetic data generation and training pipeline from AT&T-provided schemas and sample records, leveraging Kimi K2.5 to generate 50K domain-specific change tickets for enterprise change management workflows",
         "Developed a change & configuration management agent connected to ServiceNow ticket data and CMDB network topology, enabling the fine-tuned SLM to generate risk rules, blast radius analysis, recommended actions, and rollback plans",
         "Deployed the agentic SLM workflow on AT&T's AWS dev instance and integrated it with Wipro's WINGS platform for testing and validation"
@@ -200,7 +200,7 @@ export const resumeData: ResumeData = {
       endDate: "Jun 2026",
       description: [
         "Led migration of production-grade AI chatbot (Waterbot) to CISA AWS environment",
-        "Provisioned AWS CDK stack — ECS Fargate, ECR, ALB, CloudFront, S3, RDS PostgreSQL, DynamoDB, Lambda — cutting manual setup ~40% and deployment downtime ~30%",
+        "Provisioned AWS CDK stack (ECS Fargate, ECR, ALB, CloudFront, S3, RDS PostgreSQL, DynamoDB, Lambda), cutting manual setup ~40% and deployment downtime ~30%",
         "Built multi-stage RAG pipeline using AWS Bedrock Knowledge Base + GPT-4.1: safety moderation → intent detection → language detection → semantic retrieval → source citation linking",
         "Replaced a self-hosted Chroma vector DB with AWS Bedrock Knowledge Base as the retrieval layer; re-indexed embeddings and wired managed retrieval into ECS tasks for better scalability",
         "Engineered FastAPI backend with 13 REST & WebSocket endpoints; implemented per-session memory management and pluggable ModelAdapter pattern (OpenAI / Bedrock) for swappable LLM backends",
@@ -249,7 +249,7 @@ export const resumeData: ResumeData = {
       endDate: "May 2026",
       gpa: "4.00/4.00",
       achievements: [
-        "AI Backend Developer — Waterbot production RAG platform (azwaterbot.org)",
+        "AI Backend Developer on Waterbot, a production RAG platform (azwaterbot.org)",
         "Courses: Software Security, Data Mining, Statistical Machine Learning, Database Management Systems"
       ]
     },
@@ -270,8 +270,8 @@ export const resumeData: ResumeData = {
   projects: [
     {
       title: "Navia",
-      description: "Co-founded AI companion for neurodivergent adults — multi-agent orchestration, Pinecone memory, E2EE peer messaging",
-      longDescription: "Co-founded and lead AI engineering at Navia (joinnavia.com), an AI companion for neurodivergent adults navigating college and the workforce. Designed the multi-agent orchestration system with an intent router that dynamically classifies queries across tasks, brain dumps, email, calendar, and conversation — routing to the correct handler without hardcoding. Built the Pinecone vector memory layer for persistent long-term user context across sessions. Engineered the full LLM pipeline from Groq/Llama through GPT-4.1 and GPT-4.1-mini with tone-optimized prompt engineering. Built Gmail integration (reply detection, draft generation, inbox surfacing) and Google Calendar integration (add/modify/delete via chat). Architected client-side E2EE for all peer messaging with passkey auth (SimpleWebAuthn) and a recovery code fallback system. Built an energy-adaptive AI response system and Magic Mode — a deeper interaction layer with personalized entry messages. Peer matching backend with connection requests, name masking until mutual reveal, block/report/remove, and a full notification system.",
+      description: "Co-founded AI companion for neurodivergent adults, built around multi-agent orchestration, Pinecone memory and E2EE peer messaging",
+      longDescription: "Co-founded and lead AI engineering at Navia (joinnavia.com), an AI companion for neurodivergent adults navigating college and the workforce. Designed the multi-agent orchestration system with an intent router that dynamically classifies queries across tasks, brain dumps, email, calendar, and conversation, routing to the correct handler without hardcoding. Built the Pinecone vector memory layer for persistent long-term user context across sessions. Engineered the full LLM pipeline from Groq/Llama through GPT-4.1 and GPT-4.1-mini with tone-optimized prompt engineering. Built Gmail integration (reply detection, draft generation, inbox surfacing) and Google Calendar integration (add/modify/delete via chat). Architected client-side E2EE for all peer messaging with passkey auth (SimpleWebAuthn) and a recovery code fallback system. Built an energy-adaptive AI response system and Magic Mode, a deeper interaction layer with personalized entry messages. Peer matching backend with connection requests, name masking until mutual reveal, block/report/remove, and a full notification system.",
       image: "/assets/projects/navia.jpg",
       technologies: [
         "Next.js", "React 19", "TypeScript", "Tailwind CSS",
@@ -288,7 +288,7 @@ export const resumeData: ResumeData = {
     {
       title: "ReAct-Based Medical Chatbot",
       description: "Agentic medical AI chatbot with ReAct reasoning, dual search, and safety classification",
-      longDescription: "Aceso is a medical AI chatbot built on a LangGraph ReAct StateGraph — explicit Thought → Action → Observation loops powered by LLaMA-3.3-70b. Implements dual retrieval: a Pinecone vector store (Gale Encyclopedia of Medicine) for established facts and DuckDuckGo web search filtered to trusted medical sources (WHO, NIH, CDC, PubMed, Mayo Clinic). Retrieved chunks are reranked with BAAI/bge-reranker-large CrossEncoder for relevance. Every response passes through a dedicated LLaMA-3.1-8b safety classifier before being shown to the user. Conversation history is maintained across turns with automatic summarization for long sessions. Features a collapsible reasoning trace so users can inspect the full Thought-Action-Observation chain. Deployed on Hugging Face Spaces via Docker.",
+      longDescription: "Aceso is a medical AI chatbot built on a LangGraph ReAct StateGraph, with explicit Thought → Action → Observation loops powered by LLaMA-3.3-70b. Implements dual retrieval: a Pinecone vector store (Gale Encyclopedia of Medicine) for established facts and DuckDuckGo web search filtered to trusted medical sources (WHO, NIH, CDC, PubMed, Mayo Clinic). Retrieved chunks are reranked with BAAI/bge-reranker-large CrossEncoder for relevance. Every response passes through a dedicated LLaMA-3.1-8b safety classifier before being shown to the user. Conversation history is maintained across turns with automatic summarization for long sessions. Features a collapsible reasoning trace so users can inspect the full Thought-Action-Observation chain. Deployed on Hugging Face Spaces via Docker.",
       image: "/assets/projects/medical_chatbot.jpg",
       technologies: [
         "Python", "LangChain", "LangGraph", "Pinecone",
@@ -302,7 +302,7 @@ export const resumeData: ResumeData = {
     {
       title: "Waterbot",
       description: "AI-powered educational chatbot for water literacy with multilingual & voice support",
-      longDescription: "Waterbot is an AI-powered educational chatbot developed at Arizona State University to promote water literacy and sustainability awareness. It engages users—especially K-12 students—in interactive, conversational learning about water conservation, the water cycle, and real-world water challenges. The system runs on a fully cloud-based AWS infrastructure (ECS, CDK, S3, DynamoDB, CloudFront, and RDS) and supports multilingual and voice-based interactions. It was designed to deliver scalable, accessible, and engaging water education experiences while showcasing production-grade AI deployment and cloud engineering practices.",
+      longDescription: "Waterbot is an AI-powered educational chatbot developed at Arizona State University to promote water literacy and sustainability awareness. It engages users, especially K-12 students, in interactive, conversational learning about water conservation, the water cycle, and real-world water challenges. The system runs on a fully cloud-based AWS infrastructure (ECS, CDK, S3, DynamoDB, CloudFront, and RDS) and supports multilingual and voice-based interactions. It was designed to deliver scalable, accessible, and engaging water education experiences while showcasing production-grade AI deployment and cloud engineering practices.",
       image: "/assets/projects/waterbot.jpg",
       technologies: [
         "Python", "AWS", "Graph RAG", "JavaScript", "HTML", "CSS"

@@ -131,6 +131,22 @@ export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = async (email: string) => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard API needs a secure context and can be blocked outright.
+      // Selecting the text at least lets the visitor copy it by hand.
+      const sel = window.getSelection();
+      const range = document.createRange();
+      const el = document.getElementById("contact-email-value");
+      if (el && sel) { range.selectNodeContents(el); sel.removeAllRanges(); sel.addRange(range); }
+    }
+  };
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -204,9 +220,13 @@ export default function Contact() {
                 // Phone intentionally omitted — a plain-text number on a public page
                 // gets scraped into spam/lead databases and can't be taken back.
                 // It stays in resume-data.ts and on the resume PDF.
-                { Icon: Mail, label: "Email", value: resumeData.personal.email, href: `mailto:${resumeData.personal.email}` },
-                { Icon: MapPin, label: "Location", value: resumeData.personal.location, href: null },
-              ].map(({ Icon, label, value, href }, i) => (
+                // The email is copy-to-clipboard, not a mailto: link. mailto
+                // silently does nothing for anyone without a desktop mail
+                // client registered, and this row sits inside the contact form
+                // already, so pointing it at the form would be circular.
+                { Icon: Mail, label: "Email", value: resumeData.personal.email, copy: true },
+                { Icon: MapPin, label: "Location", value: resumeData.personal.location, copy: false },
+              ].map(({ Icon, label, value, copy }, i) => (
                 <motion.div
                   key={label}
                   initial={{ opacity: 0, x: -12 }}
@@ -219,8 +239,18 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-foreground/40 mb-0.5">{label}</p>
-                    {href ? (
-                      <a href={href} className="text-sm text-foreground hover:text-primary transition-colors">{value}</a>
+                    {copy ? (
+                      <button
+                        id="contact-email-value"
+                        onClick={() => handleCopyEmail(value)}
+                        className="group text-sm text-foreground hover:text-primary transition-colors flex items-center gap-2"
+                        aria-label={`Copy email address ${value}`}
+                      >
+                        {value}
+                        <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                          {copied ? "Copied" : "Copy"}
+                        </span>
+                      </button>
                     ) : (
                       <p className="text-sm text-foreground">{value}</p>
                     )}
