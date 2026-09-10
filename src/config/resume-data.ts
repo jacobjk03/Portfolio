@@ -4,7 +4,9 @@ export interface ResumeData {
     title: string;
     tagline: string;
     email: string;
-    phone: string;
+    // Deliberately not stored here — a plain-text number in a public repo gets
+    // scraped into spam databases. It lives only in the resume PDF.
+    phone?: string;
     location: string;
     bio: string;
     avatar: string;
@@ -79,7 +81,6 @@ export const resumeData: ResumeData = {
     title: "Data Scientist & Machine Learning Engineer",
     tagline: "Building intelligent systems with LLMs, NLP, and cloud-first AI pipelines",
     email: "jkuriak3@asu.edu",
-    phone: "+1 (602) 802-6591",
     location: "Plano, TX",
     bio: "Data Scientist specializing in NLP, Time Series Forecasting, and multi-agent AI systems, with experience shipping production-grade AI in both research and startup environments. Platform Engineer at Wipro, open to conversations about data science and ML engineering roles.",
     avatar: "/assets/avatar/avatar.png"
