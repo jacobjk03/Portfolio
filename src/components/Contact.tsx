@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
-import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from "lucide-react";
+import { Mail, MapPin, Send, CheckCircle, AlertCircle } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import emailjs from "@emailjs/browser";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
@@ -201,8 +201,10 @@ export default function Contact() {
 
             <div className="space-y-6">
               {[
+                // Phone intentionally omitted — a plain-text number on a public page
+                // gets scraped into spam/lead databases and can't be taken back.
+                // It stays in resume-data.ts and on the resume PDF.
                 { Icon: Mail, label: "Email", value: resumeData.personal.email, href: `mailto:${resumeData.personal.email}` },
-                { Icon: Phone, label: "Phone", value: resumeData.personal.phone, href: `tel:${resumeData.personal.phone}` },
                 { Icon: MapPin, label: "Location", value: resumeData.personal.location, href: null },
               ].map(({ Icon, label, value, href }, i) => (
                 <motion.div
@@ -230,7 +232,7 @@ export default function Contact() {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-foreground/50">
-                Available for work
+                Open to opportunities
               </span>
             </div>
           </motion.div>

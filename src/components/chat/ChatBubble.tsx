@@ -66,6 +66,18 @@ export function ChatBubble({ message, isUser, isTyping }: ChatBubbleProps) {
               code: ({ children }) => (
                 <code className="px-1 py-0.5 bg-foreground/8 text-[12px] font-mono">{children}</code>
               ),
+              // Open in a new tab — navigating the current tab would unmount the
+              // chat and lose the whole conversation (messages aren't persisted).
+              a: ({ href, children }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-2 decoration-primary/40 hover:decoration-primary break-words"
+                >
+                  {children}
+                </a>
+              ),
             }}
           >
             {message}

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Mail, Linkedin, Github, ArrowUpRight, PlaneTakeoff } from "lucide-react";
+import { Mail, Linkedin, Github, ArrowUpRight, ArrowDown, PlaneTakeoff } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Scroll3DReveal } from "@/components/Scroll3DReveal";
@@ -99,7 +99,7 @@ function OdometerNumber({ value, isVisible, delay }: {
 
 const BADGES = [
   { icon: "📍", label: resumeData.personal.location, variant: "plain" as const },
-  { icon: "💼", label: "Available for work",          variant: "plain" as const },
+  { icon: "💼", label: "Open to opportunities",       variant: "plain" as const },
   { icon: null,  label: "Open to relocate",           variant: "accent" as const },
 ];
 
@@ -199,7 +199,7 @@ function FlipCard({ isVisible }: { isVisible: boolean }) {
 
               {/* Name + title */}
               <div>
-                <p className="text-[9px] font-semibold tracking-[0.2em] uppercase text-primary/70 mb-2">Available now</p>
+                <p className="text-[9px] font-semibold tracking-[0.2em] uppercase text-primary/70 mb-2">Open to opportunities</p>
                 <h3 className="font-serif font-medium text-foreground leading-tight mb-1" style={{ fontSize: "1.35rem" }}>
                   {resumeData.personal.name}
                 </h3>
@@ -253,8 +253,11 @@ function FlipCard({ isVisible }: { isVisible: boolean }) {
                   </a>
                 )}
 
+                {/* Jumps to the contact form rather than a mailto: — mailto silently
+                    does nothing for visitors without a desktop mail client, and the
+                    Contact section shows the address anyway for those who want it. */}
                 <a
-                  href={`mailto:${resumeData.personal.email}`}
+                  href="#contact"
                   className="group flex items-center justify-between px-4 py-4 border border-foreground/10 bg-secondary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
                 >
                   <div className="flex items-center gap-3">
@@ -263,10 +266,10 @@ function FlipCard({ isVisible }: { isVisible: boolean }) {
                     </div>
                     <div>
                       <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-foreground/70 group-hover:text-foreground transition-colors">Email</p>
-                      <p className="text-[10px] text-foreground/35 mt-0.5">Get in touch</p>
+                      <p className="text-[10px] text-foreground/35 mt-0.5">Send a message</p>
                     </div>
                   </div>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-foreground/25 group-hover:text-primary transition-colors" />
+                  <ArrowDown className="w-3.5 h-3.5 text-foreground/25 group-hover:text-primary transition-colors" />
                 </a>
               </div>
 
@@ -274,7 +277,7 @@ function FlipCard({ isVisible }: { isVisible: boolean }) {
               <div className="flex items-center gap-2 pt-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                 <span className="text-[9px] font-semibold tracking-[0.15em] uppercase text-foreground/35">
-                  Immediate joiner · F-1 OPT
+                  Platform Engineer @ Wipro · F-1 OPT
                 </span>
               </div>
             </div>
@@ -331,15 +334,19 @@ export default function About() {
                   tool-use, and multi-step reasoning.
                 </FadeParagraph>
                 <FadeParagraph>
-                  I ship production-ready LLM applications on{" "}
-                  <HighlightWord>AWS</HighlightWord>, architected for speed,
-                  reliability, and enterprise scale. Blending research and engineering, I design AI agents
+                  I ship production-grade LLM systems on{" "}
+                  <HighlightWord>AWS</HighlightWord> —{" "}
+                  <HighlightWord>fine-tuned small language models</HighlightWord>,
+                  multi-agent workflows, and retrieval pipelines built for reliability
+                  at enterprise scale. Blending research and engineering, I design AI agents
                   you can trust, from real-time decision systems to voice-enabled assistants.
                 </FadeParagraph>
                 <FadeParagraph>
-                  Recently graduated from{" "}
-                  <HighlightWord>Arizona State University</HighlightWord> with
-                  an MS in Data Science, focused on cloud-native AI systems and next-gen autonomous intelligence.
+                  Currently a{" "}
+                  <HighlightWord>Platform Engineer at Wipro</HighlightWord> in
+                  Plano, TX — following an MS in Data Science from{" "}
+                  <HighlightWord>Arizona State University</HighlightWord> and AI
+                  engineering work spanning enterprise deployments and university research.
                 </FadeParagraph>
               </div>
 

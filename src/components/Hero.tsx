@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail, Globe, FileDown, Eye } from "lucide-react";
-import { resumeData } from "@/config/resume-data";
+import { resumeData, RESUME_URL } from "@/config/resume-data";
 import { useResumeDownload } from "@/hooks/useResumeDownload";
 import { DownloadToast } from "@/components/DownloadToast";
 import { useRecruiterMode } from "@/hooks/useRecruiterMode";
@@ -23,7 +23,9 @@ export default function Hero() {
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
   const taglineTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const TAGLINE = "Data Scientist specializing in Machine Learning and NLP with hands-on experience in deploying generative AI systems and cloud-native architectures.";
+  // Kept shorter than personal.bio on purpose — this types out char-by-char
+  // and has to stay within a few lines at the hero's width.
+  const TAGLINE = "Data Scientist specializing in NLP, time series forecasting, and multi-agent AI systems — shipping production-grade AI on the cloud.";
 
   useEffect(() => {
     let i = 0;
@@ -91,10 +93,10 @@ export default function Hero() {
             <span className="editorial-label">
               {resumeData.personal.title}
             </span>
-            {/* Available for work indicator */}
+            {/* Availability indicator */}
             <span className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.12em] uppercase text-foreground/50">
               <span className="w-2 h-2 rounded-full bg-green-500 avail-dot inline-block" />
-              Open to Work
+              Open to Opportunities
             </span>
           </motion.div>
 
@@ -192,7 +194,7 @@ export default function Hero() {
             {/* Split Resume button: left = view, right = download */}
             <div className="flex border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase overflow-hidden">
               <a
-                href="/Jacob-Kuriakose-Resume.pdf"
+                href={RESUME_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-fill flex items-center gap-2 px-6 py-3.5 hover:bg-foreground/5 active:scale-95 transition-all"

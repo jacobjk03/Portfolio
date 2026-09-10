@@ -60,7 +60,9 @@ export function VisionSection({
   return (
     <section
       ref={ref}
-      className={`vision-section ${isVisible ? "vision-visible" : ""} ${className} relative overflow-hidden`}
+      // overflow-clip clips the decorative layers exactly like overflow-hidden, but
+      // without creating a scroll container — which would break position:sticky children.
+      className={`vision-section ${isVisible ? "vision-visible" : ""} ${className} relative overflow-clip`}
       style={{
         animationDelay: `${delay}ms`,
       }}

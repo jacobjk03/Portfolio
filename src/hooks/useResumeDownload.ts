@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { RESUME_FILE_NAME, RESUME_URL } from "@/config/resume-data";
 
 interface DownloadOptions {
   showToast?: (message: string, position: { x: number; y: number }) => void;
@@ -39,9 +40,9 @@ export function useResumeDownload() {
       try {
         // Create a link element for download
         const link = document.createElement("a");
-        link.href = "/Jacob-Kuriakose-Resume.pdf";
-        link.download = "Jacob-Kuriakose-Resume.pdf";
-        link.setAttribute("download", "Jacob-Kuriakose-Resume.pdf");
+        link.href = RESUME_URL;
+        link.download = RESUME_FILE_NAME;
+        link.setAttribute("download", RESUME_FILE_NAME);
         
         // Force download (not open in browser)
         document.body.appendChild(link);
@@ -60,7 +61,7 @@ export function useResumeDownload() {
       } catch (error) {
         console.error("Failed to download resume:", error);
         // Fallback: open in new tab
-        window.open("/Jacob-Kuriakose-Resume.pdf", "_blank");
+        window.open(RESUME_URL, "_blank");
       } finally {
         setIsDownloading(false);
       }

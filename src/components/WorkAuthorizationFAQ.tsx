@@ -6,8 +6,12 @@ import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 const faqData = [
   {
+    question: "Currently",
+    answer: "Platform Engineer at Wipro — open to opportunities"
+  },
+  {
     question: "Work eligibility?",
-    answer: "CPT for internship + 3 years STEM-OPT full-time after graduation"
+    answer: "3 years full-time without sponsorship (12-mo OPT + 24-mo STEM-OPT)"
   },
   {
     question: "Visa type",
@@ -15,7 +19,7 @@ const faqData = [
   },
   {
     question: "Degree",
-    answer: "MS in Data Science (currently enrolled full-time)"
+    answer: "MS in Data Science (graduated May 2026)"
   },
   {
     question: "Need sponsorship now?",

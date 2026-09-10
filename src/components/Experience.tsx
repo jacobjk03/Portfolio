@@ -150,7 +150,9 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="py-28 border-b border-foreground/8 relative overflow-hidden"
+      // overflow-clip (not hidden) so the sticky education rail below still works —
+      // overflow-hidden would make this a scroll container and cancel the stickiness.
+      className="py-28 border-b border-foreground/8 relative overflow-clip"
       ref={ref}
     >
       <SectionNumber number="03" />
@@ -203,8 +205,11 @@ export default function Experience() {
               </TimelineColumn>
             </div>
 
-            {/* ── Education (right) ── */}
-            <div className="lg:pl-16 mt-16 lg:mt-0">
+            {/* ── Education (right) ──
+                self-start keeps this item content-height (grid items stretch by
+                default, and a full-height item has no room to stick within);
+                lg:sticky pins it while the taller Experience column scrolls past. */}
+            <div className="lg:pl-16 mt-16 lg:mt-0 self-start lg:sticky lg:top-28">
               <span className="editorial-label block mb-10">Education</span>
               <TimelineColumn isVisible={isVisible} lineDelay={0.35}>
                 {resumeData.education.map((edu, index) => (

@@ -65,6 +65,14 @@ export interface ResumeData {
   }[];
 }
 
+// Resume PDF — single source of truth for the view + download buttons.
+// Bump RESUME_VERSION whenever public/Jacob-Kuriakose-Resume.pdf is replaced so
+// browsers and the CDN don't serve a cached copy of the old file.
+export const RESUME_FILE_NAME = "Jacob-Kuriakose-Resume.pdf";
+export const RESUME_PATH = `/${RESUME_FILE_NAME}`;
+export const RESUME_VERSION = "2026-09";
+export const RESUME_URL = `${RESUME_PATH}?v=${RESUME_VERSION}`;
+
 export const resumeData: ResumeData = {
   personal: {
     name: "Jacob Kuriakose",
@@ -72,8 +80,8 @@ export const resumeData: ResumeData = {
     tagline: "Building intelligent systems with LLMs, NLP, and cloud-first AI pipelines",
     email: "jkuriak3@asu.edu",
     phone: "+1 (602) 802-6591",
-    location: "Tempe, AZ",
-    bio: "Data Scientist specializing in Machine Learning and NLP with hands-on experience in deploying generative AI systems and cloud-native architectures. Strong background in agentic LLM pipelines, time-series forecasting, and scalable ML infrastructure on AWS.",
+    location: "Plano, TX",
+    bio: "Data Scientist specializing in NLP, Time Series Forecasting, and multi-agent AI systems, with experience shipping production-grade AI in both research and startup environments. Platform Engineer at Wipro, open to conversations about data science and ML engineering roles.",
     avatar: "/assets/avatar/avatar.png"
   },
 
@@ -89,7 +97,8 @@ export const resumeData: ResumeData = {
       items: [
         "Machine Learning", "Deep Learning", "NLP",
         "Transformers", "Generative AI", "Time Series Forecasting",
-        "EDA", "Feature Engineering", "Model Evaluation"
+        "LLM Fine-Tuning", "Multi-Agent Systems", "RAG",
+        "EDA", "Feature Engineering", "Model Evaluation", "A/B Testing"
       ]
     },
     {
@@ -100,36 +109,64 @@ export const resumeData: ResumeData = {
       category: "Frameworks & Libraries",
       items: [
         "TensorFlow", "Keras", "PyTorch", "Scikit-Learn",
-        "LangChain", "LangGraph", "Flask", "Statsmodels"
+        "LangChain", "LangGraph", "FastAPI", "Flask", "Statsmodels",
+        "SpaCy", "NLTK"
       ]
     },
     {
       category: "Cloud & Tools",
       items: [
         "AWS (EC2, ECS, ECR, RDS, S3, DynamoDB, Lambda, CloudFront, Secrets Manager)",
-        "Docker", "Git", "Jupyter Notebook", "PySpark", "Tableau", "MS Excel"
+        "AWS Bedrock", "Docker", "Git", "GitHub Actions", "MLflow", "DVC",
+        "Jupyter Notebook", "PySpark", "Tableau", "MS Excel"
       ]
     }
   ],
 
   experience: [
     {
-      company: "Arizona State University",
-      position: "Research Assistant — AI & Cloud",
-      location: "Tempe, AZ",
-      startDate: "May 2025",
+      company: "Wipro",
+      position: "Platform Engineer",
+      location: "Plano, TX",
+      startDate: "Sep 2026",
       endDate: "Present",
       description: [
+        // TODO: replace with real responsibilities once the role ramps up
+        "Joined full-time as a Platform Engineer after converting from the summer AI Engineer internship"
+      ]
+    },
+    {
+      company: "Wipro",
+      position: "AI Engineer Intern",
+      location: "Plano, TX",
+      startDate: "Jun 2026",
+      endDate: "Aug 2026",
+      description: [
+        "Fine-tuned a Granite 4.1 8B SLM for AT&T change risk management — accuracy 56.5% → 92.3% and macro F1 0.50 → 0.92, using Claude as an LLM judge for explanation correctness and action relevance",
+        "Built an end-to-end synthetic data generation and training pipeline from AT&T-provided schemas and sample records, leveraging Kimi K2.5 to generate 50K domain-specific change tickets for enterprise change management workflows",
+        "Developed a change & configuration management agent connected to ServiceNow ticket data and CMDB network topology, enabling the fine-tuned SLM to generate risk rules, blast radius analysis, recommended actions, and rollback plans",
+        "Deployed the agentic SLM workflow on AT&T's AWS dev instance and integrated it with Wipro's WINGS platform for testing and validation"
+      ],
+      technologies: ["Granite 4.1 8B", "LLM Fine-Tuning", "LLM-as-a-Judge", "Synthetic Data Generation", "Agentic AI", "ServiceNow", "CMDB", "AWS", "Python"]
+    },
+    {
+      company: "Arizona State University",
+      position: "AI Backend Developer",
+      location: "Tempe, AZ",
+      startDate: "May 2025",
+      endDate: "Jun 2026",
+      description: [
         "Led migration of production-grade AI chatbot (Waterbot) to CISA AWS environment",
-        "Provisioned AWS CDK stack — ECS, ECR, ALB, CloudFront, S3, RDS PostgreSQL, DynamoDB, Lambda",
+        "Provisioned AWS CDK stack — ECS Fargate, ECR, ALB, CloudFront, S3, RDS PostgreSQL, DynamoDB, Lambda — cutting manual setup ~40% and deployment downtime ~30%",
         "Built multi-stage RAG pipeline using AWS Bedrock Knowledge Base + GPT-4.1: safety moderation → intent detection → language detection → semantic retrieval → source citation linking",
+        "Replaced a self-hosted Chroma vector DB with AWS Bedrock Knowledge Base as the retrieval layer; re-indexed embeddings and wired managed retrieval into ECS tasks for better scalability",
         "Engineered FastAPI backend with 13 REST & WebSocket endpoints; implemented per-session memory management and pluggable ModelAdapter pattern (OpenAI / Bedrock) for swappable LLM backends",
         "Developed real-time voice transcription via WebSocket with S3 storage and presigned URL downloads; added English/Spanish auto-detection using langdetect",
-        "Implemented secure RDS integration via Secrets Manager & IAM roles",
-        "Built & pushed Docker images to ECR; switched to ECS CLI redeploys reducing deploy time ~85%",
+        "Implemented secure RDS integration via Secrets Manager & IAM roles; configured EC2 IAM role-based auth, eliminating static credentials",
+        "Built CI/CD with GitHub Actions and pushed Docker images to ECR; switched to ECS CLI redeploys reducing release cycle ~85%",
         "Restored chatbot access for 2,000+ users by removing unintended CloudFront auth"
       ],
-      technologies: ["AWS CDK", "AWS Bedrock", "FastAPI", "RAG", "GPT-4.1", "Docker", "ECS Fargate", "PostgreSQL", "Python", "WebSocket", "Lambda"]
+      technologies: ["AWS CDK", "AWS Bedrock", "FastAPI", "RAG", "GPT-4.1", "Docker", "ECS Fargate", "PostgreSQL", "Python", "WebSocket", "Lambda", "GitHub Actions"]
     },
     {
       company: "Red Hat",
@@ -169,8 +206,8 @@ export const resumeData: ResumeData = {
       endDate: "May 2026",
       gpa: "4.00/4.00",
       achievements: [
-        "Research Assistant — Cloud & AI",
-        "Courses: Software Security, Data Mining, Statistical Machine Learning"
+        "AI Backend Developer — Waterbot production RAG platform (azwaterbot.org)",
+        "Courses: Software Security, Data Mining, Statistical Machine Learning, Database Management Systems"
       ]
     },
     {
