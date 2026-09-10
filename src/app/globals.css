@@ -121,22 +121,30 @@ html {
    Skill diagrams — one looping micro-animation per headline skill.
    Only run when the section is in view (.sd-run is applied by the component).
    ======================================== */
-/* Fine-tuning: the naive straight fit yields to a curve that follows the data. */
+/* Fine-tuning: error bars collapse as the fit learns the shape. */
 @keyframes sdFtNaive {
-  0%, 18%   { opacity: 0.55; }
-  34%, 90%  { opacity: 0; }
-  100%      { opacity: 0.55; }
+  0%, 16%   { opacity: 0.5; }
+  38%, 90%  { opacity: 0; }
+  100%      { opacity: 0.5; }
 }
-.sd-run .sd-ft-naive { animation: sdFtNaive 4.6s ease-in-out infinite; }
+.sd-run .sd-ft-naive { animation: sdFtNaive 4.8s ease-in-out infinite; }
+
+@keyframes sdFtErr {
+  0%, 16%   { transform: scaleY(1); opacity: 0.45; }
+  40%, 92%  { transform: scaleY(0); opacity: 0; }
+  100%      { transform: scaleY(1); opacity: 0.45; }
+}
+.sd-run .sd-ft-err { animation: sdFtErr 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.sd-ft-err { opacity: 0.45; }
 
 @keyframes sdFtFit {
-  0%, 20%   { opacity: 0; stroke-dashoffset: 190; }
-  46%, 92%  { opacity: 1; stroke-dashoffset: 0; }
+  0%, 18%   { opacity: 0; stroke-dashoffset: 190; }
+  44%, 92%  { opacity: 1; stroke-dashoffset: 0; }
   100%      { opacity: 0; stroke-dashoffset: 190; }
 }
 .sd-run .sd-ft-fit {
   stroke-dasharray: 190;
-  animation: sdFtFit 4.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: sdFtFit 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 .sd-ft-fit { opacity: 0; }
 
@@ -157,22 +165,43 @@ html {
 .sd-run .sd-fc-fut { animation: sdFadeSlide 4.6s ease-in-out infinite; }
 .sd-fc-fut { opacity: 0; }
 
+/* RAG: question out, match lights up, answer comes back and fills. */
 @keyframes sdRagQuery {
-  0%        { transform: translate(28px, 48px); opacity: 0; }
-  12%       { opacity: 1; }
-  38%, 54%  { transform: translate(124px, 48px); opacity: 1; }
-  86%       { transform: translate(28px, 48px); opacity: 1; }
-  100%      { transform: translate(28px, 48px); opacity: 0; }
+  0%        { transform: translate(66px, 48px); opacity: 0; }
+  8%        { opacity: 1; }
+  30%       { transform: translate(130px, 48px); opacity: 1; }
+  34%, 100% { transform: translate(130px, 48px); opacity: 0; }
 }
-.sd-run .sd-rag-query { animation: sdRagQuery 4.2s ease-in-out infinite; }
-.sd-rag-query { transform: translate(28px, 48px); opacity: 0; }
+.sd-run .sd-rag-query { animation: sdRagQuery 4.6s ease-in-out infinite; }
+.sd-rag-query { transform: translate(66px, 48px); opacity: 0; }
 
-@keyframes sdRagHit {
-  0%, 34%   { opacity: 0.28; }
-  46%, 72%  { opacity: 1; }
-  84%, 100% { opacity: 0.28; }
+@keyframes sdRagReturn {
+  0%, 46%   { transform: translate(130px, 48px); opacity: 0; }
+  52%       { opacity: 1; }
+  72%       { transform: translate(66px, 48px); opacity: 1; }
+  76%, 100% { transform: translate(66px, 48px); opacity: 0; }
 }
-.sd-run .sd-rag-hit { animation: sdRagHit 4.2s ease-in-out infinite; stroke: hsl(var(--data-1)); }
+.sd-run .sd-rag-return { animation: sdRagReturn 4.6s ease-in-out infinite; }
+.sd-rag-return { transform: translate(130px, 48px); opacity: 0; }
+
+/* The matched document stays lit for most of the loop */
+@keyframes sdRagHit {
+  0%, 28%   { opacity: 0.35; }
+  40%, 94%  { opacity: 1; }
+  100%      { opacity: 0.35; }
+}
+.sd-run .sd-rag-hit { animation: sdRagHit 4.6s ease-in-out infinite; }
+.sd-rag-hit { opacity: 0.35; }
+
+@keyframes sdRagAnswer {
+  0%, 62%   { opacity: 0; transform: scaleX(0.2); }
+  76%, 94%  { opacity: 1; transform: scaleX(1); }
+  100%      { opacity: 0; transform: scaleX(0.2); }
+}
+.sd-run .sd-rag-answer {
+  animation: sdRagAnswer 4.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.sd-rag-answer { opacity: 0; transform-box: fill-box; transform-origin: left center; }
 
 @keyframes sdAgentPulse {
   0%, 100% { opacity: 0.4; }
@@ -182,41 +211,70 @@ html {
 .sd-run .sd-agent-node { animation: sdAgentPulse 2.1s ease-in-out infinite; }
 .sd-agent-node { opacity: 0.4; }
 
-@keyframes sdNlpTok {
-  0%, 12%   { opacity: 0; transform: scaleX(0.8); }
-  26%, 94%  { opacity: 1; transform: scaleX(1); }
-  100%      { opacity: 0; transform: scaleX(0.8); }
+/* NLP: a highlighter sweeps onto the phrase that carries the meaning. */
+@keyframes sdNlpMark {
+  0%, 10%   { transform: scaleX(0); opacity: 0.75; }
+  32%, 92%  { transform: scaleX(1); opacity: 0.22; }
+  100%      { transform: scaleX(0); opacity: 0.75; }
 }
-.sd-run .sd-nlp-tok { animation: sdNlpTok 4.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-.sd-nlp-tok { opacity: 0; transform-box: fill-box; transform-origin: left center; }
+.sd-run .sd-nlp-mark { animation: sdNlpMark 4.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.sd-nlp-mark { transform: scaleX(0); opacity: 0.22; }
 
-/* Services rising into the cloud, then absorbed by it. */
+@keyframes sdNlpWord {
+  0%, 22%   { opacity: 0.2; }
+  38%, 92%  { opacity: 0.62; }
+  100%      { opacity: 0.2; }
+}
+.sd-run .sd-nlp-word { animation: sdNlpWord 4.4s ease-in-out infinite; }
+
+/* A deploy: the unit ships along the track, then instances come up running. */
+@keyframes sdAwsShip {
+  0%        { transform: translate(48px, 43px); opacity: 0; }
+  10%       { opacity: 1; }
+  40%       { transform: translate(108px, 43px); opacity: 1; }
+  46%, 100% { transform: translate(108px, 43px); opacity: 0; }
+}
+.sd-run .sd-aws-ship { animation: sdAwsShip 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.sd-aws-ship { transform: translate(48px, 43px); opacity: 0; }
+
+/* Instances appear once the deploy lands, and hold for most of the loop. */
 @keyframes sdCloudBox {
-  0%        { opacity: 0; transform: translateY(14px); }
-  22%, 62%  { opacity: 1; transform: translateY(0); }
-  100%      { opacity: 0; transform: translateY(-26px); }
+  0%, 42%   { opacity: 0; transform: translateY(6px); }
+  56%, 94%  { opacity: 1; transform: translateY(0); }
+  100%      { opacity: 0; transform: translateY(6px); }
 }
 .sd-run .sd-cloud-box { animation: sdCloudBox 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
 .sd-cloud-box { opacity: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .sd-run .sd-ft-naive,
+  .sd-run .sd-ft-err,
   .sd-run .sd-ft-fit,
   .sd-run .sd-fc-hist,
   .sd-run .sd-fc-fut,
   .sd-run .sd-rag-query,
+  .sd-run .sd-rag-return,
   .sd-run .sd-rag-hit,
+  .sd-run .sd-rag-answer,
   .sd-run .sd-agent-node,
-  .sd-run .sd-nlp-tok,
+  .sd-run .sd-nlp-mark,
+  .sd-run .sd-nlp-word,
+  .sd-run .sd-aws-ship,
   .sd-run .sd-cloud-box {
     animation: none;
   }
+  /* Deploy already landed: hide the in-flight unit, show it running. */
+  .sd-aws-ship { opacity: 0; }
   /* Show the resolved end-state rather than an empty frame. */
-  .sd-ft-naive { opacity: 0; }
-  .sd-ft-fit { opacity: 1; stroke-dashoffset: 0; }
-  .sd-fc-fut,
+  .sd-ft-naive,
+  .sd-ft-err,
   .sd-rag-query,
-  .sd-nlp-tok,
+  .sd-rag-return { opacity: 0; }
+  .sd-ft-fit { opacity: 1; stroke-dashoffset: 0; }
+  .sd-rag-hit { opacity: 1; }
+  .sd-rag-answer { opacity: 1; transform: scaleX(1); }
+  .sd-nlp-mark { opacity: 0.22; transform: scaleX(1); }
+  .sd-fc-fut,
   .sd-cloud-box { opacity: 1; transform: none; }
   .sd-agent-node { opacity: 1; }
 }
@@ -1082,46 +1140,40 @@ a[data-ripple] {
   }
 }
 
-/* Recruiter Mode Animations */
-@keyframes recruiterBadgePulse {
-  0%, 100% {
-    box-shadow: 
-      0 0 10px rgba(184, 77, 39, 0.3),
-      0 0 20px rgba(34, 211, 238, 0.2);
-  }
-  50% {
-    box-shadow: 
-      0 0 20px rgba(184, 77, 39, 0.6),
-      0 0 40px rgba(34, 211, 238, 0.4);
-  }
+/* ========================================
+   Navbar icon tooltips
+   Instant, styled replacements for the native title attribute (which the
+   browser delays by 1-2s before showing).
+   ======================================== */
+.nav-tip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-3px);
+  white-space: nowrap;
+  pointer-events: none;
+  padding: 5px 9px;
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+  z-index: 60;
 }
 
-@keyframes recruiterCardGlow {
-  0%, 100% {
-    box-shadow:
-      0 0 60px rgba(184, 77, 39, 0.10),
-      0 0 120px rgba(184, 77, 39, 0.05);
-  }
-  50% {
-    box-shadow:
-      0 0 80px rgba(184, 77, 39, 0.18),
-      0 0 160px rgba(34, 211, 238, 0.08);
-  }
-}
-
-.recruiter-badge {
-  animation: recruiterBadgePulse 2s ease-in-out infinite;
-}
-
-.recruiter-card-glow {
-  animation: recruiterCardGlow 3s ease-in-out infinite;
+.group:hover > .nav-tip,
+.group:focus-within > .nav-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .recruiter-badge,
-  .recruiter-card-glow {
-    animation: none !important;
-  }
+  .nav-tip { transition: opacity 0.14s ease; transform: translateX(-50%); }
+  .group:hover > .nav-tip,
+  .group:focus-within > .nav-tip { transform: translateX(-50%); }
 }
 
 /* Navbar persistent active state - Desktop/Tablet */

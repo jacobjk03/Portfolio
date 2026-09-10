@@ -6,8 +6,6 @@ import { ArrowDown, Github, Linkedin, Mail, Globe, FileDown, Eye } from "lucide-
 import { resumeData, RESUME_URL } from "@/config/resume-data";
 import { useResumeDownload } from "@/hooks/useResumeDownload";
 import { DownloadToast } from "@/components/DownloadToast";
-import { useRecruiterMode } from "@/hooks/useRecruiterMode";
-import { RecruiterToast } from "@/components/RecruiterToast";
 import { ScrambleText } from "@/components/ScrambleText";
 import { SkillMap } from "@/components/SkillMap";
 import { SectionNumber } from "@/components/SectionNumber";
@@ -15,7 +13,6 @@ import { SectionNumber } from "@/components/SectionNumber";
 export default function Hero() {
   const [toastState, setToastState] = useState<{ message: string; position: { x: number; y: number } } | null>(null);
   const { downloadResume, isDownloading, showSuccessBadge } = useResumeDownload();
-  const { isRecruiterMode, toggleRecruiterMode, showToast } = useRecruiterMode();
 
   const [tagline, setTagline] = useState("");
   const [taglineDone, setTaglineDone] = useState(false);
@@ -45,13 +42,11 @@ export default function Hero() {
     website: Globe,
   };
 
+  // Kept so the name stays clickable for the scramble effect; the five-click
+  // easter egg that enabled Recruiter Mode is gone along with the mode itself.
   const handleNameClick = () => {
     clickCountRef.current += 1;
     if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
-    if (clickCountRef.current >= 5) {
-      if (!isRecruiterMode) toggleRecruiterMode(true);
-      clickCountRef.current = 0;
-    }
     clickTimerRef.current = setTimeout(() => { clickCountRef.current = 0; }, 2000);
   };
 
@@ -117,45 +112,25 @@ export default function Hero() {
             </h1>
           </motion.div>
 
-          {/* Recruiter Mode Badge */}
-          <AnimatePresence>
-            {isRecruiterMode && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="mb-6"
-              >
-                <div className="inline-flex items-center gap-2 px-4 py-2 border border-primary/30 bg-primary/5 recruiter-badge">
-                  <span className="text-sm">🎯</span>
-                  <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-primary">
-                    Recruiter Mode — Quick Access Enabled
-                  </span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Recruiter Mode Quick Facts */}
-          <AnimatePresence>
-            {isRecruiterMode && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ delay: 0.1 }}
-                className="mb-8 flex flex-wrap gap-6 text-sm text-muted-foreground"
-              >
-                <span className="flex items-center gap-2">📍 {resumeData.personal.location}</span>
-                <span className="flex items-center gap-2">US Work Eligible <span className="text-green-600">✓</span></span>
-                <span className="flex items-center gap-2">🎓 {graduationDate} Graduate</span>
-                <span className="flex items-center gap-2 text-primary font-medium">✈️ Open to relocate</span>
-                <a href="#projects" className="text-primary hover:underline underline-offset-4">
-                  View Projects →
-                </a>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Quick facts — always shown. These used to be hidden behind a
+              "Recruiter Mode" toggle, which meant the details recruiters most
+              want were off by default and most visitors never found the switch.
+              The "Recruiter Mode enabled" badge went with it: it described a
+              mode that no longer exists. */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="mb-8 flex flex-wrap gap-6 text-sm text-muted-foreground"
+          >
+            <span className="flex items-center gap-2">📍 {resumeData.personal.location}</span>
+            <span className="flex items-center gap-2">US Work Eligible <span className="text-green-600">✓</span></span>
+            <span className="flex items-center gap-2">🎓 {graduationDate} Graduate</span>
+            <span className="flex items-center gap-2 text-primary font-medium">✈️ Open to relocate</span>
+            <a href="#projects" className="text-primary hover:underline underline-offset-4">
+              View Projects →
+            </a>
+          </motion.div>
 
           {/* Tagline — typewriter */}
           <motion.p
@@ -204,15 +179,19 @@ export default function Hero() {
                 Resume
               </a>
               <div className="w-px bg-foreground/20 self-stretch" />
-              <button
-                onClick={handleResumeDownload}
-                disabled={isDownloading}
-                className="btn-fill px-4 py-3.5 hover:bg-foreground/5 active:scale-95 transition-all flex items-center justify-center"
-                data-ripple="true" data-ripple-color="rgba(184, 77, 39,0.3)"
-                title="Download Resume"
-              >
-                <FileDown className="w-3.5 h-3.5" />
-              </button>
+              {/* Instant tooltip instead of the native title, which waits ~2s */}
+              <div className="relative group flex">
+                <button
+                  onClick={handleResumeDownload}
+                  disabled={isDownloading}
+                  className="btn-fill px-4 py-3.5 hover:bg-foreground/5 active:scale-95 transition-all flex items-center justify-center"
+                  data-ripple="true" data-ripple-color="rgba(184, 77, 39,0.3)"
+                  aria-label="Download resume"
+                >
+                  <FileDown className="w-3.5 h-3.5" />
+                </button>
+                <span className="nav-tip">Download</span>
+              </div>
             </div>
 
             {showSuccessBadge && (
@@ -291,11 +270,6 @@ export default function Hero() {
       {toastState && (
         <DownloadToast message={toastState.message} position={toastState.position} />
       )}
-      <RecruiterToast
-        message=""
-        isOn={isRecruiterMode}
-        isVisible={showToast}
-      />
     </section>
   );
 }

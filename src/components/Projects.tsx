@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, X, ArrowRight, Lock } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
@@ -37,14 +38,19 @@ function ProjectCard({ project, index, onClick }: { project: typeof resumeData.p
     <motion.div
       ref={scrollRef}
       style={{ scale: popScale, y: popY, willChange: "transform" }}
+      className="h-full"
     >
+    {/* h-full + justify-center: the card still fills its grid cell (so the
+        hairline gap between cells stays unbroken) but its content sits centred.
+        Without it, a card sharing a row with the taller game panel stuck to the
+        top of the cell with dead space beneath it. */}
     <motion.div
       variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
       ref={cardRef}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
-      className="card-tilt group cursor-pointer bg-background hover:bg-secondary/40 transition-all duration-500 p-1 relative"
+      className="card-tilt group cursor-pointer bg-background hover:bg-secondary/40 transition-all duration-500 p-1 relative h-full flex flex-col justify-center"
     >
       {/* Image */}
       <div className="aspect-video overflow-hidden relative bg-secondary">
@@ -119,6 +125,10 @@ export default function Projects() {
   const filteredProjects = filter === "all"
     ? resumeData.projects
     : resumeData.projects.filter(p => p.category === filter);
+
+  // document.body isn't available during SSR, so the portal only mounts client-side.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const handleProjectClick = (project: typeof resumeData.projects[0]) => {
     setSelectedProject(project);
@@ -226,7 +236,16 @@ export default function Projects() {
           )}
         </AnimatePresence>
 
-        {/* Modal */}
+        {/* Modal — portalled to <body>.
+            The section it lives in (.vision-section) keeps `transform:
+            translateY(0)` after its entrance animation because of
+            `animation-fill-mode: forwards`, and ANY transform (identity
+            included) makes that element the containing block for
+            position:fixed descendants. The overlay was therefore anchored to
+            the section rather than the window, so it opened wherever that
+            section happened to sit and the backdrop stopped below the navbar.
+            Portalling sidesteps the whole class of problem. */}
+        {mounted && createPortal(
         <AnimatePresence>
           {selectedProject !== null && showContent && (
             <motion.div
@@ -235,7 +254,7 @@ export default function Projects() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={handleCloseModal}
-              className="fixed inset-0 bg-foreground/60 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-16 overflow-y-auto"
+              className="fixed inset-0 bg-foreground/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
             >
               <motion.div
                 initial={{ y: -16, opacity: 0 }}
@@ -243,10 +262,10 @@ export default function Projects() {
                 exit={{ y: -12, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-background max-w-4xl w-full border border-foreground/12 shadow-2xl mb-8"
+                className="bg-background max-w-6xl w-full border border-foreground/12 shadow-2xl max-h-[88vh] flex flex-col overflow-hidden"
               >
                 {/* Modal header */}
-                <div className="sticky top-0 bg-background/98 backdrop-blur-sm border-b border-foreground/8 px-8 py-6 flex items-start justify-between z-10">
+                <div className="bg-background border-b border-foreground/10 px-6 lg:px-8 py-5 flex items-start justify-between z-10 shrink-0">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="font-serif font-medium text-2xl text-foreground">
@@ -302,36 +321,36 @@ export default function Projects() {
                   </button>
                 </div>
 
-                {/* Modal body */}
-                <div className="px-8 py-8">
-                  <div className="bg-secondary/40 flex items-center justify-center min-h-[280px] mb-8">
-                    {selectedProject.image?.startsWith("/assets/") ? (
-                      <img
-                        src={selectedProject.image}
-                        alt={selectedProject.title}
-                        className="max-w-full max-h-[500px] object-contain shadow-lg"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div className="text-8xl">🚀</div>
-                    )}
-                  </div>
-                  <div className="space-y-8">
-                    {/* Live mechanism for projects that have one. Sits directly
-                        under the screenshot so the still image is immediately
-                        followed by the thing actually running. */}
-                    {hasTrace(selectedProject) && (
-                      <ReasoningTrace showAttribution={false} key={selectedProject.title} />
-                    )}
-                    <div>
-                      <h4 className="font-serif font-medium text-lg text-foreground mb-3">About This Project</h4>
-                      <p className="text-muted-foreground leading-relaxed text-base">
-                        {selectedProject.longDescription || selectedProject.description}
-                      </p>
+                {/* Modal body — two columns on desktop: the shot on the left,
+                    the reading on the right. Stacked vertically it pushed the
+                    description below the fold on every screen, and short
+                    viewports clipped the bottom entirely. Each column scrolls
+                    on its own only if it needs to. */}
+                {/* flex-1 + min-h-0 is what makes the 88vh cap actually bind: a
+                    flex child refuses to shrink below its content without
+                    min-h-0, so the body used to grow past the cap and spill off
+                    the bottom of the screen instead of scrolling inside it.
+                    Each column then scrolls independently. */}
+                <div className="grid lg:grid-cols-2 gap-0 flex-1 min-h-0">
+                  {/* Left — the visual and the stack */}
+                  <div className="flex flex-col min-h-0 overflow-y-auto lg:border-r border-foreground/10">
+                    <div className="bg-secondary/40 flex items-center justify-center p-6 lg:p-8 shrink-0">
+                      {selectedProject.image?.startsWith("/assets/") ? (
+                        <img
+                          src={selectedProject.image}
+                          alt={selectedProject.title}
+                          className="max-w-full max-h-[38vh] object-contain shadow-lg"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div className="text-8xl">🚀</div>
+                      )}
                     </div>
-                    <div>
-                      <h4 className="font-serif font-medium text-lg text-foreground mb-4">Technologies Used</h4>
+                    <div className="px-6 lg:px-8 py-6 shrink-0">
+                      <h4 className="font-serif font-medium text-base text-foreground mb-3">
+                        Technologies Used
+                      </h4>
                       <div className="flex flex-wrap gap-2">
                         {selectedProject.technologies.map((tech) => (
                           <span
@@ -344,11 +363,26 @@ export default function Projects() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Right — the reading */}
+                  <div className="px-6 py-6 lg:px-8 lg:py-8 space-y-7 min-h-0 overflow-y-auto">
+                    {hasTrace(selectedProject) && (
+                      <ReasoningTrace showAttribution={false} key={selectedProject.title} />
+                    )}
+                    <div>
+                      <h4 className="font-serif font-medium text-lg text-foreground mb-3">About This Project</h4>
+                      <p className="text-muted-foreground leading-relaxed text-[15px]">
+                        {selectedProject.longDescription || selectedProject.description}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence>,
+          document.body
+        )}
       </div>
       </ScrollTiltSection>
       <AnimatedDivider />

@@ -3,12 +3,9 @@
 import { Github, Linkedin, Mail, Globe, ArrowUp, FileDown } from "lucide-react";
 import { resumeData } from "@/config/resume-data";
 import { useResumeDownload } from "@/hooks/useResumeDownload";
-import { useRecruiterMode } from "@/hooks/useRecruiterMode";
-import { RecruiterToast } from "@/components/RecruiterToast";
 
 export default function Footer() {
   const { downloadResume, isDownloading } = useResumeDownload();
-  const { isRecruiterMode, toggleRecruiterMode, showToast } = useRecruiterMode();
 
   const socialIcons: Record<string, any> = {
     github: Github,
@@ -111,12 +108,6 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => toggleRecruiterMode(true)}
-              className="text-[11px] font-semibold tracking-[0.1em] uppercase text-foreground/40 hover:text-primary transition-colors border border-foreground/12 hover:border-primary/40 px-4 py-2"
-            >
-              Recruiter Mode: {isRecruiterMode ? "ON" : "OFF"}
-            </button>
-            <button
               onClick={scrollToTop}
               className="w-9 h-9 border border-foreground/15 flex items-center justify-center text-foreground/40 hover:border-primary hover:text-primary transition-all"
               aria-label="Scroll to top"
@@ -127,11 +118,6 @@ export default function Footer() {
         </div>
       </div>
 
-      <RecruiterToast
-        message=""
-        isOn={isRecruiterMode}
-        isVisible={showToast}
-      />
     </footer>
   );
 }

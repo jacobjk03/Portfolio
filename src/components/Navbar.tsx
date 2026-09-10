@@ -188,22 +188,31 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {mounted && (
               <>
-                <button
-                  onClick={handleResumeDownload}
-                  disabled={isDownloading}
-                  className="p-2 text-foreground/50 hover:text-foreground transition-colors"
-                  aria-label="Download Resume"
-                  title="Download Resume PDF"
-                >
-                  <FileDown className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="p-2 text-foreground/50 hover:text-foreground transition-colors"
-                  aria-label="Toggle theme"
-                >
-                  {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                </button>
+                {/* Custom tooltips rather than the native title attribute, which
+                    browsers delay by 1-2s and won't let you style. */}
+                <div className="relative group">
+                  <button
+                    onClick={handleResumeDownload}
+                    disabled={isDownloading}
+                    className="p-2 text-foreground/50 hover:text-foreground transition-colors"
+                    aria-label="Download resume"
+                  >
+                    <FileDown className="w-4 h-4" />
+                  </button>
+                  <span className="nav-tip">Download resume</span>
+                </div>
+                <div className="relative group">
+                  <button
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="p-2 text-foreground/50 hover:text-foreground transition-colors"
+                    aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                  >
+                    {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                  </button>
+                  <span className="nav-tip">
+                    {theme === "dark" ? "Light mode" : "Dark mode"}
+                  </span>
+                </div>
               </>
             )}
             <a
