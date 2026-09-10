@@ -8,8 +8,15 @@
     --foreground: 24 10% 10%;    /* warm dark #1C1917 */
     --card: 40 20% 99%;
     --card-foreground: 24 10% 10%;
-    --primary: 262 83% 58%;      /* violet #7C3AED */
+    --primary: 16 72% 42%;       /* copper #B84D27 — 5.1:1 on the cream bg */
     --primary-foreground: 0 0% 100%;
+    /* Data-viz tokens. Copper = the "after"/result series, blue = the "before"
+       baseline. Both validated with the dataviz palette checker on this surface:
+       lightness band, chroma floor, CVD separation (ΔE 18.8 protan), contrast. */
+    --data-1: 16 72% 42%;        /* #B84D27 copper — result / after */
+    --data-2: 207 57% 42%;       /* #2E6FA8 blue   — baseline / before */
+    --data-3: 32 45% 55%;        /* sand           — tertiary context */
+    --data-grid: 38 10% 84%;     /* axis + gridlines, recessive */
     --secondary: 38 20% 93%;     /* warm tinted gray */
     --secondary-foreground: 24 8% 20%;
     --muted: 38 12% 90%;
@@ -18,7 +25,7 @@
     --accent-foreground: 24 8% 20%;
     --border: 38 10% 86%;
     --input: 38 10% 86%;
-    --ring: 262 83% 58%;
+    --ring: 16 72% 42%;
     --radius: 0rem;
   }
 
@@ -27,8 +34,13 @@
     --foreground: 40 12% 90%;    /* warm off-white */
     --card: 20 8% 13%;
     --card-foreground: 40 12% 90%;
-    --primary: 262 75% 72%;      /* lighter violet for dark bg */
-    --primary-foreground: 0 0% 100%;
+    --primary: 20 85% 64%;       /* lifted copper for the dark bg */
+    --primary-foreground: 20 20% 8%;
+    /* Dark steps are chosen, not flipped — re-validated against the dark surface. */
+    --data-1: 24 64% 55%;        /* #D57A45 copper */
+    --data-2: 205 49% 50%;       /* #4288BE blue   */
+    --data-3: 36 55% 62%;
+    --data-grid: 20 5% 24%;
     --secondary: 20 7% 14%;
     --secondary-foreground: 40 10% 85%;
     --muted: 20 7% 14%;
@@ -37,7 +49,7 @@
     --accent-foreground: 40 10% 85%;
     --border: 20 5% 20%;
     --input: 20 5% 20%;
-    --ring: 262 75% 72%;
+    --ring: 20 85% 64%;
   }
 }
 
@@ -106,6 +118,161 @@ html {
 }
 
 /* ========================================
+   Skill diagrams — one looping micro-animation per headline skill.
+   Only run when the section is in view (.sd-run is applied by the component).
+   ======================================== */
+/* Fine-tuning: the naive straight fit yields to a curve that follows the data. */
+@keyframes sdFtNaive {
+  0%, 18%   { opacity: 0.55; }
+  34%, 90%  { opacity: 0; }
+  100%      { opacity: 0.55; }
+}
+.sd-run .sd-ft-naive { animation: sdFtNaive 4.6s ease-in-out infinite; }
+
+@keyframes sdFtFit {
+  0%, 20%   { opacity: 0; stroke-dashoffset: 190; }
+  46%, 92%  { opacity: 1; stroke-dashoffset: 0; }
+  100%      { opacity: 0; stroke-dashoffset: 190; }
+}
+.sd-run .sd-ft-fit {
+  stroke-dasharray: 190;
+  animation: sdFtFit 4.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.sd-ft-fit { opacity: 0; }
+
+@keyframes sdDrawLine {
+  0%        { stroke-dashoffset: 230; }
+  20%, 100% { stroke-dashoffset: 0; }
+}
+.sd-run .sd-fc-hist { stroke-dasharray: 230; animation: sdDrawLine 4.6s ease-in-out infinite; }
+
+/* Duty cycles below deliberately hold the RESOLVED state for most of the loop.
+   A visitor sees one arbitrary frame, so a diagram caught mid-transition reads
+   as broken or empty — the finished picture has to be the default. */
+@keyframes sdFadeSlide {
+  0%, 20%   { opacity: 0; transform: translateX(-7px); }
+  36%, 94%  { opacity: 1; transform: translateX(0); }
+  100%      { opacity: 0; transform: translateX(-7px); }
+}
+.sd-run .sd-fc-fut { animation: sdFadeSlide 4.6s ease-in-out infinite; }
+.sd-fc-fut { opacity: 0; }
+
+@keyframes sdRagQuery {
+  0%        { transform: translate(28px, 48px); opacity: 0; }
+  12%       { opacity: 1; }
+  38%, 54%  { transform: translate(124px, 48px); opacity: 1; }
+  86%       { transform: translate(28px, 48px); opacity: 1; }
+  100%      { transform: translate(28px, 48px); opacity: 0; }
+}
+.sd-run .sd-rag-query { animation: sdRagQuery 4.2s ease-in-out infinite; }
+.sd-rag-query { transform: translate(28px, 48px); opacity: 0; }
+
+@keyframes sdRagHit {
+  0%, 34%   { opacity: 0.28; }
+  46%, 72%  { opacity: 1; }
+  84%, 100% { opacity: 0.28; }
+}
+.sd-run .sd-rag-hit { animation: sdRagHit 4.2s ease-in-out infinite; stroke: hsl(var(--data-1)); }
+
+@keyframes sdAgentPulse {
+  0%, 100% { opacity: 0.4; }
+  16%      { opacity: 1; }
+  34%      { opacity: 0.4; }
+}
+.sd-run .sd-agent-node { animation: sdAgentPulse 2.1s ease-in-out infinite; }
+.sd-agent-node { opacity: 0.4; }
+
+@keyframes sdNlpTok {
+  0%, 12%   { opacity: 0; transform: scaleX(0.8); }
+  26%, 94%  { opacity: 1; transform: scaleX(1); }
+  100%      { opacity: 0; transform: scaleX(0.8); }
+}
+.sd-run .sd-nlp-tok { animation: sdNlpTok 4.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.sd-nlp-tok { opacity: 0; transform-box: fill-box; transform-origin: left center; }
+
+/* Services rising into the cloud, then absorbed by it. */
+@keyframes sdCloudBox {
+  0%        { opacity: 0; transform: translateY(14px); }
+  22%, 62%  { opacity: 1; transform: translateY(0); }
+  100%      { opacity: 0; transform: translateY(-26px); }
+}
+.sd-run .sd-cloud-box { animation: sdCloudBox 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.sd-cloud-box { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-run .sd-ft-naive,
+  .sd-run .sd-ft-fit,
+  .sd-run .sd-fc-hist,
+  .sd-run .sd-fc-fut,
+  .sd-run .sd-rag-query,
+  .sd-run .sd-rag-hit,
+  .sd-run .sd-agent-node,
+  .sd-run .sd-nlp-tok,
+  .sd-run .sd-cloud-box {
+    animation: none;
+  }
+  /* Show the resolved end-state rather than an empty frame. */
+  .sd-ft-naive { opacity: 0; }
+  .sd-ft-fit { opacity: 1; stroke-dashoffset: 0; }
+  .sd-fc-fut,
+  .sd-rag-query,
+  .sd-nlp-tok,
+  .sd-cloud-box { opacity: 1; transform: none; }
+  .sd-agent-node { opacity: 1; }
+}
+
+/* ========================================
+   Forecast game — "draw here" gesture hint
+   A cursor sweeps the draw region on a loop so the interaction is shown, not
+   just described. Deliberately carries no shape information: it travels flat,
+   so it can't hint at the answer.
+   ======================================== */
+@keyframes drawHintSweep {
+  0%   { transform: translateX(0); opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(var(--hint-dist, 120px)); opacity: 0; }
+}
+
+.draw-hint {
+  animation: drawHintSweep 3.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes drawRegionPulse {
+  0%, 100% { opacity: 0.045; }
+  50%      { opacity: 0.10; }
+}
+
+.draw-region-idle {
+  animation: drawRegionPulse 3.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw-hint,
+  .draw-region-idle { animation: none; }
+}
+
+/* ========================================
+   Skill map — slow organic drift per node
+   ======================================== */
+@keyframes nodeDrift {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(3px, -4px); }
+  66%      { transform: translate(-3px, 3px); }
+}
+
+.skill-node {
+  animation-name: nodeDrift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-node { animation: none; }
+}
+
+/* ========================================
    Count-up number animation
    ======================================== */
 .count-up-num {
@@ -142,33 +309,33 @@ html {
   align-items: center;
   justify-content: center;
   backface-visibility: visible;
-  background: linear-gradient(160deg, rgba(255,255,255,0.98) 0%, rgba(250,248,255,0.96) 100%);
-  border: 1px solid rgba(124,58,237,0.18);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 60px rgba(124,58,237,0.05);
+  background: linear-gradient(160deg, rgba(255,255,255,0.98) 0%, rgba(255,251,247,0.96) 100%);
+  border: 1px solid rgba(184, 77, 39,0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 60px rgba(184, 77, 39,0.05);
 }
 
 .dark .cube-face {
   background: linear-gradient(160deg, rgba(32,26,24,0.97) 0%, rgba(20,16,14,0.95) 100%);
-  border: 1px solid rgba(124,58,237,0.22);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), inset 0 0 40px rgba(124,58,237,0.06);
+  border: 1px solid rgba(184, 77, 39,0.22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), inset 0 0 40px rgba(184, 77, 39,0.06);
 }
 
 .cube-face-top {
-  background: linear-gradient(135deg, #C4B5FD 0%, #7C3AED 45%, #5B21B6 100%) !important;
-  border-color: #6D28D9 !important;
+  background: linear-gradient(135deg, #E9B48F 0%, #B84D27 45%, #7A3417 100%) !important;
+  border-color: #933D1F !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -1px 0 rgba(0,0,30,0.15) !important;
 }
 
 .cube-face-bottom {
   background: linear-gradient(135deg, #2e1a1a 0%, #1c1917 100%) !important;
-  border: 1px solid rgba(124,58,237,0.25) !important;
-  box-shadow: inset 0 0 40px rgba(124,58,237,0.15) !important;
+  border: 1px solid rgba(184, 77, 39,0.25) !important;
+  box-shadow: inset 0 0 40px rgba(184, 77, 39,0.15) !important;
 }
 
 .dark .cube-face-bottom {
   background: linear-gradient(135deg, #1a0f0f 0%, #0a0806 100%) !important;
-  border: 1px solid rgba(124,58,237,0.18) !important;
-  box-shadow: inset 0 0 30px rgba(124,58,237,0.10) !important;
+  border: 1px solid rgba(184, 77, 39,0.18) !important;
+  box-shadow: inset 0 0 30px rgba(184, 77, 39,0.10) !important;
 }
 
 /* ========================================
@@ -197,11 +364,11 @@ html {
 }
 
 .card-tilt:hover {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.13), 0 4px 16px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.13), 0 4px 16px rgba(184, 77, 39, 0.1);
 }
 
 .dark .card-tilt:hover {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(184, 77, 39, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -246,11 +413,11 @@ html {
 
 /* Gradient text */
 .gradient-text {
-  color: #7C3AED;
+  color: #B84D27;
 }
 
 .dark .gradient-text {
-  color: #A78BFA;
+  color: #E8956A;
 }
 
 /* Editorial label utility — amber accent for section headings */
@@ -286,9 +453,9 @@ html {
 .gradient-bg {
   background: linear-gradient(
     -45deg,
-    rgba(124, 58, 237, 0.1),
+    rgba(184, 77, 39, 0.1),
     rgba(245, 158, 11, 0.08),
-    rgba(124, 58, 237, 0.07),
+    rgba(184, 77, 39, 0.07),
     rgba(251, 191, 36, 0.08)
   );
   background-size: 400% 400%;
@@ -438,20 +605,20 @@ a,
   0% {
     box-shadow: 
       0 0 20px rgba(34, 211, 238, 0.4),
-      0 0 40px rgba(139, 92, 246, 0.3);
+      0 0 40px rgba(184, 77, 39, 0.3);
     opacity: 0;
   }
   50% {
     box-shadow: 
       0 0 40px rgba(34, 211, 238, 0.8),
-      0 0 80px rgba(139, 92, 246, 0.6),
+      0 0 80px rgba(184, 77, 39, 0.6),
       inset 0 0 30px rgba(34, 211, 238, 0.2);
     opacity: 1;
   }
   100% {
     box-shadow: 
       0 0 20px rgba(34, 211, 238, 0.4),
-      0 0 40px rgba(139, 92, 246, 0.3);
+      0 0 40px rgba(184, 77, 39, 0.3);
     opacity: 0;
   }
 }
@@ -584,8 +751,8 @@ a,
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    var(--ripple-color, rgba(124, 58, 237, 0.35)) 0%,
-    rgba(124, 58, 237, 0.15) 40%,
+    var(--ripple-color, rgba(184, 77, 39, 0.35)) 0%,
+    rgba(184, 77, 39, 0.15) 40%,
     transparent 100%
   );
   pointer-events: none;
@@ -668,15 +835,15 @@ a[class*="button"]:focus-visible,
 @keyframes breatheGlow {
   0%, 100% {
     box-shadow: 
-      0 0 20px rgba(139, 92, 246, 0.3),
-      0 0 40px rgba(139, 92, 246, 0.1),
-      inset 0 0 10px rgba(139, 92, 246, 0.1);
+      0 0 20px rgba(184, 77, 39, 0.3),
+      0 0 40px rgba(184, 77, 39, 0.1),
+      inset 0 0 10px rgba(184, 77, 39, 0.1);
   }
   50% {
     box-shadow: 
-      0 0 30px rgba(139, 92, 246, 0.5),
-      0 0 60px rgba(139, 92, 246, 0.2),
-      inset 0 0 15px rgba(139, 92, 246, 0.15);
+      0 0 30px rgba(184, 77, 39, 0.5),
+      0 0 60px rgba(184, 77, 39, 0.2),
+      inset 0 0 15px rgba(184, 77, 39, 0.15);
   }
 }
 
@@ -706,7 +873,7 @@ a[data-ripple] {
   }
 
   .magnetic:hover {
-    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3) !important;
+    box-shadow: 0 10px 40px rgba(184, 77, 39, 0.3) !important;
   }
 
   .tilt {
@@ -720,7 +887,7 @@ a[data-ripple] {
 
   @keyframes breatheGlow {
     0%, 100% {
-      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 0 20px rgba(184, 77, 39, 0.3);
     }
   }
 }
@@ -778,13 +945,13 @@ a[data-ripple] {
 @keyframes edgeSparkle {
   0%, 100% {
     box-shadow: 
-      0 0 20px rgba(139, 92, 246, 0.3),
-      inset 0 0 20px rgba(139, 92, 246, 0.1);
+      0 0 20px rgba(184, 77, 39, 0.3),
+      inset 0 0 20px rgba(184, 77, 39, 0.1);
   }
   50% {
     box-shadow: 
-      0 0 40px rgba(139, 92, 246, 0.5),
-      inset 0 0 30px rgba(139, 92, 246, 0.2);
+      0 0 40px rgba(184, 77, 39, 0.5),
+      inset 0 0 30px rgba(184, 77, 39, 0.2);
   }
 }
 
@@ -798,7 +965,7 @@ a[data-ripple] {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.3), transparent);
+  background: linear-gradient(135deg, rgba(184, 77, 39, 0.3), rgba(59, 130, 246, 0.3), transparent);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -874,14 +1041,14 @@ a[data-ripple] {
 @keyframes downloadPulse {
   0%, 100% {
     box-shadow: 
-      0 0 10px rgba(139, 92, 246, 0.3),
+      0 0 10px rgba(184, 77, 39, 0.3),
       0 0 20px rgba(34, 211, 238, 0.2);
   }
   50% {
     box-shadow: 
-      0 0 20px rgba(139, 92, 246, 0.6),
+      0 0 20px rgba(184, 77, 39, 0.6),
       0 0 40px rgba(34, 211, 238, 0.4),
-      inset 0 0 15px rgba(139, 92, 246, 0.1);
+      inset 0 0 15px rgba(184, 77, 39, 0.1);
   }
 }
 
@@ -919,12 +1086,12 @@ a[data-ripple] {
 @keyframes recruiterBadgePulse {
   0%, 100% {
     box-shadow: 
-      0 0 10px rgba(139, 92, 246, 0.3),
+      0 0 10px rgba(184, 77, 39, 0.3),
       0 0 20px rgba(34, 211, 238, 0.2);
   }
   50% {
     box-shadow: 
-      0 0 20px rgba(139, 92, 246, 0.6),
+      0 0 20px rgba(184, 77, 39, 0.6),
       0 0 40px rgba(34, 211, 238, 0.4);
   }
 }
@@ -932,12 +1099,12 @@ a[data-ripple] {
 @keyframes recruiterCardGlow {
   0%, 100% {
     box-shadow:
-      0 0 60px rgba(139, 92, 246, 0.10),
-      0 0 120px rgba(139, 92, 246, 0.05);
+      0 0 60px rgba(184, 77, 39, 0.10),
+      0 0 120px rgba(184, 77, 39, 0.05);
   }
   50% {
     box-shadow:
-      0 0 80px rgba(139, 92, 246, 0.18),
+      0 0 80px rgba(184, 77, 39, 0.18),
       0 0 160px rgba(34, 211, 238, 0.08);
   }
 }
@@ -960,7 +1127,7 @@ a[data-ripple] {
 /* Navbar persistent active state - Desktop/Tablet */
 .nav-active {
   transform: scale(1.08);
-  text-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
+  text-shadow: 0 0 8px rgba(184, 77, 39, 0.7);
   transition: all 0.25s ease-out;
 }
 

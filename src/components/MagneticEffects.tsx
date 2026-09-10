@@ -27,7 +27,7 @@ export function MagneticEffects() {
         // Fallback to simple hover shadow
         element.style.transition = "box-shadow 0.3s ease";
         const handleMouseEnter = () => {
-          element.style.boxShadow = "0 10px 40px rgba(139, 92, 246, 0.3)";
+          element.style.boxShadow = "0 10px 40px rgba(184, 77, 39, 0.3)";
         };
         const handleMouseLeave = () => {
           element.style.boxShadow = "";
@@ -85,8 +85,8 @@ export function MagneticEffects() {
             const tiltAmount = Math.sqrt(rotateX ** 2 + rotateY ** 2);
             const glowIntensity = Math.min(1, tiltAmount / rotate) * 0.4;
             element.style.filter = `
-              drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(124, 58, 237, ${glowIntensity}))
-              drop-shadow(0 ${Math.abs(rotateY)}px ${15 + Math.abs(rotateY) * 2}px rgba(124, 58, 237, ${glowIntensity * 0.5}))
+              drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(184, 77, 39, ${glowIntensity}))
+              drop-shadow(0 ${Math.abs(rotateY)}px ${15 + Math.abs(rotateY) * 2}px rgba(184, 77, 39, ${glowIntensity * 0.5}))
             `;
           }
 

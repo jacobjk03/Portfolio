@@ -49,7 +49,7 @@ function hexToRgba(hex: string, alpha: number): string {
  */
 export function BokehField({
   density = 0.4, // Reduced default density
-  colors = ["#8b5cf6", "#22d3ee", "#a855f7"],
+  colors = ["#CF6438", "#22d3ee", "#D97742"],
   layers = 2, // Reduced layers
   seed = 1337,
 }: BokehFieldProps) {

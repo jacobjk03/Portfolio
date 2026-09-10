@@ -9,7 +9,7 @@ import { DownloadToast } from "@/components/DownloadToast";
 import { useRecruiterMode } from "@/hooks/useRecruiterMode";
 import { RecruiterToast } from "@/components/RecruiterToast";
 import { ScrambleText } from "@/components/ScrambleText";
-import HeroCube from "@/components/HeroCube";
+import { SkillMap } from "@/components/SkillMap";
 import { SectionNumber } from "@/components/SectionNumber";
 
 export default function Hero() {
@@ -187,7 +187,7 @@ export default function Hero() {
             <a
               href="#contact"
               className="btn-fill px-8 py-3.5 border border-foreground/20 text-foreground text-[11px] font-semibold tracking-[0.15em] uppercase active:scale-95 transition-all"
-              data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
+              data-ripple="true" data-ripple-color="rgba(184, 77, 39,0.3)"
             >
               Get In Touch
             </a>
@@ -198,7 +198,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-fill flex items-center gap-2 px-6 py-3.5 hover:bg-foreground/5 active:scale-95 transition-all"
-                data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
+                data-ripple="true" data-ripple-color="rgba(184, 77, 39,0.3)"
               >
                 <Eye className="w-3.5 h-3.5" />
                 Resume
@@ -208,7 +208,7 @@ export default function Hero() {
                 onClick={handleResumeDownload}
                 disabled={isDownloading}
                 className="btn-fill px-4 py-3.5 hover:bg-foreground/5 active:scale-95 transition-all flex items-center justify-center"
-                data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
+                data-ripple="true" data-ripple-color="rgba(184, 77, 39,0.3)"
                 title="Download Resume"
               >
                 <FileDown className="w-3.5 h-3.5" />
@@ -256,17 +256,17 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* 3D Cube — desktop only */}
+        {/* Skill map — desktop only. Replaces the generic rotating cube with a
+            graphic built from Jacob's own skill data. */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
+          initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
           className="lg:col-span-5 hidden lg:flex items-center justify-center"
         >
-          <div className="relative">
-            {/* Glow behind cube */}
-            <div className="absolute inset-0 -m-16 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-            <HeroCube />
+          <div className="relative w-full">
+            <div className="absolute inset-0 -m-10 rounded-full bg-primary/[0.06] blur-3xl pointer-events-none" />
+            <SkillMap />
           </div>
         </motion.div>
 

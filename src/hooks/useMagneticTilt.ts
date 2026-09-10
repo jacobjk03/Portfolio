@@ -42,7 +42,7 @@ export function useMagneticTilt<T extends HTMLElement>(
       // Fallback to simple hover shadow
       element.style.transition = "box-shadow 0.3s ease";
       const handleMouseEnter = () => {
-        element.style.boxShadow = "0 10px 40px rgba(139, 92, 246, 0.3)";
+        element.style.boxShadow = "0 10px 40px rgba(184, 77, 39, 0.3)";
       };
       const handleMouseLeave = () => {
         element.style.boxShadow = "";
@@ -103,7 +103,7 @@ export function useMagneticTilt<T extends HTMLElement>(
 
         // Apply glow shadow based on tilt
         element.style.filter = `
-          drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(139, 92, 246, ${glowIntensity}))
+          drop-shadow(0 ${Math.abs(rotateX) * 2}px ${20 + Math.abs(rotateX) * 3}px rgba(184, 77, 39, ${glowIntensity}))
           drop-shadow(0 ${Math.abs(rotateY)}px ${15 + Math.abs(rotateY) * 2}px rgba(6, 182, 212, ${glowIntensity * 0.6}))
         `;
 

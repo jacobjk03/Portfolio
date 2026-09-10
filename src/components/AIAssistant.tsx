@@ -11,7 +11,10 @@ interface Message {
   id?: string;
 }
 
-const WELCOME_TEXT = `Hi! I'm Jacob's AI assistant 👋\n\nYou can ask me about:\n• AI/ML, RAG & LLM projects\n• AWS, DevOps & cloud skills\n• Work authorization & availability\n• Industry & research experience\n\nHow can I help?`;
+// The four bullets this used to list were the same four topics as the suggestion
+// chips directly below it — the greeting now points at them instead of repeating
+// them, which also gets the message down to two lines.
+const WELCOME_TEXT = `Hi — I'm Jacob's AI assistant.\n\nAsk me anything about his work, or start with one of these:`;
 
 const CHIPS = [
   "Experience summary?",
@@ -268,8 +271,9 @@ export function AIAssistant() {
 
   return (
     <>
-      {/* FAB */}
-      <div className="fixed bottom-6 right-6 z-50 group flex items-center gap-2">
+      {/* FAB — extra bottom clearance so the launcher never crowds the viewport
+          edge (it was being clipped at the bottom of some windows). */}
+      <div className="fixed bottom-8 right-6 z-50 group flex items-center gap-2">
 
         {/* First-visit callout bubble — positioned above the FAB */}
         <AnimatePresence>
@@ -312,9 +316,11 @@ export function AIAssistant() {
         </AnimatePresence>
 
         <div className="relative shrink-0">
-          {/* Name label above button */}
+          {/* Name label — sits to the LEFT of the button rather than above it.
+              Above, it forced the whole launcher 28px higher to stay readable,
+              which is what pushed the button off the bottom edge. */}
           <div
-            className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold tracking-[0.13em] uppercase text-foreground/50 pointer-events-none select-none"
+            className="absolute right-full top-1/2 -translate-y-1/2 mr-3 whitespace-nowrap text-[10px] font-semibold tracking-[0.13em] uppercase text-foreground/50 pointer-events-none select-none"
           >
             Jacob.ai
           </div>
@@ -332,8 +338,8 @@ export function AIAssistant() {
             className={`flex items-center justify-center shadow-lg relative ${animClass}`}
             style={{
               width: 52, height: 52,
-              background: "linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)",
-              boxShadow: "0 4px 24px rgba(124,58,237,0.45)",
+              background: "linear-gradient(135deg, #B84D27 0%, #933D1F 100%)",
+              boxShadow: "0 4px 24px rgba(184, 77, 39,0.45)",
             }}
           >
             <motion.div
@@ -357,43 +363,32 @@ export function AIAssistant() {
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
           >
-            {/* Glowing border wrapper */}
-            <motion.div
-              className="pointer-events-auto flex flex-col w-[92vw] max-w-[400px] h-[60vh] max-h-[580px] bg-background overflow-hidden"
-              style={{ border: "1px solid rgba(124,58,237,0.22)" }}
-              animate={{
-                boxShadow: [
-                  "0 8px 40px rgba(124,58,237,0.10), 0 0 0 1px rgba(124,58,237,0.12)",
-                  "0 12px 48px rgba(124,58,237,0.22), 0 0 0 1px rgba(124,58,237,0.32)",
-                  "0 8px 40px rgba(124,58,237,0.10), 0 0 0 1px rgba(124,58,237,0.12)",
-                ],
-              }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            {/* Panel. A static, quiet frame — the border used to pulse copper
+                on a 3.5s loop, which made the widget the loudest element on a
+                page built on restraint. */}
+            <div
+              className="pointer-events-auto flex flex-col w-[92vw] max-w-[400px] h-[60vh] max-h-[580px] bg-background overflow-hidden border border-foreground/15"
+              style={{ boxShadow: "0 18px 60px -12px rgba(28, 25, 23, 0.22)" }}
             >
-              {/* Header */}
-              <div
-                className="flex items-center justify-between px-5 py-3.5 border-b border-foreground/8 shrink-0"
-                style={{ background: "linear-gradient(90deg, rgba(124,58,237,0.07) 0%, transparent 70%)" }}
-              >
+              {/* Header — monogram, serif name, mono status. The stock robot
+                  glyph and gradient chip read as a generic SaaS widget on an
+                  otherwise editorial page. */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-foreground/10 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <div
-                      className="w-8 h-8 flex items-center justify-center"
-                      style={{ background: "linear-gradient(135deg, #7C3AED, #6D28D9)" }}
-                    >
-                      <Bot className="w-4 h-4 text-white" />
-                    </div>
-                    <motion.span
-                      className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-background"
-                      animate={{ scale: [1, 1.3, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    />
+                  <div className="w-8 h-8 flex items-center justify-center bg-primary shrink-0">
+                    <span className="text-primary-foreground text-[10px] font-semibold tracking-[0.08em]">
+                      JK
+                    </span>
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-foreground leading-none mb-1">Jacob.ai</h3>
+                    <h3 className="font-serif font-medium text-base text-foreground leading-none mb-1.5">
+                      Jacob.ai
+                    </h3>
                     <span className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-                      <p className="text-[10px] font-medium tracking-wide text-foreground/40 uppercase">Online</p>
+                      <span className="w-1.5 h-1.5 bg-green-600 inline-block avail-dot" />
+                      <p className="font-mono text-[9px] tracking-[0.16em] text-foreground/40 uppercase">
+                        Online
+                      </p>
                     </span>
                   </div>
                 </div>
@@ -425,13 +420,12 @@ export function AIAssistant() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-end gap-2"
                   >
-                    <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mb-0.5"
-                      style={{ background: "linear-gradient(135deg, #7C3AED, #6D28D9)" }}
-                    >
-                      <Bot className="w-3 h-3 text-white" />
+                    <div className="w-6 h-6 flex items-center justify-center shrink-0 mb-0.5 bg-primary">
+                      <span className="text-primary-foreground text-[8px] font-semibold tracking-[0.06em]">
+                        JK
+                      </span>
                     </div>
-                    <div className="max-w-[82%] px-4 py-2.5 text-xs leading-relaxed bg-foreground/5 text-foreground border border-foreground/8">
+                    <div className="max-w-[82%] px-4 py-3 text-xs leading-relaxed bg-secondary/40 text-foreground border border-foreground/10">
                       <p className="whitespace-pre-wrap">
                         {welcomeText}
                         {!welcomeDone && (
@@ -467,7 +461,7 @@ export function AIAssistant() {
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: i * 0.07, type: "spring", stiffness: 320, damping: 22 }}
                           onClick={() => handleChipClick(chip)}
-                          className="px-3 py-1.5 text-[10px] font-semibold tracking-[0.08em] uppercase border border-primary/20 text-primary/65 hover:bg-primary/10 hover:border-primary/45 hover:text-primary transition-all"
+                          className="px-3 py-1.5 font-mono text-[9.5px] tracking-[0.1em] uppercase border border-foreground/15 text-foreground/55 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all"
                         >
                           {chip}
                         </motion.button>
@@ -483,23 +477,20 @@ export function AIAssistant() {
                     onKeyPress={handleKeyPress}
                     placeholder="Ask about Jacob's background..."
                     rows={2}
-                    className="flex-1 px-3 py-2.5 bg-secondary/50 border border-foreground/10 resize-none focus:outline-none focus:border-primary/40 text-sm text-foreground placeholder:text-foreground/30 transition-colors"
+                    className="flex-1 px-3 py-2.5 bg-transparent border border-foreground/15 resize-none focus:outline-none focus:border-primary text-sm text-foreground placeholder:text-foreground/30 transition-colors"
                     style={{ minHeight: 56, maxHeight: 100 }}
                   />
-                  <motion.button
+                  <button
                     onClick={handleSend}
                     disabled={!input.trim()}
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.94 }}
-                    className="w-10 h-10 text-white flex items-center justify-center disabled:opacity-30 transition-opacity shrink-0"
-                    style={{ background: "linear-gradient(135deg, #7C3AED, #6D28D9)" }}
+                    className="w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center disabled:opacity-25 hover:opacity-90 active:scale-95 transition-all shrink-0"
                     aria-label="Send"
                   >
                     <Send className="w-4 h-4" />
-                  </motion.button>
+                  </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

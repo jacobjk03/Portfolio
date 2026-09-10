@@ -20,11 +20,11 @@ export function RecruiterToast({ isVisible, isOn }: RecruiterToastProps) {
           className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] pointer-events-none"
         >
           <div
-            className="flex items-center gap-2.5 px-5 py-3 bg-background/95 backdrop-blur-md border border-primary/25 shadow-[0_4px_24px_rgba(124,58,237,0.12)]"
+            className="flex items-center gap-2.5 px-5 py-3 bg-background/95 backdrop-blur-md border border-primary/25 shadow-[0_4px_24px_rgba(184, 77, 39,0.12)]"
           >
             <span
               className="w-2 h-2 rounded-full shrink-0"
-              style={{ background: isOn ? "#7C3AED" : "#94a3b8" }}
+              style={{ background: isOn ? "#B84D27" : "#94a3b8" }}
             />
             <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-primary whitespace-nowrap">
               {isOn ? "Recruiter mode on — optimized for hiring review" : "Recruiter mode off"}

@@ -36,6 +36,12 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
         cobalt: "#4D77FF",
+        data: {
+          1: "hsl(var(--data-1))",
+          2: "hsl(var(--data-2))",
+          3: "hsl(var(--data-3))",
+          grid: "hsl(var(--data-grid))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

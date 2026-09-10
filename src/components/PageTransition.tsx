@@ -31,7 +31,7 @@ export default function PageTransition() {
             <svg className="absolute inset-0" width="100" height="100" viewBox="0 0 100 100" fill="none">
               <motion.path
                 d="M 0,0 L 100,0 L 100,100 L 0,100 Z"
-                stroke="rgb(124,58,237)"
+                stroke="rgb(184, 77, 39)"
                 strokeWidth="0.5"
                 strokeOpacity="0.25"
                 initial={{ pathLength: 0 }}
@@ -49,7 +49,7 @@ export default function PageTransition() {
                 <motion.path
                   key={i}
                   d={d}
-                  stroke="rgb(124,58,237)"
+                  stroke="rgb(184, 77, 39)"
                   strokeWidth="1.5"
                   strokeLinecap="square"
                   initial={{ pathLength: 0, opacity: 0 }}
@@ -62,7 +62,7 @@ export default function PageTransition() {
               ))}
 
               {/* Orbiting dot — starts after brackets finish, loops forever */}
-              <circle r="2.5" fill="rgb(124,58,237)">
+              <circle r="2.5" fill="rgb(184, 77, 39)">
                 <animate
                   attributeName="fill-opacity"
                   from="0" to="1"

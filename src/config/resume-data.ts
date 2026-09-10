@@ -21,6 +21,17 @@ export interface ResumeData {
     category: string;
     items: string[];
   }[];
+  /**
+   * The handful shown large at the top of the Skills section — what you want a
+   * recruiter to take away in one glance. Everything else stays available under
+   * the toggle.
+   *
+   * `proof` is an authoring gate, not display text — the Skills cards show only
+   * the diagram and the name. Requiring a concrete, already-verified result from
+   * the experience or projects below keeps unbacked claims out of the headline
+   * set; anything without one belongs in the full list under the toggle.
+   */
+  headlineSkills: { name: string; proof: string }[];
   experience: {
     company: string;
     position: string;
@@ -92,6 +103,35 @@ export const resumeData: ResumeData = {
     website: "https://jacobkuriakose.com"
   },
 
+  // Every proof below traces to a bullet in experience[] or projects[] — nothing
+  // here is a new claim.
+  headlineSkills: [
+    {
+      name: "LLM Fine-Tuning",
+      proof: "Granite 4.1 8B · 56.5% → 92.3% accuracy",
+    },
+    {
+      name: "Time Series Forecasting",
+      proof: "38.92% RMSE improvement over LSTM",
+    },
+    {
+      name: "RAG",
+      proof: "Bedrock retrieval · 2,000+ users in production",
+    },
+    {
+      name: "Multi-Agent Systems",
+      proof: "Navia · intent routing + Pinecone memory",
+    },
+    {
+      name: "NLP",
+      proof: "Transformer classification · +10% accuracy",
+    },
+    {
+      name: "AWS",
+      proof: "ECS, CDK, Bedrock · ~85% faster releases",
+    },
+  ],
+
   skills: [
     {
       category: "Machine Learning & AI",
@@ -104,7 +144,7 @@ export const resumeData: ResumeData = {
     },
     {
       category: "Programming",
-      items: ["Python", "C++", "SQL"]
+      items: ["Python", "C++", "C", "Go", "JavaScript", "SQL"]
     },
     {
       category: "Frameworks & Libraries",
@@ -117,8 +157,10 @@ export const resumeData: ResumeData = {
     {
       category: "Cloud & Tools",
       items: [
-        "AWS (EC2, ECS, ECR, RDS, S3, DynamoDB, Lambda, CloudFront, Secrets Manager)",
-        "AWS Bedrock", "Docker", "Git", "GitHub Actions", "MLflow", "DVC",
+        // Individual AWS services live in the Experience bullets (ECS Fargate,
+        // ECR, ALB, CloudFront, S3, RDS, DynamoDB, Lambda) — as one tag here it
+        // wrapped to two lines and broke the row rhythm.
+        "AWS", "AWS Bedrock", "Docker", "Git", "GitHub Actions", "MLflow", "DVC",
         "Jupyter Notebook", "PySpark", "Tableau", "MS Excel"
       ]
     }
@@ -258,19 +300,6 @@ export const resumeData: ResumeData = {
       category: "personal"
     },
     {
-      title: "Walmart Sales Forecasting",
-      description: "Retail demand forecasting using ML & Deep Learning",
-      longDescription: "Benchmarked SARIMA, ES, LSTM, RF, and LightGBM for sales forecasting. Exponential Smoothing achieved 38.92% RMSE improvement over LSTM.",
-      image: "/assets/projects/walmart_forecasting.jpg",
-      technologies: [
-        "Python", "Pandas", "Statsmodels",
-        "TensorFlow", "Keras", "Matplotlib"
-      ],
-      github: "https://github.com/jacobjk03/Data-Driven-Walmart-Sales-Predictions",
-      featured: true,
-      category: "personal"
-    },
-    {
       title: "Waterbot",
       description: "AI-powered educational chatbot for water literacy with multilingual & voice support",
       longDescription: "Waterbot is an AI-powered educational chatbot developed at Arizona State University to promote water literacy and sustainability awareness. It engages users—especially K-12 students—in interactive, conversational learning about water conservation, the water cycle, and real-world water challenges. The system runs on a fully cloud-based AWS infrastructure (ECS, CDK, S3, DynamoDB, CloudFront, and RDS) and supports multilingual and voice-based interactions. It was designed to deliver scalable, accessible, and engaging water education experiences while showcasing production-grade AI deployment and cloud engineering practices.",
@@ -282,6 +311,22 @@ export const resumeData: ResumeData = {
       github: "https://github.com/jacobjk03/waterbot",
       featured: false,
       category: "team"
+    },
+    // Deliberately last: the projects grid renders the "Beat the forecast" game
+    // in the empty cells of the final row, so the forecasting project sits
+    // directly beside the forecasting game rather than a row apart.
+    {
+      title: "Walmart Sales Forecasting",
+      description: "Retail demand forecasting using ML & Deep Learning",
+      longDescription: "Benchmarked SARIMA, ES, LSTM, RF, and LightGBM for sales forecasting. Exponential Smoothing achieved 38.92% RMSE improvement over LSTM.",
+      image: "/assets/projects/walmart_forecasting.jpg",
+      technologies: [
+        "Python", "Pandas", "Statsmodels",
+        "TensorFlow", "Keras", "Matplotlib"
+      ],
+      github: "https://github.com/jacobjk03/Data-Driven-Walmart-Sales-Predictions",
+      featured: true,
+      category: "personal"
     }
   ],
 

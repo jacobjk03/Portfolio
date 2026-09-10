@@ -49,7 +49,7 @@ export default function ScrollProgress() {
   if (prefersReducedMotion) {
     return (
       <div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-[#7C3AED] origin-left z-50"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-[#B84D27] origin-left z-50"
         style={{ transform: `scaleX(${scrollProgress})` }}
       />
     );
@@ -66,8 +66,8 @@ export default function ScrollProgress() {
         style={{
           transform: `scaleX(${scrollProgress})`,
           width: "100%",
-          background: "#7C3AED",
-          boxShadow: scrollProgress > 0 ? "0 0 8px rgba(124, 58, 237, 0.4)" : "none",
+          background: "#B84D27",
+          boxShadow: scrollProgress > 0 ? "0 0 8px rgba(184, 77, 39, 0.4)" : "none",
           willChange: "transform",
         }}
       />

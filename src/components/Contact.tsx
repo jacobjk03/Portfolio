@@ -92,7 +92,7 @@ function FocusField({
     <div>
       <label
         className="block text-[10px] font-semibold tracking-[0.12em] uppercase mb-2 transition-colors duration-200"
-        style={{ color: focused ? "rgb(124,58,237)" : "rgba(var(--foreground-rgb, 0 0 0) / 0.4)" }}
+        style={{ color: focused ? "rgb(184, 77, 39)" : "rgba(var(--foreground-rgb, 0 0 0) / 0.4)" }}
       >
         {label}
       </label>
@@ -104,8 +104,8 @@ function FocusField({
           className="absolute inset-0 pointer-events-none"
           animate={{
             boxShadow: focused
-              ? "0 0 0 1px rgba(124,58,237,0.55), 0 0 16px rgba(124,58,237,0.12)"
-              : "0 0 0 0px rgba(124,58,237,0)",
+              ? "0 0 0 1px rgba(184, 77, 39,0.55), 0 0 16px rgba(184, 77, 39,0.12)"
+              : "0 0 0 0px rgba(184, 77, 39,0)",
           }}
           transition={{ duration: 0.25, ease: "easeOut" }}
         />
@@ -166,7 +166,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      <SectionNumber number="06" />
+      <SectionNumber number="07" />
       <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 

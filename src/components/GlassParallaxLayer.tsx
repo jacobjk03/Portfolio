@@ -58,7 +58,7 @@ export function GlassParallaxLayer({
           className={`absolute inset-0 bg-gradient-to-br ${glowColors[glow]}`}
           style={{
             // Subtle gradient overlay instead of blur
-            background: `radial-gradient(ellipse at 50% 0%, ${glow === "purple" ? "rgba(139, 92, 246, 0.15)" : glow === "blue" ? "rgba(59, 130, 246, 0.15)" : glow === "cyan" ? "rgba(6, 182, 212, 0.15)" : "rgba(236, 72, 153, 0.15)"} 0%, transparent 60%)`,
+            background: `radial-gradient(ellipse at 50% 0%, ${glow === "purple" ? "rgba(184, 77, 39, 0.15)" : glow === "blue" ? "rgba(59, 130, 246, 0.15)" : glow === "cyan" ? "rgba(6, 182, 212, 0.15)" : "rgba(236, 72, 153, 0.15)"} 0%, transparent 60%)`,
           }}
         />
       </div>

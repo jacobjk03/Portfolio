@@ -18,24 +18,21 @@ export function ChatBubble({ message, isUser, isTyping }: ChatBubbleProps) {
       animate={{ opacity: 1, x: 0, y: 0 }}
       transition={{ type: "spring", stiffness: 380, damping: 26 }}
     >
-      {/* Assistant avatar */}
+      {/* Assistant avatar — square and flat, matching the site's zero-radius,
+          no-gradient system */}
       {!isUser && (
-        <div
-          className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mb-0.5"
-          style={{ background: "linear-gradient(135deg, #7C3AED, #6D28D9)" }}
-        >
-          <span className="text-white text-[9px] font-bold">JK</span>
+        <div className="w-6 h-6 flex items-center justify-center shrink-0 mb-0.5 bg-primary">
+          <span className="text-primary-foreground text-[8px] font-semibold tracking-[0.06em]">JK</span>
         </div>
       )}
 
       {/* Bubble */}
       <div
-        className={`max-w-[82%] px-4 py-2.5 text-xs leading-relaxed ${
+        className={`max-w-[82%] px-4 py-3 text-xs leading-relaxed ${
           isUser
-            ? "text-white"
-            : "bg-foreground/5 text-foreground border border-foreground/8"
+            ? "bg-primary text-primary-foreground"
+            : "bg-secondary/40 text-foreground border border-foreground/10"
         }`}
-        style={isUser ? { background: "linear-gradient(135deg, #7C3AED, #6D28D9)" } : undefined}
       >
         {isTyping ? (
           <div className="flex items-center gap-1.5 py-0.5">

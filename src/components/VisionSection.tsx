@@ -12,7 +12,7 @@ interface VisionSectionProps {
   delay?: number;
   enableLightBeams?: boolean;
   lightPosition?: "left" | "right" | "center";
-  lightColor?: "purple" | "blue" | "cyan";
+  lightColor?: "purple" | "blue" | "cyan" | "amber";
   lightIntensity?: number;
   bokehDensity?: number;
   bokehColors?: string[];
@@ -42,7 +42,7 @@ export function VisionSection({
   lightColor = "purple",
   lightIntensity = 0.6,
   bokehDensity = 0.3, // Reduced default density
-  bokehColors = ["#8b5cf6", "#22d3ee", "#a855f7"],
+  bokehColors = ["#CF6438", "#22d3ee", "#D97742"],
   bokehLayers = 2, // Reduced layers
   bokehSeed,
   enableGlassDepth = false,

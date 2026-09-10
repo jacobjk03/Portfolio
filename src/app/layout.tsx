@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import NeonCursor from "@/components/NeonCursor";
 import PageTransition from "@/components/PageTransition";
 import { MagneticEffects } from "@/components/MagneticEffects";
 import { AIAssistant } from "@/components/AIAssistant";
@@ -13,12 +12,22 @@ const inter = Inter({
   display: "swap",
 });
 
-const newsreader = Newsreader({
+// Display serif. Fraunces is a variable face with optical sizing and a "wonk"
+// axis — it carries real personality at hero scale while staying readable small.
+const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-newsreader",
   display: "swap",
   style: ["normal", "italic"],
-  weight: ["300", "400", "500", "600"],
+  axes: ["SOFT", "WONK", "opsz"],
+});
+
+// Used for metrics, data labels and the reasoning trace — technical texture.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -80,14 +89,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* apple-touch-icon.png and manifest.json don't exist in /public — the
+            links were 404ing on every page load, so they're omitted. */}
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={`${inter.variable} ${newsreader.variable} font-sans`}>
+      <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
         <ThemeProvider>
           <PageTransition />
-          <NeonCursor />
           <MagneticEffects />
           {children}
           <AIAssistant />

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface VolumetricLightProps {
   intensity?: number;
-  color?: "purple" | "blue" | "cyan";
+  color?: "purple" | "blue" | "cyan" | "amber";
   position?: "left" | "right" | "center";
   delay?: number;
   enabled?: boolean; // New prop: only show when enabled
@@ -40,9 +40,9 @@ export function VolumetricLight({
 
   const colorMap = {
     purple: {
-      primary: "rgba(139, 92, 246, 0.3)", // Reduced opacity
-      secondary: "rgba(168, 85, 247, 0.2)",
-      glow: "rgba(139, 92, 246, 0.4)",
+      primary: "rgba(184, 77, 39, 0.3)", // Reduced opacity
+      secondary: "rgba(217, 119, 66, 0.2)",
+      glow: "rgba(184, 77, 39, 0.4)",
     },
     blue: {
       primary: "rgba(59, 130, 246, 0.3)",
@@ -53,6 +53,13 @@ export function VolumetricLight({
       primary: "rgba(6, 182, 212, 0.3)",
       secondary: "rgba(34, 211, 238, 0.2)",
       glow: "rgba(6, 182, 212, 0.4)",
+    },
+    // Matches the copper accent; kept low-opacity so it reads as warmth in the
+    // cream rather than a coloured wash.
+    amber: {
+      primary: "rgba(184, 77, 39, 0.20)",
+      secondary: "rgba(217, 119, 66, 0.14)",
+      glow: "rgba(184, 77, 39, 0.26)",
     },
   };
 

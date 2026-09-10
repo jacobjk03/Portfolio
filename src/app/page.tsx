@@ -5,6 +5,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
+import Results from "@/components/Results";
 import Projects from "@/components/Projects";
 import Certifications from "@/components/Certifications";
 import Blog from "@/components/Blog";
@@ -19,20 +20,14 @@ export default function Home() {
     <main className="min-h-screen">
       <ScrollProgress />
       <Navbar />
-      {/* Hero - Keep effects for hero section only */}
-      <VisionSection 
+      {/* Hero — one atmospheric layer, not three. Bokeh and glass depth were
+          stacked on top of the light beams here; together they cost GPU, muddied
+          the skill map behind a blur, and read as generic. Light beams stay. */}
+      <VisionSection
         enableLightBeams={true}
-        lightPosition="center" 
-        lightColor="purple" 
-        lightIntensity={0.5}
-        bokehDensity={0.4}
-        bokehColors={["#8b5cf6", "#a855f7", "#c084fc"]}
-        bokehSeed={1000}
-        enableGlassDepth={true}
-        glassIntensity={1.0}
-        glassTilt={2}
-        glassGlow="purple"
-        glassBlur="xl"
+        lightPosition="center"
+        lightColor="amber"
+        lightIntensity={0.4}
       >
         <Hero />
       </VisionSection>
@@ -40,23 +35,13 @@ export default function Home() {
       {/* Marquee ticker strip */}
       <MarqueeTicker />
 
-      {/* About - Minimal effects */}
-      <VisionSection
-        delay={100} 
-        bokehDensity={0.2}
-        bokehColors={["#3b82f6", "#60a5fa", "#93c5fd"]}
-        bokehSeed={2000}
-      >
+      {/* Content sections carry no decorative layers — the bokeh here was still
+          blue/cyan from the old palette and fought the copper accent. */}
+      <VisionSection delay={100}>
         <About />
       </VisionSection>
 
-      {/* Skills - Minimal effects */}
-      <VisionSection 
-        delay={150} 
-        bokehDensity={0.2}
-        bokehColors={["#22d3ee", "#06b6d4", "#67e8f9"]}
-        bokehSeed={3000}
-      >
+      <VisionSection delay={150}>
         <Skills />
       </VisionSection>
 
@@ -67,40 +52,30 @@ export default function Home() {
         <Experience />
       </VisionSection>
 
-      {/* Projects - Minimal effects */}
-      <VisionSection 
-        delay={150} 
-        bokehDensity={0.25}
-        bokehColors={["#3b82f6", "#2563eb", "#60a5fa"]}
-        bokehSeed={5000}
-      >
+      {/* Results - measured outcomes, no decorative effects competing with the charts */}
+      <VisionSection delay={100}>
+        <Results />
+      </VisionSection>
+
+      <VisionSection delay={150}>
         <Projects />
       </VisionSection>
 
-      {/* Certifications - No effects */}
-      <VisionSection 
-        delay={100}
-      >
+      <VisionSection delay={100}>
         <Certifications />
       </VisionSection>
 
-      {/* Blog - No effects */}
-      <VisionSection 
-        delay={150}
-      >
+      <VisionSection delay={150}>
         <Blog />
       </VisionSection>
 
-      {/* Contact - Keep effects for contact section */}
-      <VisionSection 
-        delay={100} 
+      {/* Contact — the page's closing beat gets the second (and last) light beam */}
+      <VisionSection
+        delay={100}
         enableLightBeams={true}
-        lightPosition="right" 
-        lightColor="purple" 
-        lightIntensity={0.5}
-        bokehDensity={0.3}
-        bokehColors={["#8b5cf6", "#a855f7", "#d8b4fe"]}
-        bokehSeed={8000}
+        lightPosition="right"
+        lightColor="amber"
+        lightIntensity={0.4}
       >
         <Contact />
       </VisionSection>

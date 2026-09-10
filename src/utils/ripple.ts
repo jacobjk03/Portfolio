@@ -9,7 +9,7 @@
  */
 export function attachRipple(
   element: HTMLElement,
-  color = "rgba(139, 92, 246, 0.4)"
+  color = "rgba(184, 77, 39, 0.4)"
 ) {
   // Check for reduced motion
   const prefersReducedMotion = window.matchMedia(

@@ -10,6 +10,17 @@ import { Scroll3DReveal } from "@/components/Scroll3DReveal";
 import { SectionNumber } from "@/components/SectionNumber";
 import { AnimatedDivider } from "@/components/AnimatedDivider";
 import { ScrollTiltSection } from "@/components/ScrollTiltSection";
+import { ReasoningTrace } from "@/components/ReasoningTrace";
+import { ForecastGame } from "@/components/ForecastGame";
+
+/**
+ * Which projects ship an interactive agent trace in their case study.
+ * Single source of truth so the card badge and the modal can never disagree —
+ * a badge promising a trace that isn't there would be worse than no badge.
+ */
+function hasTrace(project: typeof resumeData.projects[0]) {
+  return /medical/i.test(project.title);
+}
 
 function ProjectCard({ project, index, onClick }: { project: typeof resumeData.projects[0]; index: number; onClick: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,6 +64,17 @@ function ProjectCard({ project, index, onClick }: { project: typeof resumeData.p
         <div className="absolute top-3 right-3 px-2 py-1 bg-foreground/80 text-background text-[9px] font-semibold tracking-[0.12em] uppercase z-10">
           {project.category === "team" ? "Team" : "Personal"}
         </div>
+
+        {/* Marks cards that open with a live agent trace inside. Without this
+            the trace is invisible until someone happens to click the right
+            card — the grid stays uniform, the badge does the advertising. */}
+        {hasTrace(project) && (
+          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2 py-1 bg-background/90 backdrop-blur-sm border border-primary/30 text-[9px] font-semibold tracking-[0.12em] uppercase text-primary z-10">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary avail-dot" />
+            Live agent trace
+          </div>
+        )}
+
         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-all duration-500" />
       </div>
 
@@ -122,7 +144,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-28 border-b border-foreground/8 relative overflow-hidden" ref={ref}>
-      <SectionNumber number="04" />
+      <SectionNumber number="05" />
       <ScrollTiltSection>
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20">
 
@@ -149,7 +171,7 @@ export default function Projects() {
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  data-ripple="true" data-ripple-color="rgba(124,58,237,0.3)"
+                  data-ripple="true" data-ripple-color="rgba(184, 77, 39,0.3)"
                   className={`btn-shimmer px-4 py-2 text-[10px] font-semibold tracking-[0.12em] uppercase transition-all ${
                     filter === f
                       ? "bg-primary text-white"
@@ -179,6 +201,22 @@ export default function Projects() {
               onClick={() => handleProjectClick(project)}
             />
           ))}
+
+          {/* Fills the empty cells left by an incomplete final row (4 projects
+              in a 3-column grid leaves two). Spans 2 columns; if the remaining
+              space is narrower, CSS grid drops it to its own row rather than
+              overflowing — so it stays tidy under every filter. */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+            className="lg:col-span-2 bg-background"
+          >
+            <ForecastGame
+              onOpenProject={() => {
+                const p = resumeData.projects.find((x) => /walmart/i.test(x.title));
+                if (p) handleProjectClick(p);
+              }}
+            />
+          </motion.div>
         </motion.div>
 
         {/* Loader */}
@@ -280,6 +318,12 @@ export default function Projects() {
                     )}
                   </div>
                   <div className="space-y-8">
+                    {/* Live mechanism for projects that have one. Sits directly
+                        under the screenshot so the still image is immediately
+                        followed by the thing actually running. */}
+                    {hasTrace(selectedProject) && (
+                      <ReasoningTrace showAttribution={false} key={selectedProject.title} />
+                    )}
                     <div>
                       <h4 className="font-serif font-medium text-lg text-foreground mb-3">About This Project</h4>
                       <p className="text-muted-foreground leading-relaxed text-base">
